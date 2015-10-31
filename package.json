@@ -1,0 +1,28 @@
+{
+  "name": "dfu-programmer",
+  "version": "1.0.0",
+  "description": "DFU app to interact with Atmel chips.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jackhumbert/dfu-programmer-app.git"
+  },
+  "keywords": [
+    "dfu-programmer",
+    "dfu",
+    "keyboard",
+    "mechanical keyboard"
+  ],
+  "author": "Jack Humbert",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jackhumbert/dfu-programmer-app/issues"
+  },
+  "homepage": "https://github.com/jackhumbert/dfu-programmer-app#readme",
+  "devDependencies": {
+    "electron-prebuilt": "^0.34.0"
+  }
+}

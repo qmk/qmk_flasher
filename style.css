@@ -1,0 +1,99 @@
+* {
+  -webkit-user-select: none;
+}
+
+:focus {
+    outline: none;
+}
+
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
+html, body {
+	height: 100%;
+	-webkit-app-region: drag;
+}
+
+#close-window-button {
+	background-color: hsl(0, 50%, 50%);
+	border-radius: 12px;
+	border: 1px solid hsl(0, 50%, 30%);
+	height: 16px;
+	width: 16px;
+	margin-left: 10px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	position: relative;
+	text-align: center;
+	padding: 0px;
+  -webkit-app-region: no-drag;
+}
+#close-window-button:hover {
+	background-color: hsl(0, 50%, 45%);
+	cursor: pointer;
+}
+
+#title {
+	font-size: 16px;
+	position: absolute;
+	width: 100%;
+	height: 34px;
+	top: 0px;
+	left: 0px;
+	text-align: center;
+	line-height: 34px;
+}
+#file-path {
+	position: absolute;
+	top: 40px;
+	left: 14px;
+	width: 363px;
+	height: 24px;
+  -webkit-app-region: no-drag;
+}
+
+#load-file {
+	position: absolute;
+	top: 40px;
+	right: 14px;
+	width: 100px;
+	height: 24px;
+  -webkit-app-region: no-drag;
+}
+
+#flash-hex {
+	position: absolute;
+	bottom: 14px;
+	left: 143px;
+	height: 34px;
+	width: 100px;
+  -webkit-app-region: no-drag;
+}
+
+#reset {
+	position: absolute;
+	bottom: 14px;
+	right: 143px;
+	height: 34px;
+	width: 100px;
+  -webkit-app-region: no-drag;
+}
+
+#status {
+	font-size: 12px;
+	background-color: #eee;
+	border: #ccc solid 1px;
+	position: absolute;
+	left: 14px;
+	bottom: 62px;
+	height: 164px;
+	width: 472px;
+	border-radius: 2px;
+	overflow-y: scroll;
+	font-family: monospace;
+	white-space: pre-wrap;
+	padding: 7px;
+  -webkit-app-region: no-drag;
+  -webkit-user-select: text;
+}
