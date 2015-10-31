@@ -100,8 +100,14 @@ function sendHex(file, callback) {
   });
 };
 
+var escapeShell = function(cmd) {
+  return ''+cmd.replace(/(["\s'$`\\\(\)])/g,'\\$1')+'';
+};
+
 function eraseChip(callback) {
-  exec(__dirname + "/dfu-programmer"+dfu_extension()+" atmega32u4 erase --force", function(error, stdout, stderr) {
+  var command = escapeShell(__dirname + "/dfu-programmer"+dfu_extension())+" atmega32u4 erase --force";
+  sendStatus(command + "\n");
+  exec(command, function(error, stdout, stderr) {
     sendStatus(stdout);
     sendStatus(stderr);
     if (stderr.indexOf("no device present") > -1) {
@@ -113,7 +119,9 @@ function eraseChip(callback) {
 }
 
 function flashChip(file, callback) {
-  exec(__dirname + "/dfu-programmer"+dfu_extension()+" atmega32u4 flash " + file, function(error, stdout, stderr) {
+  var command = escapeShell(__dirname + "/dfu-programmer"+dfu_extension())+" atmega32u4 flash " + file;
+  sendStatus(command + "\n");
+  exec(command, function(error, stdout, stderr) {
     sendStatus(stdout);
     sendStatus(stderr);
     if (stderr.indexOf("no device present") > -1) {
@@ -125,7 +133,9 @@ function flashChip(file, callback) {
 }
 
 function resetChip(callback) {
-  exec(__dirname + "/dfu-programmer"+dfu_extension()+" atmega32u4 reset", function(error, stdout, stderr) {
+  var command = escapeShell(__dirname + "/dfu-programmer"+dfu_extension())+" atmega32u4 reset";
+  sendStatus(command + "\n");
+  exec(command, function(error, stdout, stderr) {
     sendStatus(stdout);
     sendStatus(stderr);
     if (stderr.indexOf("no device present") > -1) {
