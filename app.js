@@ -40,14 +40,6 @@ $(document).ready(function() {
   });
 });
 
-function dfu_location() {
- if (process.platform == "win32") {
-  return escapeShell(__dirname + "/dfu-programmer.exe");
- } else {
-  return escapeShell(__dirname + "/usr/local/bin/dfu-programmer");
- }
-}
-
 function disableButtons() {
   $('#flash-hex').attr('disabled','disabled');
   $('#reset').attr('disabled','disabled');
@@ -100,6 +92,22 @@ function sendHex(file, callback) {
   });
 };
 
+function dfu_folder() {
+ if (process.platform == "win32") {
+  return escapeShell(__dirname);
+ } else {
+  return escapeShell(__dirname + "/usr/local/bin/");
+ }
+};
+
+function dfu_location() {
+ if (process.platform == "win32") {
+  return "./dfu-programmer.exe";
+ } else {
+  return "./dfu-programmer";
+ }
+};
+
 var escapeShell = function(cmd) {
   return ''+cmd.replace(/(["\s'$`\\\(\)])/g,'\\$1')+'';
 };
@@ -107,7 +115,8 @@ var escapeShell = function(cmd) {
 function eraseChip(callback) {
   var command = dfu_location() + " atmega32u4 erase --force";
   sendStatus(command + "\n");
-  exec(command, function(error, stdout, stderr) {
+  exec(command, {cwd: dfu_folder()},
+    function(error, stdout, stderr) {
     sendStatus(stdout);
     sendStatus(stderr);
     if (stderr.indexOf("no device present") > -1) {
@@ -121,7 +130,8 @@ function eraseChip(callback) {
 function flashChip(file, callback) {
   var command = dfu_location() + " atmega32u4 flash " + file;
   sendStatus(command + "\n");
-  exec(command, function(error, stdout, stderr) {
+  exec(command, {cwd: dfu_folder()},
+    function(error, stdout, stderr) {
     sendStatus(stdout);
     sendStatus(stderr);
     if (stderr.indexOf("no device present") > -1) {
@@ -135,7 +145,8 @@ function flashChip(file, callback) {
 function resetChip(callback) {
   var command = dfu_location() + " atmega32u4 reset";
   sendStatus(command + "\n");
-  exec(command, function(error, stdout, stderr) {
+  exec(command, {cwd: dfu_folder()},
+    function(error, stdout, stderr) {
     sendStatus(stdout);
     sendStatus(stderr);
     if (stderr.indexOf("no device present") > -1) {

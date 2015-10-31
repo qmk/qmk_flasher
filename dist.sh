@@ -3,5 +3,6 @@ cp -R * /Users/j/Downloads/dfu-programmer-app-darwin/dfu-programmer.app/Contents
 cp -R * /Users/j/Downloads/dfu-programmer-app-win32/resources/app/
 rm /Users/j/Downloads/dfu-programmer-app-darwin.zip
 rm /Users/j/Downloads/dfu-programmer-app-win32.zip
-zip -r /Users/j/Downloads/dfu-programmer-app-darwin.zip /Users/j/Downloads/dfu-programmer-app-darwin/
-zip -r /Users/j/Downloads/dfu-programmer-app-win32.zip /Users/j/Downloads/dfu-programmer-app-win32/
+cd /Users/j/Downloads
+zip -r /Users/j/Downloads/dfu-programmer-app-darwin.zip dfu-programmer-app-darwin/
+zip -r /Users/j/Downloads/dfu-programmer-app-win32.zip dfu-programmer-app-win32/
