@@ -40,11 +40,11 @@ $(document).ready(function() {
   });
 });
 
-function dfu_extension() {
+function dfu_location() {
  if (process.platform == "win32") {
-  return ".exe";
+  return escapeShell(__dirname + "/dfu-programmer.exe");
  } else {
-  return "";
+  return escapeShell(__dirname + "/usr/local/bin/dfu-programmer");
  }
 }
 
@@ -105,7 +105,7 @@ var escapeShell = function(cmd) {
 };
 
 function eraseChip(callback) {
-  var command = escapeShell(__dirname + "/dfu-programmer"+dfu_extension())+" atmega32u4 erase --force";
+  var command = dfu_location() + " atmega32u4 erase --force";
   sendStatus(command + "\n");
   exec(command, function(error, stdout, stderr) {
     sendStatus(stdout);
@@ -119,7 +119,7 @@ function eraseChip(callback) {
 }
 
 function flashChip(file, callback) {
-  var command = escapeShell(__dirname + "/dfu-programmer"+dfu_extension())+" atmega32u4 flash " + file;
+  var command = dfu_location() + " atmega32u4 flash " + file;
   sendStatus(command + "\n");
   exec(command, function(error, stdout, stderr) {
     sendStatus(stdout);
@@ -133,7 +133,7 @@ function flashChip(file, callback) {
 }
 
 function resetChip(callback) {
-  var command = escapeShell(__dirname + "/dfu-programmer"+dfu_extension())+" atmega32u4 reset";
+  var command = dfu_location() + " atmega32u4 reset";
   sendStatus(command + "\n");
   exec(command, function(error, stdout, stderr) {
     sendStatus(stdout);
