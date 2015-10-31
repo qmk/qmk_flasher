@@ -18,7 +18,7 @@ html, body {
 #close-window-button {
 	background-color: hsl(0, 50%, 50%);
 	border-radius: 12px;
-	border: 1px solid hsl(0, 50%, 30%);
+	border: 1px solid hsl(0, 50%, 45%);
 	height: 16px;
 	width: 16px;
 	margin-left: 10px;
@@ -32,6 +32,24 @@ html, body {
 #close-window-button:hover {
 	background-color: hsl(0, 50%, 45%);
 	cursor: pointer;
+}
+
+.button {
+	background: hsl(0, 0%, 93%);
+	border: 1px solid hsl(0, 0%, 83%);
+	border-radius: 2px;
+}
+
+.button:hover {
+	background: hsl(0, 0%, 88%);
+}
+
+.button:disabled:hover {
+	background: hsl(0, 0%, 93%)!important;
+}
+
+.button:active {
+	background: hsl(0, 0%, 83%);
 }
 
 #title {
