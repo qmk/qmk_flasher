@@ -93,11 +93,7 @@ function sendHex(file, callback) {
 };
 
 function dfu_folder() {
- if (process.platform == "win32") {
-  return escapeShell(__dirname);
- } else {
-  return escapeShell(__dirname + "/usr/local/bin/");
- }
+  return escapeShell(__dirname + "/dfu/");
 };
 
 function dfu_location() {
@@ -114,7 +110,7 @@ var escapeShell = function(cmd) {
 
 function eraseChip(callback) {
   var command = dfu_location() + " atmega32u4 erase --force";
-  sendStatus(command + "\n");
+  sendStatus("<b>" +command + "</b>\n");
   exec(command, {cwd: dfu_folder()},
     function(error, stdout, stderr) {
     sendStatus(stdout);
@@ -129,7 +125,7 @@ function eraseChip(callback) {
 
 function flashChip(file, callback) {
   var command = dfu_location() + " atmega32u4 flash " + file;
-  sendStatus(command + "\n");
+  sendStatus("<b>" +command + "</b>\n");
   exec(command, {cwd: dfu_folder()},
     function(error, stdout, stderr) {
     sendStatus(stdout);
@@ -144,7 +140,7 @@ function flashChip(file, callback) {
 
 function resetChip(callback) {
   var command = dfu_location() + " atmega32u4 reset";
-  sendStatus(command + "\n");
+  sendStatus("<b>" +command + "</b>\n");
   exec(command, {cwd: dfu_folder()},
     function(error, stdout, stderr) {
     sendStatus(stdout);

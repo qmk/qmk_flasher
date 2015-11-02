@@ -23,5 +23,6 @@
   },
   "homepage": "https://github.com/jackhumbert/dfu-programmer-app#readme",
   "devDependencies": {
+    "electron-prebuilt": "^0.34.2"
   }
 }
