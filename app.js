@@ -98,7 +98,7 @@ function dfu_folder() {
 
 function dfu_location() {
  if (process.platform == "win32") {
-  return "./dfu-programmer.exe";
+  return "dfu-programmer.exe";
  } else {
   return "./dfu-programmer";
  }
