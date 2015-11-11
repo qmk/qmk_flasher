@@ -4,6 +4,6 @@
 
 # Development
 
-To run the app in development mode:
+To run the app in development mode, enter the directory and:
 
     npm install && npm start
