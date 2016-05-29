@@ -4,7 +4,10 @@
   "description": "DFU app to interact with Atmel chips.",
   "main": "main.js",
   "scripts": {
-    "start": "electron main.js"
+    "start": "electron main.js",
+    "postinstall": "install-app-deps",
+    "pack": "build",
+    "dist": "build"
   },
   "repository": {
     "type": "git",
@@ -24,5 +27,9 @@
   "homepage": "https://github.com/jackhumbert/dfu-programmer-app#readme",
   "devDependencies": {
     "electron-prebuilt": "^0.34.2"
+  },
+  "build": {
+    "app-bundle-id": "com.github.dfu-programmer-app",
+    "app-category-type": "public.app-category.utilities"
   }
 }
