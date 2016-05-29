@@ -1,7 +1,8 @@
 {
   "name": "dfu-programmer",
+  "productName": "QMK Firmware Flasher",
   "version": "1.0.0",
-  "description": "DFU app to interact with Atmel chips.",
+  "description": "GUI app to load firmware onto atmega32u4 chips.",
   "main": "main.js",
   "scripts": {
     "start": "electron main.js",
@@ -24,9 +25,10 @@
   "bugs": {
     "url": "https://github.com/jackhumbert/dfu-programmer-app/issues"
   },
-  "homepage": "https://github.com/jackhumbert/dfu-programmer-app#readme",
+  "homepage": "https://github.com/jackhumbert/dfu-programmer-app",
   "devDependencies": {
-    "electron-prebuilt": "^0.34.2"
+    "electron-prebuilt": "^1.2.0",
+    "electron-builder": "^3.25.0"
   },
   "build": {
     "app-bundle-id": "com.github.dfu-programmer-app",

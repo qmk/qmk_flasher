@@ -1,27 +1,41 @@
 global.$ = $;
 
-var remote = require('remote');
-var Menu = remote.require('menu');
-var dialog = remote.require('dialog');
-var sys = remote.require('sys');
-var exec = remote.require('child_process').exec;
+var fs = require('fs');
+var process = require('process');
+var app = require('electron').remote.app;
+var dialog = require('electron').remote.dialog;
+var execFile = require('child_process').execFile;
+
 var bootloader_ready = false;
 var flash_in_progress = false;
+var app_path = app.getAppPath();
+var dfu_location = app_path + '/dfu/dfu-programmer';
+
+if (process.platform == "win32") {
+  dfu_location = dfu_location + '.exe'
+}
 
 $(document).ready(function() {
   /* Handle drag-n-drop events
    */
-  $(document).on('dragenter dragover', function(e) {
-    e.preventDefault();
-    e.stopPropagation();
+  $(document).on('dragenter dragover', function(event) {
+    event.preventDefault();
+    event.stopPropagation();
   });
 
-  $(document).on('drop', function(e) {
-    e.preventDefault();
-    e.stopPropagation();
+  $(document).on('drop', function(event) {
+    event.preventDefault();
+    event.stopPropagation();
 
-    var file = e.originalEvent.dataTransfer.files[0];
+    var file = event.originalEvent.dataTransfer.files[0];
     loadHex(file.path);
+  });
+
+  $(document).on('open-file', function(event, path) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    loadHex(path);
   });
 
   /* Bind actions to our buttons
@@ -31,7 +45,7 @@ $(document).ready(function() {
     window.close();
   });
   $('#load-file').bind('click', function (event) {
-    loadHex(loadFile());
+    loadHex(loadFile()[0]);
   });
   $('#flash-hex').bind('click', function (event) {
     disableButtons();
@@ -100,7 +114,7 @@ function writeStatus(text) {
 }
 
 function sendStatus(text) {
-  writeStatus(text + "\n");
+  writeStatus('<b>' + text + "</b>\n");
 }
 
 function loadFile() {
@@ -141,27 +155,14 @@ function sendHex(file, callback) {
   flash_in_progress = false;
 };
 
-function dfu_folder() {
-  return escapeShell(__dirname + "/dfu/");
-};
-
-function dfu_location() {
- if (process.platform == "win32") {
-  return "dfu-programmer.exe";
- } else {
-  return "./dfu-programmer";
- }
-};
-
 var escapeShell = function(cmd) {
   return ''+cmd.replace(/(["\s'$`\\\(\)])/g,'\\$1')+'';
 };
 
 function eraseChip(callback) {
-  var command = dfu_location() + " atmega32u4 erase --force";
-  sendStatus("<b>" +command + "</b>");
-  exec(command, {cwd: dfu_folder()},
-    function(error, stdout, stderr) {
+  sendStatus('dfu-programmer atmega32u4 erase --force');
+  execFile(dfu_location, ['atmega32u4', 'erase', '--force'], function(error, stdout, stderr) {
+    sendStatus(error);
     writeStatus(stdout);
     writeStatus(stderr);
     if (stderr.indexOf("no device present") > -1) {
@@ -173,10 +174,8 @@ function eraseChip(callback) {
 }
 
 function flashChip(file, callback) {
-  var command = dfu_location() + " atmega32u4 flash " + file;
-  sendStatus("<b>" +command + "</b>");
-  exec(command, {cwd: dfu_folder()},
-    function(error, stdout, stderr) {
+  sendStatus('dfu-programmer atmega32u4 flash ' + file);
+  execFile(dfu_location, ['atmega32u4', 'flash', file], function(error, stdout, stderr) {
     writeStatus(stdout);
     writeStatus(stderr);
     if (stderr.indexOf("no device present") > -1) {
@@ -188,10 +187,8 @@ function flashChip(file, callback) {
 }
 
 function resetChip(callback) {
-  var command = dfu_location() + " atmega32u4 reset";
-  sendStatus("<b>" +command + "</b>");
-  exec(command, {cwd: dfu_folder()},
-    function(error, stdout, stderr) {
+  sendStatus('dfu-programmer atmega32u4 reset');
+  execFile(dfu_location, ['atmega32u4', 'reset'], function(error, stdout, stderr) {
     writeStatus(stdout);
     writeStatus(stderr);
     if (stderr.indexOf("no device present") > -1) {
@@ -206,8 +203,7 @@ function checkForBoard() {
   if (flash_in_progress) {
     window.setTimeout(checkForBoard, 10000);
   } else {
-    var command = dfu_location() + " atmega32u4 get bootloader-version";
-    exec(command, {cwd: dfu_folder()}, function(error, stdout, stderr) {
+    execFile(dfu_location, ['atmega32u4', 'get', 'bootloader-version'], function(error, stdout, stderr) {
       if (stdout.indexOf("Bootloader Version:") > -1) {
         if (!bootloader_ready && $('#file-path').val() != "") clearStatus();
         bootloader_ready = true;
