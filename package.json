@@ -34,7 +34,7 @@
     "app-bundle-id": "com.github.dfu-programmer-app",
     "app-category-type": "public.app-category.utilities",
     "win": {
-      "iconUrl": "https://raw.githubusercontent.com/skullydazed/dfu-programmer-app/master/build/windows.ico"
+      "iconUrl": "https://github.com/skullydazed/dfu-programmer-app/blob/master/build/windows.ico?raw=true"
     }
   }
 }
