@@ -1,0 +1,2 @@
+#!/bin/sh
+iconutil -c icns Icon.iconset
