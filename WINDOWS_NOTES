@@ -1,9 +1,0 @@
-What it took to get this working on windows
-
-Step 1: Download and unzip libusb: https://sourceforge.net/projects/libusb-win32/
-
-Step 2: Copy libusb-win32-bin-*/bin/x86/libusb0.dll to c:\windows\syswow32\libusb0.dll
-
-Step 3: Install driver for device by going to device manager, open atmega device, update driver, point it at the dfu-programmer directory.
-
-Step 4: Flash away!
