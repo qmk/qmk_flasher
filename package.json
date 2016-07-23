@@ -18,7 +18,9 @@
     "dfu-programmer",
     "dfu",
     "keyboard",
-    "mechanical keyboard"
+    "mechanical keyboard",
+    "qmk",
+    "qmk-firmware-flasher"
   ],
   "author": "Jack Humbert",
   "license": "MIT",
@@ -31,7 +33,7 @@
     "electron-builder": "^3.25.0"
   },
   "build": {
-    "app-bundle-id": "com.github.qmk_firmware_flasher",
+    "app-bundle-id": "com.github.qmk-firmware-flasher",
     "app-category-type": "public.app-category.utilities",
     "win": {
       "iconUrl": "https://github.com/skullydazed/dfu-programmer-app/blob/master/build/windows.ico?raw=true"
