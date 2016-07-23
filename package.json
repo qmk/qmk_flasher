@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jackhumbert/dfu-programmer-app.git"
+    "url": "git+https://github.com/jackhumbert/qmk_firmware_flasher.git"
   },
   "keywords": [
     "dfu-programmer",
@@ -23,15 +23,15 @@
   "author": "Jack Humbert",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/jackhumbert/dfu-programmer-app/issues"
+    "url": "https://github.com/jackhumbert/qmk_firmware_flasher/issues"
   },
-  "homepage": "https://github.com/jackhumbert/dfu-programmer-app",
+  "homepage": "https://github.com/jackhumbert/qmk_firmware_flasher",
   "devDependencies": {
     "electron-prebuilt": "^1.2.0",
     "electron-builder": "^3.25.0"
   },
   "build": {
-    "app-bundle-id": "com.github.dfu-programmer-app",
+    "app-bundle-id": "com.github.qmk_firmware_flasher",
     "app-category-type": "public.app-category.utilities",
     "win": {
       "iconUrl": "https://github.com/skullydazed/dfu-programmer-app/blob/master/build/windows.ico?raw=true"
