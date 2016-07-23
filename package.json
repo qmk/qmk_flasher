@@ -1,5 +1,5 @@
 {
-  "name": "dfu-programmer",
+  "name": "qmk-firmware-flasher",
   "productName": "QMK Firmware Flasher",
   "version": "0.5.0",
   "description": "GUI app to load firmware onto atmega32u4 chips.",
