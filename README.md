@@ -1,6 +1,6 @@
 # Releases
 
-[Check out the releases](https://github.com/jackhumbert/qmk-firmware-flasher/releases/) (darwin is OSX)
+[Check out the releases](https://github.com/jackhumbert/qmk_firmware_flasher/releases/) (darwin is OSX)
 
 # Development
 
