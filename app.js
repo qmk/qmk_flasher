@@ -181,7 +181,8 @@ function eraseChip(callback) {
     sendStatus(error);
     writeStatus(stdout);
     writeStatus(stderr);
-    if (stderr.indexOf("no device present") > -1) {
+    var regex = /Success.*\r?\n|\rChecking memory from .* Empty.*/;
+    if (stderr.search(regex) == -1) {
       callback(false);
     } else {
       callback(true);
