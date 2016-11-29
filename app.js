@@ -8,16 +8,21 @@ var execFile = require('child_process').execFile;
 
 var bootloader_ready = false;
 var flash_in_progress = false;
-var app_path = app.getAppPath();
-var dfu_location = app_path + '/dfu/dfu-programmer';
+var dfu_location = 'dfu/dfu-programmer';
 
 if (process.platform == "win32") {
   dfu_location = dfu_location + '.exe'
 }
 
+fs.access(dfu_location, fs.F_OK, function(err) {
+  if (err) {
+    // Running in deployed mode, use the app copy
+    var dfu_location = app.getAppPath() + '/' + dfu_location;
+  }
+});
+
 $(document).ready(function() {
-  /* Handle drag-n-drop events
-   */
+  // Handle drag-n-drop events
   $(document).on('dragenter dragover', function(event) {
     event.preventDefault();
     event.stopPropagation();
@@ -38,8 +43,7 @@ $(document).ready(function() {
     loadHex(path);
   });
 
-  /* Bind actions to our buttons
-   */
+  // Bind actions to our buttons
   $('#flash-hex').attr('disabled','disabled');
   $('#close-window-button').bind('click', function (event) {
     window.close();
@@ -69,15 +73,25 @@ $(document).ready(function() {
     });
   });
 
-  /* Ready to go
-   */
-  window.setTimeout(checkForBoard, 10);
-  sendStatus("Select a firmware file by clicking 'Choose .hex' or drag and drog a file onto this window.");
+  // Ready to go
+  execFile(dfu_location, ['--version'], function(error, stdout, stderr) {
+    if (stderr.indexOf('dfu-programmer') > -1) {
+      window.setTimeout(checkForBoard, 10);
+      sendStatus("Select a firmware file by clicking 'Choose .hex' or drag and drop a file onto this window.");
+    } else {
+      sendStatus("Could not run dfu-programmer! Please report this as a bug!");
+      sendStatus("<br>Debugging information:<br>");
+      sendStatus(error);
+      sendStatus("stdout:");
+      writeStatus(stdout);
+      sendStatus("stderr:");
+      writeStatus(stderr);
+    }
+  });
 });
 
 function loadHex(filename) {
-  /* Load a file and prepare to flash it.
-   */
+  // Load a file and prepare to flash it.
   if (filename.slice(-4) != '.hex') {
     sendStatus("Invalid firmware file: " + filename);
     return;
@@ -155,9 +169,11 @@ function sendHex(file, callback) {
   flash_in_progress = false;
 };
 
+/*
 var escapeShell = function(cmd) {
   return ''+cmd.replace(/(["\s'$`\\\(\)])/g,'\\$1')+'';
 };
+*/
 
 function eraseChip(callback) {
   sendStatus('dfu-programmer atmega32u4 erase --force');
@@ -200,20 +216,17 @@ function resetChip(callback) {
 }
 
 function checkForBoard() {
-  if (flash_in_progress) {
-    window.setTimeout(checkForBoard, 10000);
-  } else {
+  if (!flash_in_progress) {
     execFile(dfu_location, ['atmega32u4', 'get', 'bootloader-version'], function(error, stdout, stderr) {
       if (stdout.indexOf("Bootloader Version:") > -1) {
         if (!bootloader_ready && $('#file-path').val() != "") clearStatus();
         bootloader_ready = true;
         if ($('#file-path').val() != "") enableButtons();
-        window.setTimeout(checkForBoard, 10000);
       } else {
         bootloader_ready = false;
         disableButtons();
-        window.setTimeout(checkForBoard, 1000);
       }
     });
   }
+  window.setTimeout(checkForBoard, 10000);
 }
