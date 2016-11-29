@@ -61,17 +61,6 @@ $(document).ready(function() {
       }
     });
   });
-  $('#reset').bind('click', function (event) {
-    disableButtons();
-    resetChip(function(success) {
-      enableButtons();
-      if (success) {
-        sendStatus("Reset complete!");
-      } else {
-        sendStatus("An error occured - please try again.");
-      }
-    });
-  });
 
   // Ready to go
   execFile(dfu_location, ['--version'], function(error, stdout, stderr) {
