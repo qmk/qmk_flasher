@@ -29,8 +29,8 @@
   },
   "homepage": "https://github.com/jackhumbert/qmk_firmware_flasher",
   "devDependencies": {
-    "electron-prebuilt": "^1.2.0",
-    "electron-builder": "^3.25.0"
+    "electron": "^1.4.10",
+    "electron-builder": "^8.6.0"
   },
   "build": {
     "app-bundle-id": "com.github.qmk-firmware-flasher",
