@@ -11,9 +11,9 @@
 !define VERSIONBUILD 0
 # These will be displayed by the "Click here for support information" link in "Add/Remove Programs"
 # It is possible to use "mailto:" links in here to open the email client
-!define HELPURL "https://github.com/jackhumbert/dfu-programmer-app/issues" # "Support Information" link
-!define UPDATEURL "https://github.com/jackhumbert/dfu-programmer-app/releases" # "Product Updates" link
-!define ABOUTURL "https://github.com/jackhumbert/dfu-programmer-app" # "Publisher" link
+!define HELPURL "https://github.com/jackhumbert/qmk-firmware-flasher/issues" # "Support Information" link
+!define UPDATEURL "https://github.com/jackhumbert/qmk-firmware-flasher/releases" # "Product Updates" link
+!define ABOUTURL "https://github.com/jackhumbert/qmk-firmware-flasher" # "Publisher" link
 
 # This is the size (in kB) of all the files copied into "Program Files"
 #!define INSTALLSIZE 7233
