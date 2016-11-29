@@ -14,8 +14,8 @@ app.on('ready', function() {
   // Load the main interface
   win.loadURL('file://' + __dirname + '/index.html');
 
-  // Open the DevTools. FIXME: Comment this out before release
-  win.webContents.openDevTools({'mode':'undocked'});
+  // Uncomment this line to open the DevTools upon launch. 
+  //win.webContents.openDevTools({'mode':'undocked'});
 
   win.on('closed', function() {
     // Dereference the window object so our app exits
