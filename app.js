@@ -6,9 +6,13 @@ var app = require('electron').remote.app;
 var dialog = require('electron').remote.dialog;
 var execFile = require('child_process').execFile;
 
+var dfu_location = 'dfu/dfu-programmer';
+
+// State variables
 var bootloader_ready = false;
 var flash_in_progress = false;
-var dfu_location = 'dfu/dfu-programmer';
+var flash_when_ready = false;
+
 
 if (process.platform == "win32") {
   dfu_location = dfu_location + '.exe'
