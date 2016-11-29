@@ -181,10 +181,11 @@ function eraseChip(callback) {
     sendStatus(error);
     writeStatus(stdout);
     writeStatus(stderr);
-    if (stderr.indexOf("no device present") > -1) {
-      callback(false);
-    } else {
+    var regex = /.*Success.*\r?\n|\rChecking memory from .* Empty.*/;
+    if (regex.test(stderr)) {
       callback(true);
+    } else {
+      callback(false);
     }
   });
 }
@@ -194,10 +195,10 @@ function flashChip(file, callback) {
   execFile(dfu_location, ['atmega32u4', 'flash', file], function(error, stdout, stderr) {
     writeStatus(stdout);
     writeStatus(stderr);
-    if (stderr.indexOf("no device present") > -1) {
-      callback(false);
-    } else {
+    if (stderr.indexOf("Validating...  Success") > -1) {
       callback(true);
+    } else {
+      callback(false);
     }
   });
 }
@@ -207,10 +208,10 @@ function resetChip(callback) {
   execFile(dfu_location, ['atmega32u4', 'reset'], function(error, stdout, stderr) {
     writeStatus(stdout);
     writeStatus(stderr);
-    if (stderr.indexOf("no device present") > -1) {
-      callback(false);
+	if (stderr == "") {
+	  callback(true);
     } else {
-      callback(true);
+      callback(false);
     }
   });
 }
