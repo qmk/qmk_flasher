@@ -207,7 +207,7 @@ function resetChip(callback) {
   execFile(dfu_location, ['atmega32u4', 'reset'], function(error, stdout, stderr) {
     writeStatus(stdout);
     writeStatus(stderr);
-	if (stderr.indexOf("no device present") > -1) {
+	if (stderr != "") {
 	  callback(false);
     } else {
       callback(true);
