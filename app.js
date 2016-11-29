@@ -45,9 +45,6 @@ $(document).ready(function() {
 
   // Bind actions to our buttons
   $('#flash-hex').attr('disabled','disabled');
-  $('#close-window-button').bind('click', function (event) {
-    window.close();
-  });
   $('#load-file').bind('click', function (event) {
     loadHex(loadFile()[0]);
   });
