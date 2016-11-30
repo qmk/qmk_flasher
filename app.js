@@ -10,6 +10,12 @@ var bootloader_ready = false;
 var flash_in_progress = false;
 var dfu_location = 'dfu/dfu-programmer';
 
+//HTML entities
+let flashButton = $('#flash-hex');
+let loadButton = $('#load-file');
+let pathField = $('#file-path');
+let statusBox = $('#status');
+
 if (process.platform == "win32") {
   dfu_location = dfu_location + '.exe'
 }
@@ -44,13 +50,13 @@ $(document).ready(function() {
   });
 
   // Bind actions to our buttons
-  $('#flash-hex').attr('disabled','disabled');
-  $('#load-file').bind('click', function (event) {
+  flashButton.attr('disabled','disabled');
+  loadButton.bind('click', function (event) {
     loadHex(loadFile()[0]);
   });
-  $('#flash-hex').bind('click', function (event) {
+  flashButton.bind('click', function (event) {
     disableButtons();
-    sendHex($("#file-path").val(), function(success) {
+    sendHex(pathField.val(), function(success) {
       if (success) {
         sendStatus("Flashing complete!");
       } else {
@@ -83,7 +89,7 @@ function loadHex(filename) {
     return;
   }
 
-  $("#file-path").val(filename);
+  pathField.val(filename);
   enableButtons();
   clearStatus();
 
@@ -91,26 +97,26 @@ function loadHex(filename) {
 }
 
 function disableButtons() {
-  $('#flash-hex').attr('disabled','disabled');
-  $('#flash-hex').css('background-color', 'red');
-  $('#flash-hex').css('color', 'black');
+  flashButton.attr('disabled','disabled');
+  flashButton.css('background-color', 'red');
+  flashButton.css('color', 'black');
 }
 
 function enableButtons() {
-  if (bootloader_ready && $('#file-path').val() != "") {
-    $('#flash-hex').removeAttr('disabled');
-    $('#flash-hex').css('background-color', 'green');
-    $('#flash-hex').css('color', 'white');
+  if (bootloader_ready && pathField.val() != "") {
+    flashButton.removeAttr('disabled');
+    flashButton.css('background-color', 'green');
+    flashButton.css('color', 'white');
   }
 }
 
 function clearStatus() {
-  $('#status').text('');
+  statusBox.text('');
 }
 
 function writeStatus(text) {
-  $('#status').append(text);
-  $('#status').scrollTop($('#status')[0].scrollHeight);
+  statusBox.append(text);
+  statusBox.scrollTop(statusBox.scrollHeight);
 }
 
 function sendStatus(text) {
@@ -206,9 +212,9 @@ function checkForBoard() {
   if (!flash_in_progress) {
     execFile(dfu_location, ['atmega32u4', 'get', 'bootloader-version'], function(error, stdout, stderr) {
       if (stdout.indexOf("Bootloader Version:") > -1) {
-        if (!bootloader_ready && $('#file-path').val() != "") clearStatus();
+        if (!bootloader_ready && pathField.val() != "") clearStatus();
         bootloader_ready = true;
-        if ($('#file-path').val() != "") enableButtons();
+        if (pathField.val() != "") enableButtons();
       } else {
         bootloader_ready = false;
         disableButtons();
