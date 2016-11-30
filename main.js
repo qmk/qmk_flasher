@@ -17,6 +17,9 @@ app.on('ready', function() {
   // Uncomment this line to open the DevTools upon launch. 
   //win.webContents.openDevTools({'mode':'undocked'});
 
+  //Disable the menubar for dev versions
+  win.setMenu(null);
+
   win.on('closed', function() {
     // Dereference the window object so our app exits
     win = null;
