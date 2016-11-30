@@ -16,6 +16,7 @@ var flash_when_ready = false;
 
 //HTML entities
 let flashButton = $('#flash-hex');
+let fwrButton = $('#flash-when-ready');
 let loadButton = $('#load-file');
 let pathField = $('#file-path');
 let statusBox = $('#status');
@@ -58,14 +59,11 @@ $(document).ready(function() {
     loadHex(loadFile()[0]);
   });
   flashButton.bind('click', function (event) {
-    disableFlashButton();
-    sendHex(pathField.val(), function(success) {
-      if (success) {
-        sendStatus("Flashing complete!");
-      } else {
-        sendStatus("An error occured - please try again.");
-      }
-    });
+      flashFirmware();
+  });
+  fwrButton.bind('click', function (event) {
+    flash_when_ready = true;
+    disableFwrButton();
   });
 
   // Ready to go
@@ -93,10 +91,14 @@ function loadHex(filename) {
   }
 
   pathField.val(filename);
-  enableFlashButton();
   clearStatus();
 
-  if (!bootloader_ready) sendStatus("Press RESET on your keyboard's PCB.");
+    if (bootloader_ready) {
+      enableFlashButton();
+    } else {
+      sendStatus("Press RESET on your keyboard's PCB.");
+      showFwrButton();
+    }
 }
 
 function disableFlashButton() {
@@ -107,6 +109,19 @@ function enableFlashButton() {
   if (bootloader_ready && pathField.val() != "" && !flash_in_progress) {
       flashButton.removeAttr('disabled');
   }
+}
+
+function showFwrButton() {
+  fwrButton.removeClass('invisible');
+  fwrButton.removeAttr('disabled');
+}
+
+function disableFwrButton() {
+  fwrButton.attr('disabled', 'disabled');
+}
+
+function hideFwrButton() {
+  fwrButton.addClass('invisible');
 }
 
 function clearStatus() {
@@ -131,8 +146,21 @@ function loadFile() {
   });
 }
 
+function flashFirmware() {
+    disableFlashButton();
+    hideFwrButton();
+    sendHex(pathField.val(), function (success) {
+        if (success) {
+            sendStatus("Flashing complete!");
+        } else {
+            sendStatus("An error occured - please try again.");
+        }
+    });
+}
+
 function sendHex(file, callback) {
   flash_in_progress = true;
+  flash_when_ready = false;
   eraseChip(function(success) {
     if (success) {
       // continue
@@ -213,12 +241,16 @@ function checkForBoard() {
       if (stdout.indexOf("Bootloader Version:") > -1) {
         if (!bootloader_ready && pathField.val() != "") clearStatus();
         bootloader_ready = true;
-        if (pathField.val() != "") enableFlashButton();
+        if (pathField.val() != "") {
+          if(flash_when_ready) {
+            flashFirmware();
+          }
+        } enableFlashButton();
       } else {
         bootloader_ready = false;
         disableFlashButton();
       }
     });
   }
-  window.setTimeout(checkForBoard, 10000);
+  window.setTimeout(checkForBoard, 5000);
 }
