@@ -50,12 +50,11 @@ $(document).ready(function() {
   });
 
   // Bind actions to our buttons
-  flashButton.attr('disabled','disabled');
   loadButton.bind('click', function (event) {
     loadHex(loadFile()[0]);
   });
   flashButton.bind('click', function (event) {
-    disableButtons();
+    disableFlashButton();
     sendHex(pathField.val(), function(success) {
       if (success) {
         sendStatus("Flashing complete!");
@@ -90,23 +89,19 @@ function loadHex(filename) {
   }
 
   pathField.val(filename);
-  enableButtons();
+  enableFlashButton();
   clearStatus();
 
   if (!bootloader_ready) sendStatus("Press RESET on your keyboard's PCB.");
 }
 
-function disableButtons() {
-  flashButton.attr('disabled','disabled');
-  flashButton.css('background-color', 'red');
-  flashButton.css('color', 'black');
+function disableFlashButton() {
+    flashButton.attr('disabled','disabled');
 }
 
-function enableButtons() {
-  if (bootloader_ready && pathField.val() != "") {
-    flashButton.removeAttr('disabled');
-    flashButton.css('background-color', 'green');
-    flashButton.css('color', 'white');
+function enableFlashButton() {
+  if (bootloader_ready && pathField.val() != "" && !flash_in_progress) {
+      flashButton.attr('disabled','disabled');
   }
 }
 
@@ -214,10 +209,10 @@ function checkForBoard() {
       if (stdout.indexOf("Bootloader Version:") > -1) {
         if (!bootloader_ready && pathField.val() != "") clearStatus();
         bootloader_ready = true;
-        if (pathField.val() != "") enableButtons();
+        if (pathField.val() != "") enableFlashButton();
       } else {
         bootloader_ready = false;
-        disableButtons();
+        disableFlashButton();
       }
     });
   }

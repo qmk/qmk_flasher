@@ -45,8 +45,6 @@ html, body {
   height: 34px;
   width: 200px;
   -webkit-app-region: no-drag;
-  background-color: red;
-  color: black;
 }
 
 #flash-hex:hover {
