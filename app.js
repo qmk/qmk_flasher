@@ -101,7 +101,7 @@ function disableFlashButton() {
 
 function enableFlashButton() {
   if (bootloader_ready && pathField.val() != "" && !flash_in_progress) {
-      flashButton.attr('disabled','disabled');
+      flashButton.removeAttr('disabled');
   }
 }
 
