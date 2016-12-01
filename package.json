@@ -28,11 +28,13 @@
     "url": "https://github.com/jackhumbert/qmk_firmware_flasher/issues"
   },
   "homepage": "https://github.com/jackhumbert/qmk_firmware_flasher",
-  "devDependencies": {
-    "electron": "^1.4.10",
-    "electron-builder": "^8.6.0",
+  "dependencies": {
     "electron-debug": "~1.1",
     "bootstrap": "~3"
+  },
+  "devDependencies": {
+    "electron": "^1.4.10",
+    "electron-builder": "^8.6.0"
   },
   "build": {
     "app-bundle-id": "com.github.qmk-firmware-flasher",
