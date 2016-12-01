@@ -5,8 +5,9 @@ var process = require('process');
 var app = require('electron').remote.app;
 var dialog = require('electron').remote.dialog;
 var execFile = require('child_process').execFile;
+var path = require('path');
 
-var dfu_location = 'dfu/dfu-programmer';
+var dfu_location = path.normalize('dfu/dfu-programmer');
 
 // State variables
 var bootloader_ready = false;
@@ -30,7 +31,7 @@ try {
     fs.accessSync(dfu_location, fs.F_OK);
 } catch (err) {
     // Running in deployed mode, use the app copy
-    var dfu_location = app.getAppPath() + '/' + dfu_location;
+    dfu_location = path.resolve(app.getAppPath(), dfu_location);
 }
 
 $(document).ready(function() {
