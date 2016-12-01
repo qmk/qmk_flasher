@@ -25,12 +25,13 @@ if (process.platform == "win32") {
   dfu_location = dfu_location + '.exe'
 }
 
-fs.access(dfu_location, fs.F_OK, function(err) {
-  if (err) {
+
+try {
+    fs.accessSync(dfu_location, fs.F_OK);
+} catch (err) {
     // Running in deployed mode, use the app copy
     var dfu_location = app.getAppPath() + '/' + dfu_location;
-  }
-});
+}
 
 $(document).ready(function() {
   // Handle drag-n-drop events
@@ -79,6 +80,8 @@ $(document).ready(function() {
       writeStatus(stdout);
       sendStatus("stderr:");
       writeStatus(stderr);
+      sendStatus("dfu location:");
+      writeStatus(dfu_location);
     }
   });
 });
