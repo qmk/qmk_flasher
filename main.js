@@ -8,7 +8,7 @@ let win;  // Ensure that our win isn't garbage collected
 app.on('ready', function() {
   // Create the browser window.
   if (process.platform == 'win32')
-    win = new BrowserWindow({width: 670, height: 510, frame: true, resizable: false});
+    win = new BrowserWindow({width: 659, height: 510, frame: true, resizable: false});
   else
     win = new BrowserWindow({width: 640, height: 480, frame: true, resizable: false});
 
