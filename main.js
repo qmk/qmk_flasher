@@ -1,5 +1,6 @@
 var electron = require('electron');  // Module to control application life.
 var process = require('process');
+require('electron-debug')({showDevTools: false});
 const {app} = electron;
 const {BrowserWindow} = electron;
 let win;  // Ensure that our win isn't garbage collected
@@ -13,9 +14,6 @@ app.on('ready', function() {
 
   // Load the main interface
   win.loadURL('file://' + __dirname + '/index.html');
-
-  // Uncomment this line to open the DevTools upon launch. 
-  //win.webContents.openDevTools({'mode':'undocked'});
 
   //Disable the menubar for dev versions
   win.setMenu(null);
