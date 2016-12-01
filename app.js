@@ -243,6 +243,7 @@ function checkForBoard() {
         bootloader_ready = true;
         if (pathField.val() != "") {
           enableFlashButton();
+          hideFwrButton();
           if(flash_when_ready) {
             flashFirmware();
           }
