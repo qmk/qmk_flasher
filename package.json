@@ -31,6 +31,7 @@
   "devDependencies": {
     "electron": "^1.4.10",
     "electron-builder": "^8.6.0",
+    "electron-debug": "~1.1",
     "bootstrap": "~3"
   },
   "build": {
