@@ -242,10 +242,11 @@ function checkForBoard() {
         if (!bootloader_ready && pathField.val() != "") clearStatus();
         bootloader_ready = true;
         if (pathField.val() != "") {
+          enableFlashButton();
           if(flash_when_ready) {
             flashFirmware();
           }
-        } enableFlashButton();
+        }
       } else {
         bootloader_ready = false;
         disableFlashButton();
