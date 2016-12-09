@@ -73,13 +73,6 @@ $(document).ready(function() {
     if (stderr.indexOf('dfu-programmer') > -1) {
       window.setTimeout(checkForBoard, 10);
       sendStatus("Select a firmware file by clicking 'Choose .hex' or drag and drop a file onto this window.");
-    } else if(process.platform == "win32" && process.arch == "ia32") {
-      sendStatus("dfu-programmer currently has a compatibility issue with 32-bit Windows operating systems.");
-      sendStatus("");
-      sendStatus("Check https://github.com/jackhumbert/qmk_firmware_flasher/releases");
-      sendStatus("to see if there is a new version that fixes this problem.");
-      sendStatus("");
-      sendStatus("If there is not, consider using Atmel FLIP to flash the firmware.");
     } else {
       sendStatus("Could not run dfu-programmer! Please report this as a bug!");
       sendStatus("<br>Debugging information:<br>");
