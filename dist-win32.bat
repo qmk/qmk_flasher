@@ -11,6 +11,6 @@ set PACKAGE_DIR="%OUTPUT_DIR%\QMK Firmware Flasher-%PLATFORM%-%ARCH%"
 
 call npm install
 
-call electron-packager . --platform=%PLATFORM% --arch=%ARCH% --out %OUTPUT_DIR% --overwrite
+call electron-packager . --platform=%PLATFORM% --arch=%ARCH% --out %OUTPUT_DIR% --overwrite --asar
 
 copy firmware_flasher.win32.nsi %PACKAGE_DIR%
