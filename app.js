@@ -5,21 +5,34 @@ var process = require('process');
 var app = require('electron').remote.app;
 var dialog = require('electron').remote.dialog;
 var execFile = require('child_process').execFile;
+var path = require('path');
 
+var dfu_location = path.normalize('dfu/dfu-programmer');
+
+// State variables
 var bootloader_ready = false;
 var flash_in_progress = false;
-var dfu_location = 'dfu/dfu-programmer';
+var flash_when_ready = false;
+
+
+//HTML entities
+let flashButton = $('#flash-hex');
+let fwrButton = $('#flash-when-ready');
+let loadButton = $('#load-file');
+let pathField = $('#file-path');
+let statusBox = $('#status');
 
 if (process.platform == "win32") {
   dfu_location = dfu_location + '.exe'
 }
 
-fs.access(dfu_location, fs.F_OK, function(err) {
-  if (err) {
+
+try {
+    fs.accessSync(dfu_location, fs.F_OK);
+} catch (err) {
     // Running in deployed mode, use the app copy
-    var dfu_location = app.getAppPath() + '/' + dfu_location;
-  }
-});
+    dfu_location = path.resolve(app.getAppPath(), dfu_location);
+}
 
 $(document).ready(function() {
   // Handle drag-n-drop events
@@ -44,33 +57,15 @@ $(document).ready(function() {
   });
 
   // Bind actions to our buttons
-  $('#flash-hex').attr('disabled','disabled');
-  $('#close-window-button').bind('click', function (event) {
-    window.close();
-  });
-  $('#load-file').bind('click', function (event) {
+  loadButton.bind('click', function (event) {
     loadHex(loadFile()[0]);
   });
-  $('#flash-hex').bind('click', function (event) {
-    disableButtons();
-    sendHex($("#file-path").val(), function(success) {
-      if (success) {
-        sendStatus("Flashing complete!");
-      } else {
-        sendStatus("An error occured - please try again.");
-      }
-    });
+  flashButton.bind('click', function (event) {
+      flashFirmware();
   });
-  $('#reset').bind('click', function (event) {
-    disableButtons();
-    resetChip(function(success) {
-      enableButtons();
-      if (success) {
-        sendStatus("Reset complete!");
-      } else {
-        sendStatus("An error occured - please try again.");
-      }
-    });
+  fwrButton.bind('click', function (event) {
+    flash_when_ready = true;
+    disableFwrButton();
   });
 
   // Ready to go
@@ -86,6 +81,8 @@ $(document).ready(function() {
       writeStatus(stdout);
       sendStatus("stderr:");
       writeStatus(stderr);
+      sendStatus("dfu location:");
+      writeStatus(dfu_location);
     }
   });
 });
@@ -97,34 +94,47 @@ function loadHex(filename) {
     return;
   }
 
-  $("#file-path").val(filename);
-  enableButtons();
+  pathField.val(filename);
   clearStatus();
 
-  if (!bootloader_ready) sendStatus("Press RESET on your keyboard's PCB.");
+    if (bootloader_ready) {
+      enableFlashButton();
+    } else {
+      sendStatus("Press RESET on your keyboard's PCB.");
+      showFwrButton();
+    }
 }
 
-function disableButtons() {
-  $('#flash-hex').attr('disabled','disabled');
-  $('#flash-hex').css('background-color', 'red');
-  $('#flash-hex').css('color', 'black');
+function disableFlashButton() {
+    flashButton.attr('disabled','disabled');
 }
 
-function enableButtons() {
-  if (bootloader_ready && $('#file-path').val() != "") {
-    $('#flash-hex').removeAttr('disabled');
-    $('#flash-hex').css('background-color', 'green');
-    $('#flash-hex').css('color', 'white');
+function enableFlashButton() {
+  if (bootloader_ready && pathField.val() != "" && !flash_in_progress) {
+      flashButton.removeAttr('disabled');
   }
 }
 
+function showFwrButton() {
+  fwrButton.removeClass('invisible');
+  fwrButton.removeAttr('disabled');
+}
+
+function disableFwrButton() {
+  fwrButton.attr('disabled', 'disabled');
+}
+
+function hideFwrButton() {
+  fwrButton.addClass('invisible');
+}
+
 function clearStatus() {
-  $('#status').text('');
+  statusBox.text('');
 }
 
 function writeStatus(text) {
-  $('#status').append(text);
-  $('#status').scrollTop($('#status')[0].scrollHeight);
+  statusBox.append(text);
+  statusBox.scrollTop(statusBox.scrollHeight);
 }
 
 function sendStatus(text) {
@@ -140,8 +150,21 @@ function loadFile() {
   });
 }
 
+function flashFirmware() {
+    disableFlashButton();
+    hideFwrButton();
+    sendHex(pathField.val(), function (success) {
+        if (success) {
+            sendStatus("Flashing complete!");
+        } else {
+            sendStatus("An error occured - please try again.");
+        }
+    });
+}
+
 function sendHex(file, callback) {
   flash_in_progress = true;
+  flash_when_ready = false;
   eraseChip(function(success) {
     if (success) {
       // continue
@@ -220,14 +243,20 @@ function checkForBoard() {
   if (!flash_in_progress) {
     execFile(dfu_location, ['atmega32u4', 'get', 'bootloader-version'], function(error, stdout, stderr) {
       if (stdout.indexOf("Bootloader Version:") > -1) {
-        if (!bootloader_ready && $('#file-path').val() != "") clearStatus();
+        if (!bootloader_ready && pathField.val() != "") clearStatus();
         bootloader_ready = true;
-        if ($('#file-path').val() != "") enableButtons();
+        if (pathField.val() != "") {
+          enableFlashButton();
+          hideFwrButton();
+          if(flash_when_ready) {
+            flashFirmware();
+          }
+        }
       } else {
         bootloader_ready = false;
-        disableButtons();
+        disableFlashButton();
       }
     });
   }
-  window.setTimeout(checkForBoard, 10000);
+  window.setTimeout(checkForBoard, 5000);
 }
