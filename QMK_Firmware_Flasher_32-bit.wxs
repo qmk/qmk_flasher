@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='windows-1252'?>
-<Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
+<Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'
+     xmlns:difxapp="http://schemas.microsoft.com/wix/DifxAppExtension">
 	<Product Name='Firmware Flasher' Manufacturer='QMK'
 		Id='936206DD-192B-40C8-80FA-3354A98D3844'
 		UpgradeCode='F43ED636-ED6D-453B-B2C8-3EEB8F13D6A7'
