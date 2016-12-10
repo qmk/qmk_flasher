@@ -349,22 +349,6 @@
                         <File Id="filF5E957B4118F5F1DC7477B1CE9641FB0" KeyPath="yes" Source="SourceDir\resources\app.asar.unpacked\dfu\dfu-prog-usb-1.2.2\amd64\libusb0.sys" />
                       </Component>
                     </Directory>
-                    <Directory Id="dirC02E578028508AAF993D04A4C4CF2998" Name="ia64">
-                      <Component Id="cmp92EC9526013166FA176A27E9D00DCC74" Guid="{6DAF2B1F-3E0C-4233-B30A-D34206A5EC8A}">
-                        <File Id="filCE5AED9597B46A4A7BE3B7B5BE8287D3" KeyPath="yes" Source="SourceDir\resources\app.asar.unpacked\dfu\dfu-prog-usb-1.2.2\ia64\libusb0.dll" />
-                      </Component>
-                      <Component Id="cmpD77245F2F0ED053BDA4030257135EFE1" Guid="{C4830FDC-F541-43DE-B7A0-C9C115B1A681}">
-                        <File Id="fil3FAF9CA4DAB03D61B326137107C0BAFA" KeyPath="yes" Source="SourceDir\resources\app.asar.unpacked\dfu\dfu-prog-usb-1.2.2\ia64\libusb0.sys" />
-                      </Component>
-                    </Directory>
-                    <Directory Id="dir166D84551288B847CCCFDA27C43B99C9" Name="x86">
-                      <Component Id="cmpC63C071E2A44F067319FEE879F2913B9" Guid="{C994C8A0-9BC8-4CD0-B304-795E9CC13569}">
-                        <File Id="filB67CC8794381963116E748D7DB8229D6" KeyPath="yes" Source="SourceDir\resources\app.asar.unpacked\dfu\dfu-prog-usb-1.2.2\x86\libusb0.sys" />
-                      </Component>
-                      <Component Id="cmp568ACA0AFC5467CD7BB0B332741F21C3" Guid="{8CF3E4C8-C806-4FCA-9E3E-494EA3A959CF}">
-                        <File Id="fil6F6BAE7A80C71AB77BBB57A48BE7E7E2" KeyPath="yes" Source="SourceDir\resources\app.asar.unpacked\dfu\dfu-prog-usb-1.2.2\x86\libusb0_x86.dll" />
-                      </Component>
-                    </Directory>
                   </Directory>
                 </Directory>
               </Directory>
@@ -473,10 +457,6 @@
       <ComponentRef Id="cmp9D70B54BE1A6A1B01FD09C4B64826700" />
       <ComponentRef Id="cmpF40D9AC1C3BE1E00384BBCECD2118BD3" />
       <ComponentRef Id="cmpA3CE83A924AAFE8C20577F546AE7E56D" />
-      <ComponentRef Id="cmp92EC9526013166FA176A27E9D00DCC74" />
-      <ComponentRef Id="cmpD77245F2F0ED053BDA4030257135EFE1" />
-      <ComponentRef Id="cmpC63C071E2A44F067319FEE879F2913B9" />
-      <ComponentRef Id="cmp568ACA0AFC5467CD7BB0B332741F21C3" />
     </ComponentGroup>
 
     <Feature Id='Complete' Level='1'>
