@@ -15,14 +15,19 @@ call node package.js
 
 :: call electron-packager . --platform=%PLATFORM% --arch=%ARCH% --out %OUTPUT_DIR% --overwrite --asar.unpackDir dfu'
 
-copy installer.wxs %PACKAGE_DIR%
+copy QMK_Firmware_Flasher_32-bit.wxs %PACKAGE_DIR%
+copy QMK_Firmware_Flasher_64-bit.wxs %PACKAGE_DIR%
 
 copy build\windows.ico %PACKAGE_DIR%
 
 cd %PACKAGE_DIR%
 
-call candle installer.wxs
+call candle QMK_Firmware_Flasher_32-bit.wxs
 
-if errorlevel 0 call light installer.wixobj
+if errorlevel 0 call light QMK_Firmware_Flasher_32-bit.wixobj
+
+call candle QMK_Firmware_Flasher_64-bit.wxs
+
+if errorlevel 0 call light QMK_Firmware_Flasher_64-bit.wixobj
 
 cd %~dp0
