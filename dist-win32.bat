@@ -11,6 +11,18 @@ set PACKAGE_DIR="%OUTPUT_DIR%\QMK Firmware Flasher-%PLATFORM%-%ARCH%"
 
 call npm install
 
-call electron-packager . --platform=%PLATFORM% --arch=%ARCH% --out %OUTPUT_DIR% --overwrite --asar
+call node package.js
 
-copy firmware_flasher.win32.nsi %PACKAGE_DIR%
+:: call electron-packager . --platform=%PLATFORM% --arch=%ARCH% --out %OUTPUT_DIR% --overwrite --asar.unpackDir dfu'
+
+copy installer.wxs %PACKAGE_DIR%
+
+copy build\windows.ico %PACKAGE_DIR%
+
+cd %PACKAGE_DIR%
+
+call candle installer.wxs
+
+if errorlevel 0 call light installer.wixobj
+
+cd %~dp0

@@ -31,7 +31,7 @@ try {
     fs.accessSync(dfu_location, fs.F_OK);
 } catch (err) {
     // Running in deployed mode, use the app copy
-    dfu_location = path.resolve(app.getAppPath(), dfu_location);
+    dfu_location = path.resolve(app.getAppPath(), '..', 'app.asar.unpacked', dfu_location);
 }
 
 $(document).ready(function() {
