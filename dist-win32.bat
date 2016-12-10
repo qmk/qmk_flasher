@@ -11,23 +11,28 @@ set PACKAGE_DIR="%OUTPUT_DIR%\QMK Firmware Flasher-%PLATFORM%-%ARCH%"
 
 call npm install
 
+rmdir %PACKAGE_DIR% /S /Q
+
 call node package.js
 
-:: call electron-packager . --platform=%PLATFORM% --arch=%ARCH% --out %OUTPUT_DIR% --overwrite --asar.unpackDir dfu'
+copy QMK_Firmware_Flasher.wxs %PACKAGE_DIR%
 
-copy QMK_Firmware_Flasher_32-bit.wxs %PACKAGE_DIR%
-copy QMK_Firmware_Flasher_64-bit.wxs %PACKAGE_DIR%
+copy WixDifxAppExtension.dll %PACKAGE_DIR%
+copy difxapp_x86.wixlib %PACKAGE_DIR%
+copy difxapp_x64.wixlib %PACKAGE_DIR%
 
 copy build\windows.ico %PACKAGE_DIR%
 
 cd %PACKAGE_DIR%
 
-call candle QMK_Firmware_Flasher_32-bit.wxs
+call candle -ext WixDifxAppExtension.dll QMK_Firmware_Flasher.wxs
 
-if errorlevel 0 call light QMK_Firmware_Flasher_32-bit.wixobj
+if errorlevel 1 GOTO end
 
-call candle QMK_Firmware_Flasher_64-bit.wxs
+call light -ext WixDifxAppExtension.dll difxapp_x86.wixlib QMK_Firmware_Flasher.wixobj -o QMK_Firmware_Flasher_32-bit.msi
 
-if errorlevel 0 call light QMK_Firmware_Flasher_64-bit.wixobj
+call light -ext WixDifxAppExtension.dll difxapp_x64.wixlib QMK_Firmware_Flasher.wixobj -o QMK_Firmware_Flasher_64-bit.msi
 
+:end
+copy *.msi ..
 cd %~dp0

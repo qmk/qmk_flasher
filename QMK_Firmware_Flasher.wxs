@@ -12,7 +12,6 @@
         InstallerVersion='100' Languages='1033' Compressed='yes' SummaryCodepage='1252' />
 
     <Media Id='1' Cabinet='firmware_flasher.cab' EmbedCab='yes' />
-
     <Directory Id='TARGETDIR' Name='SourceDir'>
       <Directory Id='ProgramFilesFolder' Name='PFiles'>
         <Directory Id='QMK' Name='QMK'>
@@ -322,33 +321,36 @@
 
               <Directory Id="dirAsarUnpacked" Name="app.asar.unpacked">
                 <Directory Id="dir237C6600C303A43EA38B2FA714F5A03F" Name="dfu">
-                  <Component Id="cmp95C174447DE3AC97B9DE7B04F4195EB5" Guid="{4C4AAF74-0299-4E87-9758-7535E6A15D03}">
-                    <File Id="fil6CCD4B2BB073248A2157CED1302C2437" KeyPath="yes" Source="SourceDir\resources\app.asar.unpacked\dfu\dfu-programmer" />
-                  </Component>
                   <Component Id="cmp8E4B6D1AF625B3E3359B44D10CA6D5FE" Guid="{AEE0F46F-5F28-4117-8ADF-868DB99BCBD8}">
                     <File Id="filC06323BDAC7570BB960B0C45884F44E4" KeyPath="yes" Source="SourceDir\resources\app.asar.unpacked\dfu\dfu-programmer.exe" />
                   </Component>
-                  <Component Id="cmpB4610459D7D80C8F7FFE0E855E360207" Guid="{92A93B44-4E45-45C2-AF55-31E96C7623C6}">
-                    <File Id="filE14477D4B087D7C7A673F4F73145B116" KeyPath="yes" Source="SourceDir\resources\app.asar.unpacked\dfu\libusb-1.0.0.dylib" />
-                  </Component>
-                  <Directory Id="dirB1318A7C062D82AF1F25D3C9602343CC" Name="dfu-prog-usb-1.2.2">
-                    <Component Id="cmpB979F56DF35E40983B8D24D3866D2DAD" Guid="{59753B8F-FF05-4018-B335-A99580DDC838}">
-                      <File Id="filE4F5D3325491A1A22D63112930C1A3B3" KeyPath="yes" Source="SourceDir\resources\app.asar.unpacked\dfu\dfu-prog-usb-1.2.2\atmel_usb_dfu.cat" />
-                    </Component>
-                    <Component Id="cmpD541374AE8BDA5E48EA094332DFA6D53" Guid="{1B8F64B9-7A4A-4268-A873-B217A4BD8767}">
+                  <Directory Id="dirB1318A7C062D82AF1F25D3C9602343CC" Name="driver">
+                    <Directory Id="dirDriverx64" Name="amd64">
+                      <Component Id="cmpDriverx64" Guid="{39C3C579-301D-4243-8A3D-7869F1D766EF}">
+                        <File Id="filC6EC2BC8D1BD8B5F46EA6D55618BB4DF" Source="SourceDir\resources\app.asar.unpacked\dfu\dfu-prog-usb-1.2.2\amd64\libusb0.dll" />
+                        <File Id="filF5E957B4118F5F1DC7477B1CE9641FB0" Source="SourceDir\resources\app.asar.unpacked\dfu\dfu-prog-usb-1.2.2\amd64\libusb0.sys" />
+                      </Component>
+                    </Directory>
+                    <Directory Id="dirC02E578028508AAF993D04A4C4CF2998" Name="ia64">
+                        <Component Id="cmpDriveria64" Guid="{44D136D0-63FD-4314-B50F-E7BF6D9D3376}">
+                            <File Id="filCE5AED9597B46A4A7BE3B7B5BE8287D3" KeyPath="yes" Source="SourceDir\resources\app.asar.unpacked\dfu\dfu-prog-usb-1.2.2\ia64\libusb0.dll" />
+                            <File Id="fil3FAF9CA4DAB03D61B326137107C0BAFA" Source="SourceDir\resources\app.asar.unpacked\dfu\dfu-prog-usb-1.2.2\ia64\libusb0.sys" />
+                        </Component>
+                    </Directory>
+                    <Directory Id="dir166D84551288B847CCCFDA27C43B99C9" Name="x86">
+                        <Component Id="cmpDriverx86" Guid="{976841FA-6364-4A49-A996-D20DC3C31BAF}">
+                            <File Id="filB67CC8794381963116E748D7DB8229D6" Source="SourceDir\resources\app.asar.unpacked\dfu\dfu-prog-usb-1.2.2\x86\libusb0.sys" />
+                            <File Id="fil6F6BAE7A80C71AB77BBB57A48BE7E7E2" KeyPath="yes" Source="SourceDir\resources\app.asar.unpacked\dfu\dfu-prog-usb-1.2.2\x86\libusb0_x86.dll" />
+                        </Component>
+                    </Directory>
+                    <Component Id="cmpDriver" Guid="{B3FD9EB2-E316-4603-A537-ECB28598D213}">
+                      <File Id="filE4F5D3325491A1A22D63112930C1A3B3" Source="SourceDir\resources\app.asar.unpacked\dfu\dfu-prog-usb-1.2.2\atmel_usb_dfu.cat" />
                       <File Id="filC029E403E413FE215154D15D1C4758F9" KeyPath="yes" Source="SourceDir\resources\app.asar.unpacked\dfu\dfu-prog-usb-1.2.2\atmel_usb_dfu.inf" />
+                      <difxapp:Driver PlugAndPlayPrompt="no"/>
                     </Component>
                     <Component Id="cmp9D70B54BE1A6A1B01FD09C4B64826700" Guid="{44F1DCEA-7AAE-4BD1-8FDF-8BF37DF7FEDB}">
                       <File Id="fil95FEB0BEDBD3049C2AE924A9C62C3BD3" KeyPath="yes" Source="SourceDir\resources\app.asar.unpacked\dfu\dfu-prog-usb-1.2.2\COPYING_GPL.txt" />
                     </Component>
-                    <Directory Id="dir7AE7A51197ED4D347F907995BC45303F" Name="amd64">
-                      <Component Id="cmpF40D9AC1C3BE1E00384BBCECD2118BD3" Guid="{AC96BD91-A2CB-4669-A2B6-2F9CCDD898E2}">
-                        <File Id="filC6EC2BC8D1BD8B5F46EA6D55618BB4DF" KeyPath="yes" Source="SourceDir\resources\app.asar.unpacked\dfu\dfu-prog-usb-1.2.2\amd64\libusb0.dll" />
-                      </Component>
-                      <Component Id="cmpA3CE83A924AAFE8C20577F546AE7E56D" Guid="{A36E6B9B-528B-41BD-B2F7-B670D0E15AFD}">
-                        <File Id="filF5E957B4118F5F1DC7477B1CE9641FB0" KeyPath="yes" Source="SourceDir\resources\app.asar.unpacked\dfu\dfu-prog-usb-1.2.2\amd64\libusb0.sys" />
-                      </Component>
-                    </Directory>
                   </Directory>
                 </Directory>
               </Directory>
@@ -449,14 +451,12 @@
     </ComponentGroup>
 
     <ComponentGroup Id="DfuStuff">
-      <ComponentRef Id="cmp95C174447DE3AC97B9DE7B04F4195EB5" />
+      <ComponentRef Id="cmpDriverx64"/>
+      <ComponentRef Id="cmpDriveria64"/>
+      <ComponentRef Id="cmpDriverx86"/>
+      <ComponentRef Id="cmpDriver"/>
       <ComponentRef Id="cmp8E4B6D1AF625B3E3359B44D10CA6D5FE" />
-      <ComponentRef Id="cmpB4610459D7D80C8F7FFE0E855E360207" />
-      <ComponentRef Id="cmpB979F56DF35E40983B8D24D3866D2DAD" />
-      <ComponentRef Id="cmpD541374AE8BDA5E48EA094332DFA6D53" />
       <ComponentRef Id="cmp9D70B54BE1A6A1B01FD09C4B64826700" />
-      <ComponentRef Id="cmpF40D9AC1C3BE1E00384BBCECD2118BD3" />
-      <ComponentRef Id="cmpA3CE83A924AAFE8C20577F546AE7E56D" />
     </ComponentGroup>
 
     <Feature Id='Complete' Level='1'>
