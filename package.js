@@ -13,4 +13,8 @@ options = {
 	}
 }
 
-packager(options, function done_callback (err, appPaths) { console.log(err) })
+packager(options, function done_callback (err, appPaths) {
+	if(err) {
+		console.log(err);		
+	}
+});
