@@ -11,9 +11,9 @@ options = {
 	"asar": {
 		"unpackDir": "dfu"
 	},
-	"ignore": ["wix", ".*md", ".idea"]
+	"ignore": ["wix", ".idea"]
 }
-
+	
 packager(options, function done_callback (err, appPaths) {
 	if(err) {
 		console.log(err);		
