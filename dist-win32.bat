@@ -29,9 +29,9 @@ call candle -ext WixDifxAppExtension.dll QMK_Firmware_Flasher.wxs
 
 if errorlevel 1 GOTO end
 
-call light -ext WixDifxAppExtension.dll difxapp_x86.wixlib QMK_Firmware_Flasher.wixobj -o QMK_Firmware_Flasher_32-bit.msi
+call light -ext WixDifxAppExtension.dll -ext WixUIExtension difxapp_x86.wixlib QMK_Firmware_Flasher.wixobj -o QMK_Firmware_Flasher_32-bit.msi
 
-call light -ext WixDifxAppExtension.dll difxapp_x64.wixlib QMK_Firmware_Flasher.wixobj -o QMK_Firmware_Flasher_64-bit.msi
+call light -ext WixDifxAppExtension.dll -ext WixUIExtension difxapp_x64.wixlib QMK_Firmware_Flasher.wixobj -o QMK_Firmware_Flasher_64-bit.msi
 
 :end
 copy *.msi ..
