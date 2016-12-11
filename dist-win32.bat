@@ -16,14 +16,9 @@ del %OUTPUT_DIR%\*.msi
 
 call node package.js
 
-copy QMK_Firmware_Flasher.wxs %PACKAGE_DIR%
-
-copy WixDifxAppExtension.dll %PACKAGE_DIR%
-copy difxapp_x86.wixlib %PACKAGE_DIR%
-copy difxapp_x64.wixlib %PACKAGE_DIR%
+copy wix\* %PACKAGE_DIR%
 
 copy build\windows.ico %PACKAGE_DIR%
-copy LICENSE.rtf %PACKAGE_DIR%
 
 cd %PACKAGE_DIR%
 
