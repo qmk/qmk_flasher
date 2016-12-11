@@ -10,7 +10,8 @@ options = {
 	"overwrite": true,
 	"asar": {
 		"unpackDir": "dfu"
-	}
+	},
+	"ignore": ["wix", ".*md", ".idea"]
 }
 
 packager(options, function done_callback (err, appPaths) {
