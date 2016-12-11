@@ -469,6 +469,8 @@
     <UIRef Id="WixUI_InstallDir" />
     <UIRef Id="WixUI_ErrorProgressText" />
 
+    <WixVariable Id="WixUILicenseRtf" Value="SourceDir\License.rtf" />
+
     <Icon Id="Windows.ico" SourceFile="Windows.ico" />
 
   </Product>
