@@ -12,6 +12,7 @@ set PACKAGE_DIR="%OUTPUT_DIR%\QMK Firmware Flasher-%PLATFORM%-%ARCH%"
 call npm install
 
 rmdir %PACKAGE_DIR% /S /Q
+del %OUTPUT_DIR%\*.msi
 
 call node package.js
 
