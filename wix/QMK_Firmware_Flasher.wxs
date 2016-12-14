@@ -324,6 +324,9 @@
                   <Component Id="cmp8E4B6D1AF625B3E3359B44D10CA6D5FE" Guid="{AEE0F46F-5F28-4117-8ADF-868DB99BCBD8}">
                     <File Id="filC06323BDAC7570BB960B0C45884F44E4" KeyPath="yes" Source="SourceDir\resources\app.asar.unpacked\dfu\dfu-programmer.exe" />
                   </Component>
+                  <Component Id="cmpLibusbDll" Guid="{51A63107-61C1-4A36-9167-106FC70AA15E}">
+                    <File Id="filLibusbDllx86" KeyPath="yes" Name="libusb0.dll" Source="SourceDir\resources\app.asar.unpacked\dfu\dfu-prog-usb-1.2.2\x86\libusb0_x86.dll" />
+                  </Component>
                   <Directory Id="dirB1318A7C062D82AF1F25D3C9602343CC" Name="driver">
                     <Directory Id="dirDriverx64" Name="amd64">
                       <Component Id="cmpDriverx64" Guid="{39C3C579-301D-4243-8A3D-7869F1D766EF}">
@@ -451,6 +454,7 @@
     </ComponentGroup>
 
     <ComponentGroup Id="DfuStuff">
+      <ComponentRef Id="cmpLibusbDll" />
       <ComponentRef Id="cmpDriverx64"/>
       <ComponentRef Id="cmpDriveria64"/>
       <ComponentRef Id="cmpDriverx86"/>
