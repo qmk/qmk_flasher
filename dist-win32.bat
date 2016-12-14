@@ -16,13 +16,14 @@ del %OUTPUT_DIR%\*.msi
 
 call node package.js
 
-copy wix\* %PACKAGE_DIR%
+copy msi\* %PACKAGE_DIR%
+copy setup\* %PACKAGE_DIR%
 
 copy build\windows.ico %PACKAGE_DIR%
 
 cd %PACKAGE_DIR%
 
-call candle -ext WixDifxAppExtension.dll QMK_Firmware_Flasher.wxs
+call candle -ext WixDifxAppExtension.dll QMK_Firmware_Flasher_msi.wxs
 
 if errorlevel 1 GOTO end
 
