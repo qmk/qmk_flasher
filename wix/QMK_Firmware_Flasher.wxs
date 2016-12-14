@@ -349,7 +349,7 @@
                     <Component Id="cmpDriver" Guid="{B3FD9EB2-E316-4603-A537-ECB28598D213}">
                       <File Id="filE4F5D3325491A1A22D63112930C1A3B3" Source="SourceDir\resources\app.asar.unpacked\dfu\dfu-prog-usb-1.2.2\atmel_usb_dfu.cat" />
                       <File Id="filC029E403E413FE215154D15D1C4758F9" KeyPath="yes" Source="SourceDir\resources\app.asar.unpacked\dfu\dfu-prog-usb-1.2.2\atmel_usb_dfu.inf" />
-                      <difxapp:Driver PlugAndPlayPrompt="no"/>
+                      <difxapp:Driver PlugAndPlayPrompt="no" AddRemovePrograms="no"/>
                     </Component>
                     <Component Id="cmp9D70B54BE1A6A1B01FD09C4B64826700" Guid="{44F1DCEA-7AAE-4BD1-8FDF-8BF37DF7FEDB}">
                       <File Id="fil95FEB0BEDBD3049C2AE924A9C62C3BD3" KeyPath="yes" Source="SourceDir\resources\app.asar.unpacked\dfu\dfu-prog-usb-1.2.2\COPYING_GPL.txt" />
