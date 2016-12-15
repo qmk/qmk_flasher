@@ -31,7 +31,7 @@ try {
     fs.accessSync(dfu_location, fs.F_OK);
 } catch (err) {
     // Running in deployed mode, use the app copy
-    dfu_location = path.resolve(app.getAppPath(), '..', 'app.asar.unpacked', dfu_location);
+    dfu_location = path.resolve(app.getAppPath(), dfu_location);
 }
 
 $(document).ready(function() {
@@ -64,8 +64,9 @@ $(document).ready(function() {
       flashFirmware();
   });
   fwrButton.bind('click', function (event) {
+    if(!checkFile()) return;
     flash_when_ready = true;
-    disableFwrButton();
+    disableButton(fwrButton);
   });
 
   // Ready to go
@@ -87,10 +88,27 @@ $(document).ready(function() {
   });
 });
 
+
+function checkFile(filename = pathField.val()) {
+    if (filename.slice(-4).toUpperCase() == '.HEX') {
+        return true;
+    } else {
+        sendStatus("Invalid firmware file: " + filename);
+        return false;
+    }
+}
+
+function checkFileSilent(filename = pathField.val()) {
+    if (filename.slice(-4).toUpperCase() == '.HEX') {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 function loadHex(filename) {
   // Load a file and prepare to flash it.
-  if (filename.slice(-4) != '.hex') {
-    sendStatus("Invalid firmware file: " + filename);
+  if(!checkFile(filename)) {
     return;
   }
 
@@ -98,34 +116,33 @@ function loadHex(filename) {
   clearStatus();
 
     if (bootloader_ready) {
-      enableFlashButton();
+      enableButton(flashButton);
     } else {
       sendStatus("Press RESET on your keyboard's PCB.");
       showFwrButton();
     }
 }
 
-function disableFlashButton() {
-    flashButton.attr('disabled','disabled');
+function disableButton(button) {
+    button.attr('disabled', 'disabled');
+    button.removeClass('btn-success');
+    button.addClass('btn-secondary');
 }
 
-function enableFlashButton() {
-  if (bootloader_ready && pathField.val() != "" && !flash_in_progress) {
-      flashButton.removeAttr('disabled');
-  }
+
+function enableButton(button) {
+    button.removeAttr('disabled');
+    button.removeClass('btn-secondary');
+    button.addClass('btn-success');
 }
 
 function showFwrButton() {
   fwrButton.removeClass('invisible');
-  fwrButton.removeAttr('disabled');
-}
-
-function disableFwrButton() {
-  fwrButton.attr('disabled', 'disabled');
 }
 
 function hideFwrButton() {
   fwrButton.addClass('invisible');
+  enableButton(fwrButton);
 }
 
 function clearStatus() {
@@ -151,15 +168,16 @@ function loadFile() {
 }
 
 function flashFirmware() {
-    disableFlashButton();
-    hideFwrButton();
-    sendHex(pathField.val(), function (success) {
-        if (success) {
-            sendStatus("Flashing complete!");
-        } else {
-            sendStatus("An error occured - please try again.");
-        }
-    });
+  if(!checkFile()) return;
+  disableButton(flashButton);
+  hideFwrButton();
+  sendHex(pathField.val(), function (success) {
+      if (success) {
+          sendStatus("Flashing complete!");
+      } else {
+          sendStatus("An error occurred - please try again.");
+      }
+  });
 }
 
 function sendHex(file, callback) {
@@ -190,7 +208,7 @@ function sendHex(file, callback) {
     }
   });
   flash_in_progress = false;
-};
+}
 
 /*
 var escapeShell = function(cmd) {
@@ -239,14 +257,15 @@ function resetChip(callback) {
   });
 }
 
+// This function has some logic that might be redundant. It should be examined more closely and simplified if possible.
 function checkForBoard() {
   if (!flash_in_progress) {
     execFile(dfu_location, ['atmega32u4', 'get', 'bootloader-version'], function(error, stdout, stderr) {
       if (stdout.indexOf("Bootloader Version:") > -1) {
-        if (!bootloader_ready && pathField.val() != "") clearStatus();
+        if (!bootloader_ready && checkFileSilent()) clearStatus();
         bootloader_ready = true;
-        if (pathField.val() != "") {
-          enableFlashButton();
+        if (checkFileSilent()) {
+          enableButton(flashButton);
           hideFwrButton();
           if(flash_when_ready) {
             flashFirmware();
@@ -254,7 +273,8 @@ function checkForBoard() {
         }
       } else {
         bootloader_ready = false;
-        disableFlashButton();
+        disableButton(flashButton);
+        if(checkFileSilent()) showFwrButton();
       }
     });
   }
