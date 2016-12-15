@@ -64,6 +64,7 @@ $(document).ready(function() {
       flashFirmware();
   });
   fwrButton.bind('click', function (event) {
+    if(!checkFile()) return;
     flash_when_ready = true;
     disableButton(fwrButton);
   });
@@ -87,10 +88,27 @@ $(document).ready(function() {
   });
 });
 
+
+function checkFile(filename = pathField.val()) {
+    if (filename.slice(-4).toUpperCase() == '.HEX') {
+        return true;
+    } else {
+        sendStatus("Invalid firmware file: " + filename);
+        return false;
+    }
+}
+
+function checkFileSilent(filename = pathField.val()) {
+    if (filename.slice(-4).toUpperCase() == '.HEX') {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 function loadHex(filename) {
   // Load a file and prepare to flash it.
-  if (filename.slice(-4) != '.hex') {
-    sendStatus("Invalid firmware file: " + filename);
+  if(!checkFile(filename)) {
     return;
   }
 
@@ -150,15 +168,16 @@ function loadFile() {
 }
 
 function flashFirmware() {
-    disableButton(flashButton);
-    hideFwrButton();
-    sendHex(pathField.val(), function (success) {
-        if (success) {
-            sendStatus("Flashing complete!");
-        } else {
-            sendStatus("An error occured - please try again.");
-        }
-    });
+  if(!checkFile()) return;
+  disableButton(flashButton);
+  hideFwrButton();
+  sendHex(pathField.val(), function (success) {
+      if (success) {
+          sendStatus("Flashing complete!");
+      } else {
+          sendStatus("An error occurred - please try again.");
+      }
+  });
 }
 
 function sendHex(file, callback) {
@@ -189,7 +208,7 @@ function sendHex(file, callback) {
     }
   });
   flash_in_progress = false;
-};
+}
 
 /*
 var escapeShell = function(cmd) {
@@ -243,9 +262,9 @@ function checkForBoard() {
   if (!flash_in_progress) {
     execFile(dfu_location, ['atmega32u4', 'get', 'bootloader-version'], function(error, stdout, stderr) {
       if (stdout.indexOf("Bootloader Version:") > -1) {
-        if (!bootloader_ready && pathField.val() != "") clearStatus();
+        if (!bootloader_ready && checkFileSilent()) clearStatus();
         bootloader_ready = true;
-        if (pathField.val() != "") {
+        if (checkFileSilent()) {
           enableButton(flashButton);
           hideFwrButton();
           if(flash_when_ready) {
@@ -255,6 +274,7 @@ function checkForBoard() {
       } else {
         bootloader_ready = false;
         disableButton(flashButton);
+        if(checkFileSilent()) showFwrButton();
       }
     });
   }
