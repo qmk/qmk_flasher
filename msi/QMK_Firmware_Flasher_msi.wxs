@@ -7,11 +7,11 @@
     Language='1033' Codepage='1252'
     Version='1.0.0'>
 
-    <Package Id='*' Keywords='Installer' Description="QMK Firmware Flasher Installer"
+    <Package Id='*' Keywords='Installer' Description="QMK Firmware Flasher Installer" InstallScope="perMachine"
         Manufacturer='QMK'
         InstallerVersion='100' Languages='1033' Compressed='yes' SummaryCodepage='1252' />
 
-    <Media Id='1' Cabinet='firmware_flasher.cab' EmbedCab='yes' />
+    <Media Id='1' Cabinet='ff.cab' EmbedCab='no' />
     <Directory Id='TARGETDIR' Name='SourceDir'>
       <Directory Id='ProgramFilesFolder' Name='PFiles'>
         <Directory Id='QMK' Name='QMK'>
@@ -19,8 +19,8 @@
 
             <Component Id='MainExecutable' Guid='A6FDB7D0-5E65-4B46-B84C-C3EDDF7CD648'>
               <File Id='LauncherExe' Name='QMK Firmware Flasher.exe' DiskId='1' Source='SourceDir\QMK Firmware Flasher.exe' KeyPath='yes'>
-                <Shortcut Id="startmenuFirmwareFlasher" Directory="ProgramMenuDir" Name="Firmware Flasher" WorkingDirectory='INSTALLDIR' Icon="Windows.ico" IconIndex="0" Advertise="yes" />
-                <Shortcut Id="desktopFirmwwareFlasher" Directory="DesktopFolder" Name="QMK Firmware Flasher" WorkingDirectory='INSTALLDIR' Icon="Windows.ico" IconIndex="0" Advertise="yes" />
+                <Shortcut Id="startmenuFirmwareFlasher" Directory="ApplicationProgramFolder" Name="Firmware Flasher" WorkingDirectory='INSTALLDIR' Icon="Windows.ico" IconIndex="0" Advertise="yes" Description="Tool to flash firmware to keyboards" />
+                <Shortcut Id="desktopFirmwwareFlasher" Directory="DesktopFolder" Name="QMK Firmware Flasher" WorkingDirectory='INSTALLDIR' Icon="Windows.ico" IconIndex="0" Advertise="yes" Description="Tool to flash firmware to keyboards" />
               </File>
             </Component>
 
@@ -363,9 +363,9 @@
       </Directory>
 
       <Directory Id="ProgramMenuFolder" Name="Programs">
-        <Directory Id="ProgramMenuDir" Name="QMK">
+        <Directory Id="ApplicationProgramFolder" Name="QMK">
           <Component Id="ProgramMenuDir" Guid="B90360D2-57C6-4EA3-9B03-7B767B369548">
-            <RemoveFolder Id='ProgramMenuDir' On='uninstall' />
+            <RemoveFolder Id='ApplicationProgramFolder' On='uninstall' />
             <RegistryValue Root='HKCU' Key='Software\[Manufacturer]\[ProductName]' Type='string' Value='' KeyPath='yes' />
           </Component>
         </Directory>
