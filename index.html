@@ -6,11 +6,26 @@
     <link href="style.css" rel="stylesheet">
   </head>
   <body>
+    <center>
+			<div class="btn-group" role="group" aria-label="...">
+				<button id="simple" type="button" class="btn btn-default" style="background-color:#ccc">Simple</button>
+				<button id="expert" type="button" class="btn btn-default">Expert</button>
+			</div>
+    </center>
+
     <input type="text" id="file-path" class="form-control" placeholder="..." />
     <button id="load-file" class="button">Choose .hex</button>
     <button id="flash-hex" class="btn btn-secondary" disabled="disabled">Flash Keyboard</button>
     <button id="flash-when-ready" class="btn btn-success invisible">Flash When Ready</button>
-    <span id="status"></span>
+    <span id="simple-status"></span>
+		<div id="expert-features" style="display:none;">
+      <div id="toolbar" style="display: block">
+        <button id="autoflash" type="button" class="btn btn-default">AutoFlash</button>
+        <button id="reset" type="button" class="btn btn-default">Reset</button>
+      </div>
+      <span id="status"></span>
+    </div>
+
     <script type="text/javascript" src="js/jquery-1.7.2.js"></script>
     <script src="app.js"></script>
   </body>

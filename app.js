@@ -7,13 +7,15 @@ var dialog = require('electron').remote.dialog;
 var execFile = require('child_process').execFile;
 var path = require('path');
 
-var dfu_location = path.normalize('dfu/dfu-programmer');
+// Allow the app to control the window
+const {BrowserWindow} = require('electron').remote
+var win = BrowserWindow.getFocusedWindow();
 
 // State variables
 var bootloader_ready = false;
 var flash_in_progress = false;
 var flash_when_ready = false;
-
+var ui_mode = 'simple';
 
 //HTML entities
 let flashButton = $('#flash-hex');
@@ -21,20 +23,51 @@ let fwrButton = $('#flash-when-ready');
 let loadButton = $('#load-file');
 let pathField = $('#file-path');
 let statusBox = $('#status');
+let simple_tab = $('#simple');
+let expert_tab = $('#expert');
+let expertFeatures = $('#expert-features');
+let simpleStatus = $('#simple-status');
+
+// Figure out the path to dfu-programmer
+var dfu_location = path.normalize('dfu/dfu-programmer');
 
 if (process.platform == "win32") {
   dfu_location = dfu_location + '.exe'
 }
 
-
 try {
-    fs.accessSync(dfu_location, fs.F_OK);
+  fs.accessSync(dfu_location, fs.F_OK);
 } catch (err) {
-    // Running in deployed mode, use the app copy
-    dfu_location = path.resolve(app.getAppPath(), dfu_location);
+  // Running in deployed mode, use the app copy
+  dfu_location = path.resolve(app.getAppPath(), dfu_location);
 }
 
 $(document).ready(function() {
+  // Setup the tabs
+  $('#simple').click(function() {
+    win_size = win.getSize();
+    if (win_size[1] > 330) {
+      simple_tab.css('background-color', '#ccc');
+      expert_tab.css('background-color', '#fff');
+      let y = win_size[1] - 330;
+      expertFeatures.hide();
+      simpleStatus.show();
+      win.setSize(win_size[0], y, true);
+    }
+  });
+
+  $('#expert').click(function() {
+    win_size = win.getSize();
+    if (win_size[1] < 330) {
+      simple_tab.css('background-color', '#fff');
+      expert_tab.css('background-color', '#ccc');
+      let y = win_size[1] + 330;
+      expertFeatures.show();
+      simpleStatus.hide();
+      win.setSize(win_size[0], y, true);
+    }
+  });
+
   // Handle drag-n-drop events
   $(document).on('dragenter dragover', function(event) {
     event.preventDefault();
@@ -73,9 +106,12 @@ $(document).ready(function() {
   execFile(dfu_location, ['--version'], function(error, stdout, stderr) {
     if (stderr.indexOf('dfu-programmer') > -1) {
       window.setTimeout(checkForBoard, 10);
-      sendStatus("Select a firmware file by clicking 'Choose .hex' or drag and drop a file onto this window.");
+      msg = "Select a firmware file by clicking 'Choose .hex' or drag and drop a file onto this window.";
+      sendStatus(msg);
+      sendSimpleStatus(msg);
     } else {
       sendStatus("Could not run dfu-programmer! Please report this as a bug!");
+      sendSimpleStatus("Could not run dfu-programmer! Please report this as a bug!");
       sendStatus("<br>Debugging information:<br>");
       sendStatus(error);
       sendStatus("stdout:");
@@ -94,6 +130,7 @@ function checkFile(filename = pathField.val()) {
         return true;
     } else {
         sendStatus("Invalid firmware file: " + filename);
+        sendSimpleStatus("Invalid firmware file: " + filename);
         return false;
     }
 }
@@ -119,6 +156,7 @@ function loadHex(filename) {
       enableButton(flashButton);
     } else {
       sendStatus("Press RESET on your keyboard's PCB.");
+      sendSimpleStatus("Press RESET on your keyboard's PCB.");
       showFwrButton();
     }
 }
@@ -147,6 +185,7 @@ function hideFwrButton() {
 
 function clearStatus() {
   statusBox.text('');
+  simpleStatus.text('');
 }
 
 function writeStatus(text) {
@@ -156,6 +195,11 @@ function writeStatus(text) {
 
 function sendStatus(text) {
   writeStatus('<b>' + text + "</b>\n");
+}
+
+function sendSimpleStatus(text) {
+  simpleStatus.append('<b>' + text + "</b>\n");
+  simpleStatus.scrollTop(simpleStatus.scrollHeight);
 }
 
 function loadFile() {
@@ -174,13 +218,16 @@ function flashFirmware() {
   sendHex(pathField.val(), function (success) {
       if (success) {
           sendStatus("Flashing complete!");
+          sendSimpleStatus("Flashing complete!");
       } else {
           sendStatus("An error occurred - please try again.");
+          sendSimpleStatus("An error occurred - please try again.");
       }
   });
 }
 
 function sendHex(file, callback) {
+  sendSimpleStatus("Flash in progress, please wait...");
   flash_in_progress = true;
   flash_when_ready = false;
   eraseChip(function(success) {
@@ -209,12 +256,6 @@ function sendHex(file, callback) {
   });
   flash_in_progress = false;
 }
-
-/*
-var escapeShell = function(cmd) {
-  return ''+cmd.replace(/(["\s'$`\\\(\)])/g,'\\$1')+'';
-};
-*/
 
 function eraseChip(callback) {
   sendStatus('dfu-programmer atmega32u4 erase --force');
