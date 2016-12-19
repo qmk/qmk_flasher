@@ -30,7 +30,9 @@
   "homepage": "https://github.com/jackhumbert/qmk_firmware_flasher",
   "dependencies": {
     "electron-debug": "~1.1",
-    "bootstrap": "~3"
+    "bootstrap": "~3.3",
+    "bootbox": "~4.4",
+    "jquery": "~2.2"
   },
   "devDependencies": {
     "electron": "^1.4.10",

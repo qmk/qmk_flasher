@@ -1,4 +1,4 @@
-global.$ = $;
+window.$ = window.jQuery = require('jquery');
 
 var fs = require('fs');
 var process = require('process');
@@ -6,14 +6,17 @@ var app = require('electron').remote.app;
 var dialog = require('electron').remote.dialog;
 var execFile = require('child_process').execFile;
 var path = require('path');
+var chokidar = require('chokidar');
+var bootstrap = require('bootstrap');
+var bootbox = require('bootbox');
 
 var dfu_location = path.normalize('dfu/dfu-programmer');
+var watcher;
 
 // State variables
 var bootloader_ready = false;
 var flash_in_progress = false;
 var flash_when_ready = false;
-
 
 //HTML entities
 let flashButton = $('#flash-hex');
@@ -21,6 +24,8 @@ let fwrButton = $('#flash-when-ready');
 let loadButton = $('#load-file');
 let pathField = $('#file-path');
 let statusBox = $('#status');
+
+var hexChangedFlashButton;
 
 if (process.platform == "win32") {
   dfu_location = dfu_location + '.exe'
@@ -107,6 +112,7 @@ function checkFileSilent(filename = pathField.val()) {
 }
 
 function loadHex(filename) {
+  if(watcher) watcher.close();
   // Load a file and prepare to flash it.
   if(!checkFile(filename)) {
     return;
@@ -115,23 +121,52 @@ function loadHex(filename) {
   pathField.val(filename);
   clearStatus();
 
-    if (bootloader_ready) {
-      enableButton(flashButton);
-    } else {
-      sendStatus("Press RESET on your keyboard's PCB.");
-      showFwrButton();
-    }
+  if (bootloader_ready) {
+    enableButton(flashButton);
+  } else {
+    sendStatus("Press RESET on your keyboard's PCB.");
+    showFwrButton();
+  }
+
+  watcher = chokidar.watch(filename, {});
+  watcher.on('change', path => {
+    var confirmButtonText;
+    if(bootloader_ready) confirmButtonText = "Flash";
+    else confirmButtonText = "Flash When Ready";
+
+    var hexChangedModal = bootbox.confirm({
+      message: "The hex file has changed. Would you like to flash the new version?",
+      buttons: {
+        confirm: {
+          label: confirmButtonText,
+          className: 'btn-success'
+        },
+        cancel: {
+          label: 'OK'
+        }
+      },
+      callback: function(result) {
+        if(result) {
+        }
+      }
+    });
+
+    hexChangedModal.init(function() {
+        hexChangedFlashButton = hexChangedModal.find("[data-bb-handler='confirm']");
+    });
+  });
+
 }
 
 function disableButton(button) {
-    button.attr('disabled', 'disabled');
+    button.prop('disabled', true);
     button.removeClass('btn-success');
     button.addClass('btn-secondary');
 }
 
 
 function enableButton(button) {
-    button.removeAttr('disabled');
+    button.prop('disabled', false);
     button.removeClass('btn-secondary');
     button.addClass('btn-success');
 }
