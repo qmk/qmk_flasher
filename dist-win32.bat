@@ -12,7 +12,7 @@ set PACKAGE_DIR="%OUTPUT_DIR%\QMK Firmware Flasher-%PLATFORM%-%ARCH%"
 call npm install
 
 rmdir %PACKAGE_DIR% /S /Q
-del %OUTPUT_DIR%\*.exe
+del %OUTPUT_DIR%\QMK_Firmware_Flasher_setup.exe
 
 call node package.js
 
