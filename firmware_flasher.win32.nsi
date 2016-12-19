@@ -54,7 +54,8 @@ section "install"
 	file /r *.*
 
 	# Install the Atmel bootloader driver
-	nsExec::Exec '"C:\Windows\System32\PnPutil.exe" -i -a "$INSTDIR\resources\app\dfu\dfu-prog-usb-1.2.2\atmel_usb_dfu.inf"'
+	DetailPrint "Installing driver..."
+	nsExec::ExecToLog '"C:\Windows\System32\PnPutil.exe" -i -a "$INSTDIR\resources\app\dfu\dfu-prog-usb-1.2.2\atmel_usb_dfu.inf"'
 
 	# Uninstaller
 	writeUninstaller "$INSTDIR\uninstall.exe"
