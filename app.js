@@ -107,11 +107,7 @@ function checkFile(filename = pathField.val()) {
 }
 
 function checkFileSilent(filename = pathField.val()) {
-    if (filename.slice(-4).toUpperCase() == '.HEX') {
-        return true;
-    } else {
-        return false;
-    }
+    return filename.slice(-4).toUpperCase() == '.HEX';
 }
 
 function loadHex(filename) {
