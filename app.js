@@ -19,12 +19,15 @@ let flash_when_ready = false;
 
 //HTML entities
 let flashButton = $('#flash-hex');
-let fwrButton = $('#flash-when-ready');
 let loadButton = $('#load-file');
 let pathField = $('#file-path');
 let statusBox = $('#status');
 let hexChangedFlashButton;
 
+const flashImmediatelyButtonText = "Flash Keyboard";
+const flashWhenReadyButtonText = "Flash When Ready";
+
+flashButton.text(flashImmediatelyButtonText);
 
 if (process.platform == "win32") {
   dfu_location = dfu_location + '.exe'
@@ -65,12 +68,13 @@ $(document).ready(function() {
     loadHex(loadFile()[0]);
   });
   flashButton.bind('click', function (event) {
-      flashFirmware();
-  });
-  fwrButton.bind('click', function (event) {
-    if(!checkFile()) return;
-    flash_when_ready = true;
-    disableButton(fwrButton);
+    if(flashButton.text() == flashImmediatelyButtonText){
+        flashFirmware();
+    } else {
+        if(!checkFile()) return;
+        flash_when_ready = true;
+        disableButton(flashButton);
+    }
   });
 
   // Ready to go
@@ -120,11 +124,14 @@ function loadHex(filename) {
   pathField.val(filename);
   clearStatus();
 
+
+  enableButton(flashButton);
+
   if (bootloader_ready) {
-    enableButton(flashButton);
+    setFlashButtonImmediate();
   } else {
     sendStatus("Press RESET on your keyboard's PCB.");
-    showFwrButton();
+    flashButton.text(flashWhenReadyButtonText);
   }
 
   watcher = chokidar.watch(filename, {});
@@ -170,13 +177,12 @@ function enableButton(button) {
     button.addClass('btn-success');
 }
 
-function showFwrButton() {
-  fwrButton.removeClass('invisible');
+function setFlashButtonImmediate() {
+  flashButton.text(flashImmediatelyButtonText);
 }
 
-function hideFwrButton() {
-  fwrButton.addClass('invisible');
-  enableButton(fwrButton);
+function setFlashButtonWhenReady() {
+    flashButton.text(flashWhenReadyButtonText);
 }
 
 function clearStatus() {
@@ -204,7 +210,6 @@ function loadFile() {
 function flashFirmware() {
   if(!checkFile()) return;
   disableButton(flashButton);
-  hideFwrButton();
   sendHex(pathField.val(), function (success) {
       if (success) {
           sendStatus("Flashing complete!");
@@ -291,7 +296,6 @@ function resetChip(callback) {
   });
 }
 
-// This function has some logic that might be redundant. It should be examined more closely and simplified if possible.
 function checkForBoard() {
   if (!flash_in_progress) {
     execFile(dfu_location, ['atmega32u4', 'get', 'bootloader-version'], function(error, stdout, stderr) {
@@ -300,15 +304,22 @@ function checkForBoard() {
         bootloader_ready = true;
         if (checkFileSilent()) {
           enableButton(flashButton);
-          hideFwrButton();
+          setFlashButtonImmediate();
           if(flash_when_ready) {
             flashFirmware();
           }
         }
       } else {
         bootloader_ready = false;
-        disableButton(flashButton);
-        if(checkFileSilent()) showFwrButton();
+        if(checkFileSilent()) {
+          if(!flash_when_ready){
+            enableButton(flashButton);
+          }
+          setFlashButtonWhenReady();
+        } else {
+          setFlashButtonImmediate();
+          disableButton(flashButton);
+        }
       }
     });
   }

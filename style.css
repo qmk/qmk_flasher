@@ -47,15 +47,6 @@ html, body {
   -webkit-app-region: no-drag;
 }
 
-#flash-when-ready {
-  position: absolute;
-  bottom: 14px;
-  left: 443px;
-  height: 34px;
-  width: 185px;
-  -webkit-app-region: no-drag;
-}
-
 #flash-hex:hover {
   cursor: default;
 }
