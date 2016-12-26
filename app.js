@@ -1,22 +1,21 @@
 window.$ = window.jQuery = require('jquery');
 
-var fs = require('fs');
-var process = require('process');
-var app = require('electron').remote.app;
-var dialog = require('electron').remote.dialog;
-var execFile = require('child_process').execFile;
-var path = require('path');
-var chokidar = require('chokidar');
-var bootstrap = require('bootstrap');
-var bootbox = require('bootbox');
+const fs = require('fs');
+const app = require('electron').remote.app;
+const dialog = require('electron').remote.dialog;
+const execFile = require('child_process').execFile;
+const path = require('path');
+const chokidar = require('chokidar');
+const bootstrap = require('bootstrap');
+const bootbox = require('bootbox');
 
-var dfu_location = path.normalize('dfu/dfu-programmer');
-var watcher;
+let dfu_location = path.normalize('dfu/dfu-programmer');
+let watcher;
 
 // State variables
-var bootloader_ready = false;
-var flash_in_progress = false;
-var flash_when_ready = false;
+let bootloader_ready = false;
+let flash_in_progress = false;
+let flash_when_ready = false;
 
 //HTML entities
 let flashButton = $('#flash-hex');
@@ -24,8 +23,8 @@ let fwrButton = $('#flash-when-ready');
 let loadButton = $('#load-file');
 let pathField = $('#file-path');
 let statusBox = $('#status');
+let hexChangedFlashButton;
 
-var hexChangedFlashButton;
 
 if (process.platform == "win32") {
   dfu_location = dfu_location + '.exe'
@@ -50,7 +49,7 @@ $(document).ready(function() {
     event.preventDefault();
     event.stopPropagation();
 
-    var file = event.originalEvent.dataTransfer.files[0];
+    const file = event.originalEvent.dataTransfer.files[0];
     loadHex(file.path);
   });
 
@@ -134,7 +133,7 @@ function loadHex(filename) {
     if(bootloader_ready) confirmButtonText = "Flash";
     else confirmButtonText = "Flash When Ready";
 
-    var hexChangedModal = bootbox.confirm({
+    const hexChangedModal = bootbox.confirm({
       message: "The hex file has changed. Would you like to flash the new version?",
       buttons: {
         confirm: {
@@ -257,7 +256,7 @@ function eraseChip(callback) {
     sendStatus(error);
     writeStatus(stdout);
     writeStatus(stderr);
-    var regex = /.*Success.*\r?\n|\rChecking memory from .* Empty.*/;
+    const regex = /.*Success.*\r?\n|\rChecking memory from .* Empty.*/;
     if (regex.test(stderr)) {
       callback(true);
     } else {

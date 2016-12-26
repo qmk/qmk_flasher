@@ -1,5 +1,4 @@
-var electron = require('electron');  // Module to control application life.
-var process = require('process');
+const electron = require('electron');  // Module to control application life.
 require('electron-debug')({showDevTools: false});
 const {app} = electron;
 const {BrowserWindow} = electron;
