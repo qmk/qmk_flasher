@@ -33,7 +33,6 @@ if (process.platform == "win32") {
   dfu_location = dfu_location + '.exe'
 }
 
-
 try {
     fs.accessSync(dfu_location, fs.F_OK);
 } catch (err) {
@@ -68,13 +67,7 @@ $(document).ready(function() {
     loadHex(loadFile()[0]);
   });
   flashButton.bind('click', function (event) {
-    if(flashButton.text() == flashImmediatelyButtonText){
-        flashFirmware();
-    } else {
-        if(!checkFile()) return;
-        flash_when_ready = true;
-        disableButton(flashButton);
-    }
+    handleFlashButton();
   });
 
   // Ready to go
@@ -132,8 +125,8 @@ function loadHex(filename) {
 
   watcher = chokidar.watch(filename, {});
   watcher.on('change', path => {
-    var confirmButtonText;
-    if(bootloader_ready) confirmButtonText = "Flash";
+    let confirmButtonText;
+    if(bootloader_ready) confirmButtonText = "Flash Keyboard";
     else confirmButtonText = "Flash When Ready";
 
     const hexChangedModal = bootbox.confirm({
@@ -149,6 +142,7 @@ function loadHex(filename) {
       },
       callback: function(result) {
         if(result) {
+          handleFlashButton();
         }
       }
     });
@@ -175,10 +169,29 @@ function enableButton(button) {
 
 function setFlashButtonImmediate() {
   flashButton.text(flashImmediatelyButtonText);
+  if(hexChangedFlashButton){
+    hexChangedFlashButton.text(flashImmediatelyButtonText);
+  }
 }
 
 function setFlashButtonWhenReady() {
-    flashButton.text(flashWhenReadyButtonText);
+  flashButton.text(flashWhenReadyButtonText);
+  if(hexChangedFlashButton){
+    hexChangedFlashButton.text(flashWhenReadyButtonText);
+  }
+}
+
+function handleFlashButton() {
+    if(flashButton.text() == flashImmediatelyButtonText){
+        flashFirmware();
+    } else {
+        if(!checkFile()) return;
+        flash_when_ready = true;
+        clearStatus();
+        sendStatus("The firmware will flash as soon as the keyboard is ready to receive it.");
+        sendStatus("Press the RESET button to prepare the keyboard.");
+        disableButton(flashButton);
+    }
 }
 
 function clearStatus() {
