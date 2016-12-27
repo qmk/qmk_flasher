@@ -144,7 +144,7 @@ function loadHex(filename) {
           className: 'btn-success'
         },
         cancel: {
-          label: 'OK'
+          label: 'Cancel'
         }
       },
       callback: function(result) {
