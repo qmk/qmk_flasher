@@ -9,6 +9,8 @@ const chokidar = require('chokidar');
 const bootstrap = require('bootstrap');
 const bootbox = require('bootbox');
 
+const win = require('electron').remote.getCurrentWindow();
+
 let dfu_location = path.normalize('dfu/dfu-programmer');
 let watcher;
 
@@ -125,6 +127,7 @@ function loadHex(filename) {
 
   watcher = chokidar.watch(filename, {});
   watcher.on('change', path => {
+    win.focus();
     let confirmButtonText;
     if(bootloader_ready) confirmButtonText = "Flash Keyboard";
     else confirmButtonText = "Flash When Ready";

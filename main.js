@@ -4,6 +4,17 @@ const {app} = electron;
 const {BrowserWindow} = electron;
 let win;  // Ensure that our win isn't garbage collected
 
+const shouldQuit = app.makeSingleInstance((commandLine, workingDirectory) => {
+  if(win) {
+    if(win.isMinimized()) win.restore();
+    win.focus();
+  }
+});
+
+if(shouldQuit) {
+  app.quit();
+}
+
 app.on('ready', function() {
   // Create the browser window.
   if (process.platform == 'win32')
