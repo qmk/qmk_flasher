@@ -127,8 +127,12 @@ function loadHex(filename) {
 
   watcher = chokidar.watch(filename, {});
   watcher.on('change', path => {
-    win.once('focus', () => win.flashFrame(false))
-    win.flashFrame(true)
+    if(process.platform == "win32") {
+      win.once('focus', () => win.flashFrame(false));
+      win.flashFrame(true);
+    } else if(process.platform == "darwin") {
+      app.dock.bounce();
+    }
     win.focus();
     let confirmButtonText;
     if(bootloader_ready) confirmButtonText = "Flash Keyboard";
