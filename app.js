@@ -144,11 +144,13 @@ function loadHex(filename) {
 
     if (process.platform == "darwin") {
       dialog.showMessageBox(win, {
-        type: "info",
-        buttons: ["Cancel", confirmButtonText],
+        // type: "info",
+        buttons: [confirmButtonText, "Cancel"],
+        defaultId: 0,
         message: messageText
+        //TODO: Set an appropriate icon
       }, function(response) {
-        if(response == 1) {
+        if(response == 0) {
           handleFlashButton();
         }
       })
@@ -209,6 +211,7 @@ function setFlashButtonWhenReady() {
 
 function handleFlashButton() {
     if(flashButton.text() == flashImmediatelyButtonText){
+        clearStatus();
         flashFirmware();
     } else {
         if(!checkFile()) return;
