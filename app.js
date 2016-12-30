@@ -133,32 +133,49 @@ function loadHex(filename) {
     } else if(process.platform == "darwin") {
       app.dock.bounce();
     }
+
+    //TODO: Only focus if the option is enabled in settings.
     win.focus();
+
     let confirmButtonText;
     if(bootloader_ready) confirmButtonText = "Flash Keyboard";
     else confirmButtonText = "Flash When Ready";
+    const messageText = "The hex file has changed. Would you like to flash the new version?";
 
-    const hexChangedModal = bootbox.confirm({
-      message: "The hex file has changed. Would you like to flash the new version?",
-      buttons: {
-        confirm: {
-          label: confirmButtonText,
-          className: 'btn-success'
-        },
-        cancel: {
-          label: 'Cancel'
-        }
-      },
-      callback: function(result) {
-        if(result) {
+    if (process.platform == "darwin") {
+      dialog.showMessageBox(win, {
+        type: "info",
+        buttons: ["Cancel", confirmButtonText],
+        message: messageText
+      }, function(response) {
+        if(response == 1) {
           handleFlashButton();
         }
-      }
-    });
+      })
+    } else { // On platforms other than Mac, use Bootbox for the prompt
+      const hexChangedModal = bootbox.confirm({
+        message: messageText,
+        buttons: {
+          confirm: {
+            label: confirmButtonText,
+            className: 'btn-success'
+          },
+          cancel: {
+            label: 'Cancel'
+          }
+        },
+        callback: function (result) {
+          if (result) {
+            handleFlashButton();
+          }
+        }
+      });
 
-    hexChangedModal.init(function() {
+      hexChangedModal.init(function () {
         hexChangedFlashButton = hexChangedModal.find("[data-bb-handler='confirm']");
-    });
+      });
+    }
+
   });
 
 }
