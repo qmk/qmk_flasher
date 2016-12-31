@@ -1,6 +1,7 @@
 window.$ = window.jQuery = require('jquery');
 
 const fs = require('fs');
+const {ipcRenderer} = require('electron');
 const remote = require('electron').remote;
 const app = remote.app;
 const dialog = remote.dialog;
@@ -78,7 +79,7 @@ $(document).ready(function() {
   });
 
   gearMenuButton.bind('click', function (event) {
-    showMenu();
+    ipcRenderer.send('show-menu');
   });
 
   // Ready to go
