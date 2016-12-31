@@ -3,6 +3,7 @@ require('electron-debug')({showDevTools: false});
 const {app} = electron;
 const {BrowserWindow} = electron;
 let win;  // Ensure that our win isn't garbage collected
+let menuWin;
 
 const shouldQuit = app.makeSingleInstance((commandLine, workingDirectory) => {
   if(win) {
@@ -31,7 +32,41 @@ app.on('ready', function() {
   win.on('closed', function() {
     // Dereference the window object so our app exits
     win = null;
+    menuWin.close();
   });
+
+
+  let menuWinXOffset;
+  let menuWinYOffset;
+  if (process.platform == "darwin") {
+    menuWinXOffset = 10;
+    menuWinYOffset = 470;
+  } else {
+    menuWinXOffset = 20;
+    menuWinYOffset = 490;
+  }
+
+  menuWin = new BrowserWindow({
+    width: 120,
+    height: 64,
+    frame: false,
+    x: win.getPosition()[0] + menuWinXOffset,
+    y: win.getPosition()[1] + menuWinYOffset,
+    show: false
+  });
+  menuWin.loadURL('file://' + __dirname + '/options-menu.html');
+  menuWin.on('blur', function () {
+    menuWin.hide();
+  });
+
+  global.showMenu = function () {
+    menuWin.setPosition(
+      win.getPosition()[0] + menuWinXOffset,
+      win.getPosition()[1] + menuWinYOffset,
+      false
+    );
+    menuWin.show();
+  }
 });
 
 // Quit when all windows are closed.

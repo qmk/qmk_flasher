@@ -1,15 +1,17 @@
 window.$ = window.jQuery = require('jquery');
 
 const fs = require('fs');
-const app = require('electron').remote.app;
-const dialog = require('electron').remote.dialog;
+const remote = require('electron').remote;
+const app = remote.app;
+const dialog = remote.dialog;
 const execFile = require('child_process').execFile;
 const path = require('path');
 const chokidar = require('chokidar');
 const bootstrap = require('bootstrap');
 const bootbox = require('bootbox');
 
-const win = require('electron').remote.getCurrentWindow();
+const win = remote.getCurrentWindow();
+const showMenu = remote.getGlobal('showMenu');
 
 let dfu_location = path.normalize('dfu/dfu-programmer');
 let watcher;
@@ -25,6 +27,8 @@ let loadButton = $('#load-file');
 let pathField = $('#file-path');
 let statusBox = $('#status');
 let hexChangedFlashButton;
+
+let gearMenuButton = $('#gear-menu');
 
 const flashImmediatelyButtonText = "Flash Keyboard";
 const flashWhenReadyButtonText = "Flash When Ready";
@@ -68,8 +72,13 @@ $(document).ready(function() {
   loadButton.bind('click', function (event) {
     loadHex(loadFile()[0]);
   });
+
   flashButton.bind('click', function (event) {
     handleFlashButton();
+  });
+
+  gearMenuButton.bind('click', function (event) {
+    showMenu();
   });
 
   // Ready to go

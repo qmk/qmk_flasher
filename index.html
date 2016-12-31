@@ -2,13 +2,17 @@
 <html>
   <head>
     <title>QMK Firmware Flasher</title>
-    <link href="node_modules/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+    <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
   </head>
   <body>
     <input type="text" id="file-path" class="form-control" placeholder="..." />
     <button id="load-file" class="button">Choose .hex</button>
     <button id="flash-hex" class="btn btn-success" disabled ></button>
+    <button id="gear-menu" class="btn btn-default">
+      <span class="glyphicon glyphicon-cog"></span>
+      <span class="caret"></span>
+    </button>
     <span id="status"></span>
     <script src="app.js"></script>
   </body>

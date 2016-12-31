@@ -55,6 +55,23 @@ html, body {
   cursor: not-allowed;
 }
 
+#gear-menu {
+  position: absolute;
+  bottom: 14px;
+  left: 14px;
+  /*height: 34px;*/
+  /*width: 45px;*/
+  padding: 0;
+  border: none;
+  background: none;
+  -webkit-app-region: no-drag;
+}
+
+#gear-menu > span {
+  font-size: 25px;
+}
+
+
 #status {
   font-size: 12px;
   background-color: #eee;
