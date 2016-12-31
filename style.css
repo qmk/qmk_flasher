@@ -63,6 +63,7 @@ html, body {
   /*width: 45px;*/
   padding: 0;
   border: none;
+  outline: none;
   background: none;
   -webkit-app-region: no-drag;
 }
