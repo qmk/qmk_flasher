@@ -25,7 +25,7 @@ app.on('ready', function() {
     mainWin = new BrowserWindow({width: 640, height: 480, frame: true, resizable: false});
 
   // Load the main interface
-  mainWin.loadURL('file://' + __dirname + '/index.html');
+  mainWin.loadURL('file://' + __dirname + '/MainWindow/index.html');
 
   //Disable the menubar for dev versions
   mainWin.setMenu(null);
@@ -55,7 +55,7 @@ app.on('ready', function() {
     y: mainWin.getPosition()[1] + menuWinYOffset,
     show: false
   });
-  menuWin.loadURL('file://' + __dirname + '/options-menu.html');
+  menuWin.loadURL('file://' + __dirname + '/OptionsMenuWindow/index.html');
   menuWin.on('blur', function () {
     menuWin.hide();
   });
