@@ -10,7 +10,7 @@ const aboutMenuItem = $('#about-item');
 const optionsMenuItem = $('#options-item');
 
 aboutMenuItem.bind('click', () => {
-  mainWindow.webContents.executeJavaScript("sendStatus('About menu item clicked.')");
+  mainWindow.webContents.executeJavaScript("openAboutDialog()");
   aboutMenuItem.blur();
   win.hide();
 });
