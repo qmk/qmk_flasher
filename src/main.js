@@ -72,7 +72,7 @@ app.on('ready', function() {
     y: mainWin.getPosition()[1] + menuWinYOffset,
     show: false
   });
-  menuWin.loadURL('file://' + __dirname + '/OptionsMenuWindow/index.html');
+  menuWin.loadURL('file://' + __dirname + '/GearMenuWindow/index.html');
   menuWin.on('blur', function () {
     menuWin.hide();
   });
@@ -93,6 +93,11 @@ app.on('ready', function() {
     if(isSettingsInitialized) {
       event.returnValue = settingsCache.focusWindowOnHexChange;
     }
+  });
+
+  ipcMain.on('set-settings', (event, updatedSettings) => {
+    settingsCache.focusWindowOnHexChange = updatedSettings.focusWindowOnHexChange;
+    settings.set('focusWindowOnHexChange', updatedSettings.focusWindowOnHexChange);
   });
 });
 

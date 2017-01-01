@@ -12,7 +12,6 @@ const bootstrap = require('bootstrap');
 const bootbox = require('bootbox');
 
 const win = remote.getCurrentWindow();
-const showMenu = remote.getGlobal('showMenu');
 
 let dfu_location = path.normalize('dfu/dfu-programmer');
 let watcher;
@@ -27,6 +26,9 @@ let flashButton = $('#flash-hex');
 let loadButton = $('#load-file');
 let pathField = $('#file-path');
 let statusBox = $('#status');
+let optionsModal = $('#options-modal');
+let saveOptionsButton = $('#save-options-button');
+let bringToFrontCheckbox = $('#bring-to-front-checkbox');
 let hexChangedFlashButton;
 
 let gearMenuButton = $('#gear-menu');
@@ -46,6 +48,8 @@ try {
     // Running in deployed mode, use the app copy
     dfu_location = path.resolve(app.getAppPath(), dfu_location);
 }
+
+loadOptionsState();
 
 $(document).ready(function() {
   // Handle drag-n-drop events
@@ -82,6 +86,17 @@ $(document).ready(function() {
     ipcRenderer.send('show-menu');
   });
 
+  optionsModal.on('hidden.bs.modal', function (e) {
+    loadOptionsState();
+  });
+
+  saveOptionsButton.bind('click', function (event) {
+    optionsModal.modal('hide');
+    ipcRenderer.send('set-settings', {
+      focusWindowOnHexChange: bringToFrontCheckbox.is(":checked")
+    });
+  });
+
   // Ready to go
   execFile(dfu_location, ['--version'], function(error, stdout, stderr) {
     if (stderr.indexOf('dfu-programmer') > -1) {
@@ -101,6 +116,13 @@ $(document).ready(function() {
   });
 });
 
+function openOptions() {
+  optionsModal.modal('show');
+}
+
+function loadOptionsState() {
+  bringToFrontCheckbox.prop('checked', ipcRenderer.sendSync('get-setting-focus-window-on-hex-change'));
+}
 
 function checkFile(filename = pathField.val()) {
     if (filename.slice(-4).toUpperCase() == '.HEX') {
