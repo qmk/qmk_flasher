@@ -3,8 +3,13 @@ require('electron-debug')({showDevTools: false});
 const {app} = electron;
 const {BrowserWindow} = electron;
 const {ipcMain} = electron;
+const settings = require('electron-settings');
+
 let mainWin;  // Ensure that our mainWin isn't garbage collected
 let menuWin;
+
+let isSettingsInitialized = false;
+let settingsCache;
 
 const shouldQuit = app.makeSingleInstance((commandLine, workingDirectory) => {
   if(mainWin) {
@@ -36,6 +41,18 @@ app.on('ready', function() {
     menuWin.close();
   });
 
+
+  let focusWindowByDefault = true;
+  if(process.platform == "darwin") focusWindowByDefault = false;
+
+  settings.defaults({
+    focusWindowOnHexChange: focusWindowByDefault
+  });
+
+  settings.get().then(result => {
+    settingsCache = result;
+    isSettingsInitialized = true;
+  });
 
   let menuWinXOffset;
   let menuWinYOffset;
@@ -70,9 +87,13 @@ app.on('ready', function() {
       false
     );
     menuWin.show();
-  }); {
+  });
 
-  }
+  ipcMain.on('get-setting-focus-window-on-hex-change', (event) => {
+    if(isSettingsInitialized) {
+      event.returnValue = settingsCache.focusWindowOnHexChange;
+    }
+  });
 });
 
 // Quit when all windows are closed.

@@ -144,8 +144,9 @@ function loadHex(filename) {
       app.dock.bounce();
     }
 
-    //TODO: Only focus if the option is enabled in settings.
-    win.focus();
+    if(ipcRenderer.sendSync('get-setting-focus-window-on-hex-change')) {
+      win.focus();
+    }
 
     let confirmButtonText;
     if(bootloader_ready) confirmButtonText = "Flash Keyboard";
