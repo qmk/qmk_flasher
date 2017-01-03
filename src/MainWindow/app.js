@@ -120,6 +120,7 @@ function openAboutDialog() {
   bootbox.alert({
     size: "small",
     title: "About",
+    message: `QMK Firmware Flasher version ${process.env.npm_package_version}`
     //TODO: Display information about open source licenses
   });
 }
