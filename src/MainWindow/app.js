@@ -6,14 +6,14 @@ const remote = require('electron').remote;
 const app = remote.app;
 const dialog = remote.dialog;
 const execFile = require('child_process').execFile;
-const path = require('path');
+const pathModule = require('path');
 const chokidar = require('chokidar');
 const bootstrap = require('bootstrap');
 const bootbox = require('bootbox');
 
 const win = remote.getCurrentWindow();
 
-let dfu_location = path.normalize('dfu/dfu-programmer');
+let dfu_location = pathModule.normalize('dfu/dfu-programmer');
 let watcher;
 
 // State variables
@@ -46,7 +46,7 @@ try {
     fs.accessSync(dfu_location, fs.F_OK);
 } catch (err) {
     // Running in deployed mode, use the app copy
-    dfu_location = path.resolve(app.getAppPath(), dfu_location);
+    dfu_location = pathModule.resolve(app.getAppPath(), dfu_location);
 }
 
 loadOptionsState();
