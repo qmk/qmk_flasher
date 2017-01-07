@@ -185,8 +185,9 @@ function loadHex(filename) {
     const messageText = "The hex file has changed. Would you like to flash the new version?";
 
     if (process.platform == "darwin") {
+      let iconPath = pathModule.resolve(app.getAppPath(), "build", "icon.iconset", "icon_256x256.png");
       dialog.showMessageBox(win, {
-        // type: "info",
+        icon: iconPath,
         buttons: [confirmButtonText, "Cancel"],
         defaultId: 0,
         message: messageText
