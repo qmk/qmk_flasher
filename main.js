@@ -6,12 +6,16 @@ const {BrowserWindow} = electron;
 let win;  // Ensure that our win isn't garbage collected
 
 app.on('ready', function() {
-  // Create the browser window.
-  if (process.platform == 'win32')
-    win = new BrowserWindow({width: 659, height: 510, frame: true, resizable: false});
-  else
-    win = new BrowserWindow({width: 640, height: 480, frame: true, resizable: false});
+  let windowOptions = {frame: true, resizable: false};
+  if (process.platform == 'win32') {
+    windowOptions.width = 659;
+    windowOptions.height = 510;
+  } else {
+    windowOptions.width = 640;
+    windowOptions.height = 480;
+  }
 
+  win = new BrowserWindow(windowOptions);
   // Load the main interface
   win.loadURL('file://' + __dirname + '/index.html');
 
