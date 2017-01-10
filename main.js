@@ -6,7 +6,7 @@ const {BrowserWindow} = electron;
 let win;  // Ensure that our win isn't garbage collected
 
 app.on('ready', function() {
-  let windowOptions = {frame: true, resizable: false};
+  let windowOptions = {show: false, frame: true, resizable: false};
   if (process.platform == 'win32') {
     windowOptions.width = 659;
     windowOptions.height = 510;
@@ -21,6 +21,10 @@ app.on('ready', function() {
 
   //Disable the menubar for dev versions
   win.setMenu(null);
+
+  win.once('ready-to-show', () => {
+    win.show();
+  });
 
   win.on('closed', function() {
     // Dereference the window object so our app exits
