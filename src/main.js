@@ -23,17 +23,26 @@ if(shouldQuit) {
 }
 
 app.on('ready', function() {
-  // Create the browser window.
-  if (process.platform == 'win32')
-    mainWin = new BrowserWindow({width: 659, height: 510, frame: true, resizable: false});
-  else
-    mainWin = new BrowserWindow({width: 640, height: 480, frame: true, resizable: false});
+  let mainWinOptions = {show: false, frame: true, resizable: false};
+  if (process.platform == 'win32') {
+    mainWinOptions.width = 659;
+    mainWinOptions.height = 510;
+  } else {
+    mainWinOptions.width = 640;
+    mainWinOptions.height = 480;
+  }
+
+  mainWin = new BrowserWindow(mainWinOptions);
 
   // Load the main interface
   mainWin.loadURL('file://' + __dirname + '/MainWindow/index.html');
 
   //Disable the menubar for dev versions
   mainWin.setMenu(null);
+
+  mainWin.once('ready-to-show', () => {
+    mainWin.show();
+  });
 
   mainWin.on('closed', function() {
     // Dereference the window object so our app exits
