@@ -146,6 +146,50 @@ function checkFileSilent(filename = pathField.val()) {
     return filename.slice(-4).toUpperCase() == '.HEX';
 }
 
+function displayHexFileChangedPrompt(useNativeDialog) {
+  let confirmButtonText;
+  if (bootloader_ready) confirmButtonText = "Flash Keyboard";
+  else confirmButtonText = "Flash When Ready";
+  const messageText = "The hex file has changed. Would you like to flash the new version?";
+
+  if (useNativeDialog) {
+    let iconPath = pathModule.resolve(app.getAppPath(), "build", "icon.iconset", "icon_256x256.png");
+    dialog.showMessageBox(win, {
+      icon: iconPath,
+      buttons: [confirmButtonText, "Cancel"],
+      defaultId: 0,
+      message: messageText
+      //TODO: Set an appropriate icon
+    }, function (response) {
+      if (response == 0) {
+        handleFlashButton();
+      }
+    })
+  } else { // On platforms other than Mac, use Bootbox for the prompt
+    const hexChangedModal = bootbox.confirm({
+      message: messageText,
+      buttons: {
+        confirm: {
+          label: confirmButtonText,
+          className: 'btn-success'
+        },
+        cancel: {
+          label: 'Cancel'
+        }
+      },
+      callback: function (result) {
+        if (result) {
+          handleFlashButton();
+        }
+      }
+    });
+
+    hexChangedModal.init(function () {
+      hexChangedFlashButton = hexChangedModal.find("[data-bb-handler='confirm']");
+    });
+  }
+}
+
 function loadHex(filename) {
   if(watcher) watcher.close();
   // Load a file and prepare to flash it.
@@ -178,47 +222,10 @@ function loadHex(filename) {
     if(ipcRenderer.sendSync('get-setting-focus-window-on-hex-change')) {
       win.focus();
     }
-
-    let confirmButtonText;
-    if(bootloader_ready) confirmButtonText = "Flash Keyboard";
-    else confirmButtonText = "Flash When Ready";
-    const messageText = "The hex file has changed. Would you like to flash the new version?";
-
     if (process.platform == "darwin") {
-      let iconPath = pathModule.resolve(app.getAppPath(), "build", "icon.iconset", "icon_256x256.png");
-      dialog.showMessageBox(win, {
-        icon: iconPath,
-        buttons: [confirmButtonText, "Cancel"],
-        defaultId: 0,
-        message: messageText
-        //TODO: Set an appropriate icon
-      }, function(response) {
-        if(response == 0) {
-          handleFlashButton();
-        }
-      })
-    } else { // On platforms other than Mac, use Bootbox for the prompt
-      const hexChangedModal = bootbox.confirm({
-        message: messageText,
-        buttons: {
-          confirm: {
-            label: confirmButtonText,
-            className: 'btn-success'
-          },
-          cancel: {
-            label: 'Cancel'
-          }
-        },
-        callback: function (result) {
-          if (result) {
-            handleFlashButton();
-          }
-        }
-      });
-
-      hexChangedModal.init(function () {
-        hexChangedFlashButton = hexChangedModal.find("[data-bb-handler='confirm']");
-      });
+      displayHexFileChangedPrompt(true);
+    } else {
+      displayHexFileChangedPrompt(false);
     }
 
   });
