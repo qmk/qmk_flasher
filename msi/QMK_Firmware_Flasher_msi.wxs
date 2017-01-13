@@ -5,7 +5,7 @@
 		Id='936206DD-192B-40C8-80FA-3354A98D3844'
 		UpgradeCode='F43ED636-ED6D-453B-B2C8-3EEB8F13D6A7'
     Language='1033' Codepage='1252'
-    Version='1.0.0'>
+    Version='!(bind.FileVersion.LauncherExe)'>
 
     <Package Id='*' Keywords='Installer' Description="QMK Firmware Flasher Installer" InstallScope="perMachine"
         Manufacturer='QMK'
