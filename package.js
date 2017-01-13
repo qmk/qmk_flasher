@@ -1,8 +1,8 @@
-var packager = require('electron-packager');
-var path = require('path');
-var os = require('os');
+const packager = require('electron-packager');
+const path = require('path');
+const os = require('os');
 
-options = {
+packagerOptions = {
 	"dir": ".",
 	"out": path.resolve(os.homedir(), "firmware_flasher"),
 	"platform": "win32,darwin",
@@ -11,10 +11,10 @@ options = {
 	"asar": {
 		"unpackDir": "dfu"
 	},
-	"ignore": ["wix", ".idea"]
-}
+	"ignore": ["msi", "setup", ".idea"]
+};
 	
-packager(options, function done_callback (err, appPaths) {
+packager(packagerOptions, function done_callback (err, appPaths) {
 	if(err) {
 		console.log(err);		
 	}
