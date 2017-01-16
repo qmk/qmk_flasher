@@ -5,7 +5,7 @@ const {ipcRenderer} = require('electron');
 const remote = require('electron').remote;
 const app = remote.app;
 const dialog = remote.dialog;
-const execFile = require('child_process').execFile;
+const exec = require('child_process').exec;
 const pathModule = require('path');
 const chokidar = require('chokidar');
 const bootstrap = require('bootstrap');
@@ -98,7 +98,7 @@ $(document).ready(function() {
   });
 
   // Ready to go
-  execFile(dfu_location, ['--version'], function(error, stdout, stderr) {
+  exec(dfu_location + ' --version', function(error, stdout, stderr) {
     if (stderr.indexOf('dfu-programmer') > -1) {
       window.setTimeout(checkForBoard, 10);
       sendStatus("Select a firmware file by clicking 'Choose .hex' or drag and drop a file onto this window.");
@@ -345,8 +345,7 @@ var escapeShell = function(cmd) {
 
 function eraseChip(callback) {
   sendStatus('dfu-programmer atmega32u4 erase --force');
-  execFile(dfu_location, ['atmega32u4', 'erase', '--force'], function(error, stdout, stderr) {
-    sendStatus(error);
+  exec(dfu_location + ' atmega32u4 erase --force', function(error, stdout, stderr) {
     writeStatus(stdout);
     writeStatus(stderr);
     const regex = /.*Success.*\r?\n|\rChecking memory from .* Empty.*/;
@@ -360,7 +359,7 @@ function eraseChip(callback) {
 
 function flashChip(file, callback) {
   sendStatus('dfu-programmer atmega32u4 flash ' + file);
-  execFile(dfu_location, ['atmega32u4', 'flash', file], function(error, stdout, stderr) {
+  exec(dfu_location + ' atmega32u4 flash ' + file, function(error, stdout, stderr) {
     writeStatus(stdout);
     writeStatus(stderr);
     if (stderr.indexOf("Validating...  Success") > -1) {
@@ -373,7 +372,7 @@ function flashChip(file, callback) {
 
 function resetChip(callback) {
   sendStatus('dfu-programmer atmega32u4 reset');
-  execFile(dfu_location, ['atmega32u4', 'reset'], function(error, stdout, stderr) {
+  exec(dfu_location + ' atmega32u4 reset', function(error, stdout, stderr) {
     writeStatus(stdout);
     writeStatus(stderr);
 	if (stderr == "") {
@@ -386,7 +385,7 @@ function resetChip(callback) {
 
 function checkForBoard() {
   if (!flash_in_progress) {
-    execFile(dfu_location, ['atmega32u4', 'get', 'bootloader-version'], function(error, stdout, stderr) {
+    exec(dfu_location + ' atmega32u4 get bootloader-version', function(error, stdout, stderr) {
       if (stdout.indexOf("Bootloader Version:") > -1) {
         if (!bootloader_ready && checkFileSilent()) clearStatus();
         bootloader_ready = true;
