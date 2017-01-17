@@ -47,15 +47,6 @@ html, body {
   -webkit-app-region: no-drag;
 }
 
-#flash-when-ready {
-  position: absolute;
-  bottom: 14px;
-  left: 443px;
-  height: 34px;
-  width: 185px;
-  -webkit-app-region: no-drag;
-}
-
 #flash-hex:hover {
   cursor: default;
 }
@@ -63,6 +54,24 @@ html, body {
 #flash-hex:disabled:hover {
   cursor: not-allowed;
 }
+
+#gear-menu {
+  position: absolute;
+  bottom: 14px;
+  left: 14px;
+  /*height: 34px;*/
+  /*width: 45px;*/
+  padding: 0;
+  border: none;
+  outline: none;
+  background: none;
+  -webkit-app-region: no-drag;
+}
+
+#gear-menu > span {
+  font-size: 25px;
+}
+
 
 #status {
   font-size: 12px;
