@@ -1,2 +1,10 @@
 #!/bin/sh
+# This turns the files in Icon.iconset into a since Icon.icns file.
+
+if [ ! -d Icon.iconset ]; then
+	echo "Error: This must be run from the directory containing Icon.iconset."
+	exit 1
+fi
+
+# Create the Icon
 iconutil -c icns Icon.iconset
