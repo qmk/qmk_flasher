@@ -3,9 +3,9 @@
   "productName": "QMK Firmware Flasher",
   "version": "0.5.1",
   "description": "GUI app to load firmware onto atmega32u4 chips.",
-  "main": "main.js",
+  "main": "src/main.js",
   "scripts": {
-    "start": "electron main.js",
+    "start": "electron .",
     "postinstall": "install-app-deps",
     "pack": "build",
     "dist": "build"
@@ -29,10 +29,15 @@
   },
   "homepage": "https://github.com/jackhumbert/qmk_firmware_flasher",
   "dependencies": {
+    "bootbox": "~4.4",
+    "bootstrap": "~3.3",
+    "chokidar": "~1.6",
     "electron-debug": "~1.1",
-    "bootstrap": "~3"
+    "electron-settings": "~2.2.2",
+    "jquery": "~2.2"
   },
   "devDependencies": {
+    "devtron": "^1.4.0",
     "electron": "^1.4.10",
     "electron-builder": "^8.6.0"
   },
