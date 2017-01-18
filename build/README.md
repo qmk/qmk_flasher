@@ -15,7 +15,7 @@ The windows icon was created using this tool:
 ## Mac Icon
 
 The Mac icon is built from files in Icon.iconset. We need the following
-resolutions and filenames:
+resolutions and filenames, and only these files:
 
 * 128x128: icon.iconset/icon_128x128.png
 * 16x16: icon.iconset/icon_16x16.png
@@ -25,5 +25,11 @@ resolutions and filenames:
 * 512x512: icon.iconset/icon_512x512.png
 * 1024x1024: icon.iconset/icon_512x512@2x.png
 
-Once those are created you can run the `make_icns` scripts. This will 
-generate Icon.iconset.
+To create these files you can export from Adobe Illustrator. Use these
+settings:
+
+[!illustrator-export-settings.png]
+
+Once the files have been exported you can run the `make_icns` scripts. This 
+will move the exported files into the location that iconutil expects, and
+then generate icon.iconset.
