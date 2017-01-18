@@ -1,4 +1,4 @@
-version: 0.5.1.{build}
+version: 9.9.9.{build}
 skip_non_tags: true
 build: off
 test: off
