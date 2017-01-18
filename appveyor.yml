@@ -1,0 +1,18 @@
+version: 0.5.1.{build}
+skip_non_tags: true
+build: off
+test: off
+artifacts:
+- path: dist\windows\QMK_Firmware_Flasher_setup.exe
+  name: setup
+before_deploy:
+- cmd: dist-win32.bat
+deploy:
+- provider: GitHub
+  auth_token:
+    secure: MBivjW4RpFI0TRdHQb+PchNY5yQte+IOqerViefhEo6XqTgH8nAIvC9ibShVik8s
+  draft: true
+  prerelease: true
+  force_update: true
+  on:
+    branch: master
