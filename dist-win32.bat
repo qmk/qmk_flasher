@@ -6,7 +6,7 @@
 
 set PLATFORM=win32
 set ARCH=ia32
-set OUTPUT_DIR=%userprofile%\firmware_flasher
+set OUTPUT_DIR=dist\windows
 set PACKAGE_DIR="%OUTPUT_DIR%\QMK Firmware Flasher-%PLATFORM%-%ARCH%"
 
 call npm install

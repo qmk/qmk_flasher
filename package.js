@@ -4,8 +4,8 @@ const os = require('os');
 
 packagerOptions = {
 	"dir": ".",
-	"out": path.resolve(os.homedir(), "firmware_flasher"),
-	"platform": "win32,darwin",
+	"out": path.resolve("dist", "windows"),
+	"platform": "win32",
 	"arch": "ia32",
 	"overwrite": true,
 	"asar": {
