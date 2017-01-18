@@ -4,6 +4,9 @@
 :: After executing this script, use NSIS to create an installer from the firmware_flasher.win32.nsi file located there.
 :: You may need to run npm install electron-packager --global once before this will work correctly.
 
+echo PATH:
+echo %PATH%
+
 set PLATFORM=win32
 set ARCH=ia32
 set OUTPUT_DIR=dist\windows
