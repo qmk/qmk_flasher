@@ -11,6 +11,8 @@ set PACKAGE_DIR="%OUTPUT_DIR%\QMK Firmware Flasher-%PLATFORM%-%ARCH%"
 
 set WIX_DIR="C:\Program Files (x86)\WiX Toolset v3.10\bin"
 
+dir "C:\Program Files (x86)\WiX Toolset v3.8\bin"
+
 call npm install
 
 rmdir %PACKAGE_DIR% /S /Q
