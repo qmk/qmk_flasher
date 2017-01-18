@@ -5,6 +5,9 @@ test: off
 artifacts:
 - path: dist\windows\QMK_Firmware_Flasher_setup.exe
   name: setup
+install:
+  - ps: $env:package_version = (Get-Content -Raw -Path package.json | ConvertFrom-Json).version
+  - ps: Update-AppveyorBuild -Version "$env:package_version-$env:APPVEYOR_BUILD_NUMBER"
 before_deploy:
 - cmd: dist-win32.bat
 deploy:
