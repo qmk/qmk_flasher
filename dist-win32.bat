@@ -9,6 +9,8 @@ set ARCH=ia32
 set OUTPUT_DIR=dist\windows
 set PACKAGE_DIR="%OUTPUT_DIR%\QMK Firmware Flasher-%PLATFORM%-%ARCH%"
 
+set WIX_DIR="C:\Program Files (x86)\WiX Toolset v3.10\bin"
+
 call npm install
 
 rmdir %PACKAGE_DIR% /S /Q
@@ -24,19 +26,19 @@ copy build\windows.png %PACKAGE_DIR%
 
 cd %PACKAGE_DIR%
 
-call candle -ext WixDifxAppExtension.dll QMK_Firmware_Flasher_msi.wxs
+call %WIX_DIR%\candle.exe -ext WixDifxAppExtension.dll QMK_Firmware_Flasher_msi.wxs
 if errorlevel 1 GOTO end
 
-call light -cc . -ext WixDifxAppExtension.dll -ext WixUIExtension difxapp_x86.wixlib QMK_Firmware_Flasher_msi.wixobj -o QMK_Firmware_Flasher_32-bit.msi
+call %WIX_DIR%\light.exe -cc . -ext WixDifxAppExtension.dll -ext WixUIExtension difxapp_x86.wixlib QMK_Firmware_Flasher_msi.wixobj -o QMK_Firmware_Flasher_32-bit.msi
 if errorlevel 1 GOTO end
 
-call light -cc . -reusecab -ext WixDifxAppExtension.dll -ext WixUIExtension difxapp_x64.wixlib QMK_Firmware_Flasher_msi.wixobj -o QMK_Firmware_Flasher_64-bit.msi
+call %WIX_DIR%\light.exe -cc . -reusecab -ext WixDifxAppExtension.dll -ext WixUIExtension difxapp_x64.wixlib QMK_Firmware_Flasher_msi.wixobj -o QMK_Firmware_Flasher_64-bit.msi
 if errorlevel 1 GOTO end
 
-call candle QMK_Firmware_Flasher_setup.wxs -ext WixBalExtension
+call %WIX_DIR%\candle.exe QMK_Firmware_Flasher_setup.wxs -ext WixBalExtension
 if errorlevel 1 GOTO end
 
-call light -ext WixBalExtension QMK_Firmware_Flasher_setup.wixobj
+call %WIX_DIR%\light.exe -ext WixBalExtension QMK_Firmware_Flasher_setup.wixobj
 if errorlevel 1 GOTO end
 
 copy QMK_Firmware_Flasher_setup.exe ..

@@ -1,5 +1,6 @@
-version: 0.5.1.{build}
+version: 9.9.9.{build}
 skip_non_tags: true
+cache: node_modules
 build: off
 test: off
 artifacts:
@@ -8,14 +9,12 @@ artifacts:
 install:
   - ps: $env:package_version = (Get-Content -Raw -Path package.json | ConvertFrom-Json).version
   - ps: Update-AppveyorBuild -Version "$env:package_version-$env:APPVEYOR_BUILD_NUMBER"
-before_deploy:
-- cmd: dist-win32.bat
+  - cmd: dist-win32.bat
 deploy:
 - provider: GitHub
   auth_token:
     secure: MBivjW4RpFI0TRdHQb+PchNY5yQte+IOqerViefhEo6XqTgH8nAIvC9ibShVik8s
+  artifact: setup
   draft: true
   prerelease: true
   force_update: true
-  on:
-    branch: master
