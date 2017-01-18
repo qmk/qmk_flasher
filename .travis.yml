@@ -1,7 +1,6 @@
-language: objective-c
-os: osx
+language: node_js
 node_js: node
-install: npm install
+os: osx
 script: npm run dist
 deploy:
   provider: releases
