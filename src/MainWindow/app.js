@@ -49,6 +49,9 @@ try {
     dfu_location = pathModule.resolve(app.getAppPath(), dfu_location);
 }
 
+//Place after all modifications to dfu_location have been made.
+dfu_location = '"' + dfu_location + '"';
+
 loadOptionsState();
 
 $(document).ready(function() {
@@ -153,9 +156,7 @@ function displayHexFileChangedPrompt(useNativeDialog) {
   const messageText = "The hex file has changed. Would you like to flash the new version?";
 
   if (useNativeDialog) {
-    let iconPath = pathModule.resolve(app.getAppPath(), "build", "icon.iconset", "icon_256x256.png");
     dialog.showMessageBox(win, {
-      icon: iconPath,
       buttons: [confirmButtonText, "Cancel"],
       defaultId: 0,
       message: messageText

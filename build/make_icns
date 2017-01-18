@@ -6,5 +6,12 @@ if [ ! -d Icon.iconset ]; then
 	exit 1
 fi
 
+# Move the icons into the places apple demands they be
+cp icon.iconset/icon_32x32.png icon.iconset/icon_16x16@2x.png
+cp icon.iconset/icon_64x64.png icon.iconset/icon_32x32@2x.png
+cp icon.iconset/icon_256x256.png icon.iconset/icon_128x128@2x.png
+cp icon.iconset/icon_512x512.png icon.iconset/icon_256x256@2x.png
+rm icon.iconset/icon_24x24* icon.iconset/icon_48x48* icon.iconset/icon_64x64*
+
 # Create the Icon
-iconutil -c icns Icon.iconset
+iconutil -c icns icon.iconset
