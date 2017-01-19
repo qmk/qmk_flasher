@@ -26,10 +26,10 @@ app.on('ready', function() {
   let mainWinOptions = {show: false, frame: true, resizable: false};
   if (process.platform == 'win32') {
     mainWinOptions.width = 659;
-    mainWinOptions.height = 510;
+    mainWinOptions.height = 260;
   } else {
     mainWinOptions.width = 640;
-    mainWinOptions.height = 480;
+    mainWinOptions.height = 230;
   }
 
   mainWin = new BrowserWindow(mainWinOptions);

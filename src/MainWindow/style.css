@@ -86,6 +86,7 @@ html, body {
   position: absolute;
   top: 70px;
   left: 14px;
+  height: 80px;
   width: 613px;
   border-radius: 2px;
   overflow-y: scroll;
