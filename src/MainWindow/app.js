@@ -20,6 +20,7 @@ let watcher;
 let bootloader_ready = false;
 let flash_in_progress = false;
 let flash_when_ready = false;
+let ui_mode = 'simple';
 
 //HTML entities
 let $bringToFront = $('#bring-to-front');
@@ -60,7 +61,7 @@ $(document).ready(function() {
   $("<link/>", {
      rel: "stylesheet",
      type: "text/css",
-     href: "themes/" + ipcRenderer.sendSync('get-setting-theme') + ".css"
+     href: "themes/" + $currentTheme.val() + ".css"
   }).appendTo("head");
 
   // Handle drag-n-drop events
@@ -137,7 +138,7 @@ $(document).ready(function() {
   exec(dfu_location + ' --version', function(error, stdout, stderr) {
     if (stderr.indexOf('dfu-programmer') > -1) {
       window.setTimeout(checkForBoard, 10);
-      sendStatus("Select a firmware file by clicking 'Choose .hex' or drag and drop a file onto this window.");
+      sendStatus("Select a firmware file by clicking 'Choose .hex' or drag and drop a file onto this window.", true);
     } else {
       if (process.platform === 'win32') {
         sendStatus("Could not run dfu-programmer! Have you installed the driver?");
@@ -149,9 +150,9 @@ $(document).ready(function() {
       sendStatus(error);
       sendStatus("stdout:");
       writeStatus(stdout);
-      sendStatus("stderr:");
+      sendStatus("stderr:", false);
       writeStatus(stderr);
-      sendStatus("dfu location:");
+      sendStatus("dfu location:", false);
       writeStatus(dfu_location);
     }
   });
@@ -178,7 +179,7 @@ function checkFile(filename = $filePath.val()) {
     if (filename.slice(-4).toUpperCase() == '.HEX') {
         return true;
     } else {
-        sendStatus("Invalid firmware file: " + filename);
+        sendStatus("Invalid firmware file: " + filename, true);
         return false;
     }
 }
@@ -245,7 +246,7 @@ function loadHex(filename) {
   if (bootloader_ready) {
     setFlashButtonImmediate();
   } else {
-    sendStatus("Press RESET on your keyboard's PCB.");
+    sendStatus("Press RESET on your keyboard's PCB.", true);
     $flashHex.text(flashWhenReadyButtonText);
   }
 
@@ -321,8 +322,15 @@ function writeStatus(text) {
   $status.scrollTop($status.scrollHeight);
 }
 
-function sendStatus(text) {
+function sendStatus(text, simple) {
+  // Write a line to the status window.
+  // Always writes to the advanced window. If simple is true it will write
+  // to the simple window as well.
   writeStatus('<b>' + text + "</b>\n");
+  if (simple) {
+    simpleStatus.append('<b>' + text + "</b>\n");
+    simpleStatus.scrollTop(simpleStatus.scrollHeight);
+  }
 }
 
 function loadFile() {
@@ -339,9 +347,9 @@ function flashFirmware() {
   disableButton($flashHex);
   sendHex($filePath.val(), function (success) {
       if (success) {
-          sendStatus("Flashing complete!");
+          sendStatus("Flashing complete!", true);
       } else {
-          sendStatus("An error occurred - please try again.");
+          sendStatus("An error occurred - please try again.", true);
       }
   });
 }
@@ -376,14 +384,8 @@ function sendHex(file, callback) {
   flash_in_progress = false;
 }
 
-/*
-var escapeShell = function(cmd) {
-  return ''+cmd.replace(/(["\s'$`\\\(\)])/g,'\\$1')+'';
-};
-*/
-
 function eraseChip(callback) {
-  sendStatus('dfu-programmer atmega32u4 erase --force');
+  sendStatus('dfu-programmer atmega32u4 erase --force', false);
   exec(dfu_location + ' atmega32u4 erase --force', function(error, stdout, stderr) {
     writeStatus(stdout);
     writeStatus(stderr);
@@ -397,7 +399,7 @@ function eraseChip(callback) {
 }
 
 function flashChip(file, callback) {
-  sendStatus('dfu-programmer atmega32u4 flash ' + file);
+  sendStatus('dfu-programmer atmega32u4 flash ' + file, false);
   exec(dfu_location + ' atmega32u4 flash ' + file, function(error, stdout, stderr) {
     writeStatus(stdout);
     writeStatus(stderr);
@@ -410,7 +412,7 @@ function flashChip(file, callback) {
 }
 
 function resetChip(callback) {
-  sendStatus('dfu-programmer atmega32u4 reset');
+  sendStatus('dfu-programmer atmega32u4 reset', false);
   exec(dfu_location + ' atmega32u4 reset', function(error, stdout, stderr) {
     writeStatus(stdout);
     writeStatus(stderr);
