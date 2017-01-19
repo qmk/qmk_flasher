@@ -29,13 +29,13 @@ Download and install the version that best fits your situation.
 If you have [homebrew](http://brew.sh) installed you can install node
 that way:
 
-    $ brew install node
+    brew install node
 
 ## Starting the App
 
 To run the app in development mode, enter the directory and:
 
-    $ npm install && npm start
+    npm install && npm start
 
 # Make A Release
 
