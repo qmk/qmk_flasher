@@ -15,14 +15,13 @@ html, body {
   -webkit-app-region: drag;
 }
 
-.button {
-  border: 1px solid hsl(0, 0%, 83%);
-  border-radius: 6px;
+#tabs {
+  top: 10px;
 }
 
 #file-path {
   position: absolute;
-  top: 40px;
+  top: 55px;
   left: 14px;
   width: 503px;
   height: 24px;
@@ -33,11 +32,13 @@ html, body {
 
 #load-file {
   position: absolute;
-  top: 40px;
+  top: 55px;
   right: 14px;
   width: 100px;
   height: 24px;
   -webkit-app-region: no-drag;
+  border: 1px solid hsl(0, 0%, 83%);
+  border-radius: 6px;
 }
 
 #flash-hex {
@@ -76,7 +77,7 @@ html, body {
 
 #toolbar {
   position: absolute;
-  top: 70px;
+  top: 90px;
   left: 14px;
   width: 503px;
 }
@@ -86,7 +87,7 @@ html, body {
   background-color: #eee;
   border: #ccc solid 1px;
   position: absolute;
-  top: 70px;
+  bottom: 65px;
   left: 14px;
   height: 80px;
   width: 613px;
@@ -104,8 +105,8 @@ html, body {
   font-size: 12px;
   position: absolute;
   left: 14px;
-  bottom: 55px;
-  height: 340px;
+  bottom: 65px;
+  height: 370px;
   width: 612px;
   border-radius: 2px;
   overflow-y: scroll;

@@ -29,10 +29,10 @@ app.on('ready', function() {
   let mainWinOptions = {show: false, frame: true, resizable: false, icon: __dirname + 'build/icon.iconset/icon_128x128.png'};
   if (process.platform == 'win32') {
     mainWinOptions.width = 659;
-    mainWinOptions.height = 260;
+    mainWinOptions.height = 290;
   } else {
     mainWinOptions.width = 640;
-    mainWinOptions.height = 230;
+    mainWinOptions.height = 260;
   }
 
   mainWin = new BrowserWindow(mainWinOptions);
