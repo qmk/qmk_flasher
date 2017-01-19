@@ -1,4 +1,5 @@
 @echo off
+setlocal EnableDelayedExpansion
 
 :: This script will create a packaged version of the app in firmware_flasher in your home folder.
 :: After executing this script, use NSIS to create an installer from the firmware_flasher.win32.nsi file located there.
@@ -11,6 +12,34 @@ set PACKAGE_DIR="%OUTPUT_DIR%\QMK Firmware Flasher-%PLATFORM%-%ARCH%"
 
 set WIX_DIR="C:\Program Files (x86)\WiX Toolset v3.10\bin"
 
+:: Color setup
+for /F "tokens=1,2 delims=#" %%a in ('"prompt #$H#$E# & echo on & for %%b in (1) do rem"') do (
+  set "DEL=%%a"
+)
+
+if not defined APPVEYOR GOTO warnUser
+GOTO build
+
+:warnUser
+echo.
+call :color 0e "	WARNING"
+echo.
+echo  	This script will generate a Windows installer.
+echo.
+call :color 0e " 	It is important that only one Windows installer is built for each version number."
+echo.
+echo  	AppVeyor will build and publish the official installer for each version.
+echo.
+call :color 0e " 	This script should only be run manually if you are working on the installer, and need to test it."
+echo. 
+call :color 0e " 	Any installers made by running this script manually should ONLY be executed inside of a clean VM."
+echo.	
+set /p acknowledgedInput=To continue, type "ACKNOWLEDGED". Any other input will quit.  
+:: If acknowledgedInput is ACKNOWLEDGED, goto build
+GOTO end
+exit /b
+
+:build
 call npm install
 
 rmdir %PACKAGE_DIR% /S /Q
@@ -42,6 +71,19 @@ call %WIX_DIR%\light.exe -ext WixBalExtension QMK_Firmware_Flasher_setup.wixobj
 if errorlevel 1 GOTO end
 
 copy QMK_Firmware_Flasher_setup.exe ..
+exit /b
+
+:: color function obtained from http://stackoverflow.com/a/5344911
+:color
+set "param=^%~2" !
+set "param=!param:"=\"!"
+<nul > X set /p ".=."
+findstr /p /A:%1 "." "!param!\..\X" nul
+<nul set /p ".=%DEL%%DEL%%DEL%%DEL%%DEL%%DEL%%DEL%"
+del X
+echo.
+exit /b
 
 :end
 cd %~dp0
+endlocal
