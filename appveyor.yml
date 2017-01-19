@@ -1,6 +1,9 @@
 version: 9.9.9.{build}
 skip_non_tags: true
 cache: node_modules
+environment:
+  TRAVIS_TOKEN:
+    secure: SoeGknhSbVyN13DDBU8YwLioiH2jXyekaIhJM6bPSx8=
 build: off
 test: off
 artifacts:
@@ -10,6 +13,7 @@ install:
   - ps: $env:package_version = (Get-Content -Raw -Path package.json | ConvertFrom-Json).version
   - ps: Update-AppveyorBuild -Version "$env:package_version-$env:APPVEYOR_BUILD_NUMBER"
   - cmd: dist-win32.bat
+  - cmd: initiate-travis-build.bat
 deploy:
 - provider: GitHub
   auth_token:
