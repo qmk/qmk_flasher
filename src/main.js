@@ -109,9 +109,11 @@ app.on('ready', function() {
   global.mainWinId = mainWin.id;
 
   ipcMain.on('show-menu', () => {
+    left_edge = mainWin.getPosition()[0];
+    bottom_edge = mainWin.getPosition()[1] + mainWin.getSize()[1];
     menuWin.setPosition(
-      mainWin.getPosition()[0] + menuWinXOffset,
-      mainWin.getPosition()[1] + menuWinYOffset,
+      left_edge + menuWinXOffset,
+      bottom_edge + menuWinYOffset,
       false
     );
     menuWin.show();
