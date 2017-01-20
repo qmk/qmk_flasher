@@ -36,18 +36,15 @@ html, body {
   right: 14px;
   width: 100px;
   height: 24px;
-  -webkit-app-region: no-drag;
   border: 1px solid hsl(0, 0%, 83%);
   border-radius: 6px;
 }
 
 #flash-hex {
   position: absolute;
+  left: 225px;
   bottom: 14px;
-  left: 213px;
-  height: 34px;
   width: 200px;
-  -webkit-app-region: no-drag;
 }
 
 #flash-hex:hover {
@@ -68,7 +65,6 @@ html, body {
   border: none;
   outline: none;
   background: none;
-  -webkit-app-region: no-drag;
 }
 
 #gear-menu > span {
@@ -77,27 +73,8 @@ html, body {
 
 #toolbar {
   position: absolute;
-  top: 90px;
+  top: 10px;
   left: 14px;
-  width: 503px;
-}
-
-#simple-status {
-  font-size: 12px;
-  background-color: #eee;
-  border: #ccc solid 1px;
-  position: absolute;
-  bottom: 65px;
-  left: 14px;
-  height: 80px;
-  width: 613px;
-  border-radius: 2px;
-  overflow-y: scroll;
-  font-family: monospace;
-  white-space: pre-wrap;
-  padding: 7px;
-  -webkit-app-region: no-drag;
-  -webkit-user-select: text;
 }
 
 #status {
@@ -105,9 +82,9 @@ html, body {
   font-size: 12px;
   position: absolute;
   left: 14px;
+  right: 14px;
+  top: 90px;
   bottom: 65px;
-  height: 370px;
-  width: 612px;
   border-radius: 2px;
   overflow-y: scroll;
   white-space: pre-wrap;

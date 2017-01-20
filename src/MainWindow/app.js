@@ -23,6 +23,7 @@ let flash_when_ready = false;
 let ui_mode = 'simple';
 
 //HTML entities
+<<<<<<< HEAD
 let $bringToFront = $('#bring-to-front');
 let $currentTheme = $('#current-theme');
 let $filePath = $('#file-path');
@@ -324,13 +325,12 @@ function writeStatus(text) {
 
 function sendStatus(text, simple) {
   // Write a line to the status window.
-  // Always writes to the advanced window. If simple is true it will write
-  // to the simple window as well.
-  writeStatus('<b>' + text + "</b>\n");
-  if (simple) {
-    simpleStatus.append('<b>' + text + "</b>\n");
-    simpleStatus.scrollTop(simpleStatus.scrollHeight);
+  // If simple is false it will not write to the status window when
+  // ui_mode == 'simple'
+  if (!simple && ui_mode == 'simple') {
+    return;
   }
+  writeStatus('<b>' + text + '</b>\n');
 }
 
 function loadFile() {

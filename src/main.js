@@ -24,15 +24,28 @@ if(shouldQuit) {
 }
 
 app.on('ready', function() {
-  /* Initialize the main window
-   */
-  let mainWinOptions = {show: false, frame: true, resizable: false, icon: __dirname + 'build/icon.iconset/icon_128x128.png'};
+  let mainWinOptions = {
+    show: false,
+    frame: true,
+    resizable: true,
+    maximizable: false,
+    fullscreen: false,
+    fullscreenable: false,
+    title: 'QMK Firmware Flasher',
+    icon: __dirname + 'build/icon.iconset/icon_128x128.png'
+  };
   if (process.platform == 'win32') {
     mainWinOptions.width = 659;
-    mainWinOptions.height = 290;
+    mainWinOptions.height = 430;
+    mainWinOptions.minWidth = 659;
+    mainWinOptions.maxWidth = 659;
+    mainWinOptions.minHeight = 290;
   } else {
     mainWinOptions.width = 640;
-    mainWinOptions.height = 260;
+    mainWinOptions.height = 400;
+    mainWinOptions.minWidth = 640;
+    mainWinOptions.maxWidth = 640;
+    mainWinOptions.minHeight = 260;
   }
 
   mainWin = new BrowserWindow(mainWinOptions);
@@ -84,12 +97,12 @@ app.on('ready', function() {
    */
   let menuWinXOffset;
   let menuWinYOffset;
-  if (process.platform == "darwin") {
-    menuWinXOffset = 10;
-    menuWinYOffset = 470;
+  if (process.platform == 'win32') {
+    menuWinXOffset = 20;   // From left edge
+    menuWinYOffset = -20;  // From bottom edge
   } else {
-    menuWinXOffset = 20;
-    menuWinYOffset = 490;
+    menuWinXOffset = 10;   // From left edge
+    menuWinYOffset = -10;  // From bottom edge
   }
 
   menuWin = new BrowserWindow({
