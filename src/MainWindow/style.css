@@ -3,7 +3,7 @@
 }
 
 :focus {
-    outline: none;
+  outline: none;
 }
 
 *, *:before, *:after {
@@ -11,13 +11,20 @@
 }
 
 html, body {
-	height: 100%;
-	-webkit-app-region: drag;
+  height: 100%;
+  -webkit-app-region: drag;
+  font: message-box;
+  color: WindowText;
+  background-color: Window;
 }
 
 .button {
   border: 1px solid hsl(0, 0%, 83%);
   border-radius: 6px;
+}
+
+.btn, .button {
+  font: icon;
 }
 
 #file-path {
@@ -27,6 +34,8 @@ html, body {
   width: 503px;
   height: 24px;
   -webkit-app-region: no-drag;
+  -webkit-user-select: text;
+  text-overflow: ellipsis;
 }
 
 #load-file {
@@ -74,9 +83,10 @@ html, body {
 
 
 #status {
+  font: message-box;
   font-size: 12px;
-  background-color: #eee;
-  border: #ccc solid 1px;
+  background-color: #ddd;
+  border: ActiveBorder solid 1px;
   position: absolute;
   left: 14px;
   bottom: 62px;
@@ -84,9 +94,11 @@ html, body {
   width: 612px;
   border-radius: 2px;
   overflow-y: scroll;
-  font-family: monospace;
   white-space: pre-wrap;
   padding: 7px;
   -webkit-app-region: no-drag;
+}
+
+#status, #status b {
   -webkit-user-select: text;
 }

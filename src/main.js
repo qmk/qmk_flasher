@@ -3,6 +3,7 @@ require('electron-debug')({showDevTools: false});
 const {app} = electron;
 const {BrowserWindow} = electron;
 const {ipcMain} = electron;
+const {Menu} = electron;
 const settings = require('electron-settings');
 
 let mainWin;  // Ensure that our mainWin isn't garbage collected
@@ -23,7 +24,7 @@ if(shouldQuit) {
 }
 
 app.on('ready', function() {
-  let mainWinOptions = {show: false, frame: true, resizable: false};
+  let mainWinOptions = {show: false, frame: true, resizable: false, icon: __dirname + 'build/icon.iconset/icon_128x128.png'};
   if (process.platform == 'win32') {
     mainWinOptions.width = 659;
     mainWinOptions.height = 510;
@@ -108,6 +109,45 @@ app.on('ready', function() {
     settingsCache.focusWindowOnHexChange = updatedSettings.focusWindowOnHexChange;
     settings.set('focusWindowOnHexChange', updatedSettings.focusWindowOnHexChange);
   });
+
+  // Setup the mac menu items
+  if (process.platform === 'darwin') {
+    const template = [
+      {
+        label: app.getName(),
+        submenu: [
+          {label: 'About '+app.getName(), click: function(menuItem, browserWindow, event) {mainWin.webContents.executeJavaScript("openAboutDialog()");}},
+          {role: 'separator'},
+          {role: 'services',submenu:[]},
+          {role: 'separator'},
+          {role: 'hide'},
+          {role: 'hideothers'},
+          {role: 'unhide'},
+          {role: 'separator'},
+          {role: 'quit'},
+        ]
+      }, {
+        label: 'Edit',
+        submenu: [
+          {role: 'copy'},
+          {role: 'selectall'}
+        ]
+      }, {
+        label: 'View',
+        submenu: [
+          {role: 'toggledevtools'}
+        ]
+      }, {
+        label: 'Window',
+        submenu: [
+          {role: 'minimize'},
+          {role: 'close'}
+        ]
+      }
+    ];
+    const menu = Menu.buildFromTemplate(template)
+    Menu.setApplicationMenu(menu);
+  }
 });
 
 // Quit when all windows are closed.
