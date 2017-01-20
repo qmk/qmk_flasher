@@ -46,7 +46,7 @@ try {
     fs.accessSync(dfu_location, fs.F_OK);
 } catch (err) {
     // Running in deployed mode, use the app copy
-    dfu_location = pathModule.resolve(app.getAppPath(), dfu_location);
+    dfu_location = pathModule.resolve(app.getAppPath(), '..', 'app.asar.unpacked' dfu_location);
 }
 
 //Place after all modifications to dfu_location have been made.
