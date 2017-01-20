@@ -13,8 +13,7 @@ install:
   - ps: $env:package_version = (Get-Content -Raw -Path package.json | ConvertFrom-Json).version
   - ps: Update-AppveyorBuild -Version "$env:package_version-$env:APPVEYOR_BUILD_NUMBER"
   - cmd: dist-win32.bat
-  # Initiate Travis build & deploy
-  - cmd: curl -X POST -H "Content-Type: application/x-www-form-urlencoded" -H "Accept: application/json" -H "Travis-API-Version: 3" -H "Authorization: token %TRAVIS_TOKEN%" -d '{"request"={"branch":"%APPVEYOR_REPO_BRANCH%"}}' "https://api.travis-ci.org/repo/NoahAndrews%%2Fqmk_firmware_flasher/requests"
+  - cmd: initiate-travis-build.bat
 deploy:
 - provider: GitHub
   auth_token:
