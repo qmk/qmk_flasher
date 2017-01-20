@@ -31,15 +31,17 @@ echo.
 call :color 0e " 	Any installers made by running this script manually should ONLY be executed inside of a clean VM."
 echo.	
 set /p acknowledgedInput=To continue, type "ACKNOWLEDGED". Any other input will quit.  
-:: If acknowledgedInput is ACKNOWLEDGED, goto build
+if "%acknowledgedInput%"=="ACKNOWLEDGED" GOTO build
 GOTO end
 exit /b
 
 :build
 call npm install
 
-rmdir %PACKAGE_DIR% /S /Q
-del %OUTPUT_DIR%\QMK_Firmware_Flasher_setup.exe
+if not defined APPVEYOR (
+    rmdir %PACKAGE_DIR% /S /Q
+    del %OUTPUT_DIR%\QMK_Firmware_Flasher_setup.exe
+)
 
 call node package.js
 
@@ -47,7 +49,7 @@ copy msi\* %PACKAGE_DIR%
 copy setup\* %PACKAGE_DIR%
 
 copy build\windows.ico %PACKAGE_DIR%
-copy build\windows.png %PACKAGE_DIR%
+copy build\icon.iconset\icon_32x32@2x.png %PACKAGE_DIR%\windows.png
 
 cd %PACKAGE_DIR%
 
