@@ -20,14 +20,23 @@ html, body {
 }
 
 #file-path {
+  font-size: 12px;
+  background-color: #eee;
+  border: #ccc solid 1px;
+  border-radius: 2px;
+  font-family: monospace;
+  white-space: pre-wrap;
+  padding: 7px;
+  -webkit-user-select: text;
   position: absolute;
   top: 55px;
+  right: 120px;
   left: 14px;
-  width: 503px;
   height: 24px;
   -webkit-app-region: no-drag;
   -webkit-user-select: text;
   text-overflow: ellipsis;
+  width: auto;
 }
 
 #load-file {
@@ -42,7 +51,8 @@ html, body {
 
 #flash-hex {
   position: absolute;
-  left: 225px;
+  left: 35%;
+  right: 35%;
   bottom: 14px;
   width: 200px;
 }

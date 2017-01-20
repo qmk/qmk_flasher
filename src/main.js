@@ -38,13 +38,11 @@ app.on('ready', function() {
     mainWinOptions.width = 659;
     mainWinOptions.height = 430;
     mainWinOptions.minWidth = 659;
-    mainWinOptions.maxWidth = 659;
     mainWinOptions.minHeight = 290;
   } else {
     mainWinOptions.width = 640;
     mainWinOptions.height = 400;
     mainWinOptions.minWidth = 640;
-    mainWinOptions.maxWidth = 640;
     mainWinOptions.minHeight = 260;
   }
 
