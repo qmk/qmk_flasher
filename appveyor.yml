@@ -15,7 +15,8 @@ install:
   - cmd: packaging\dist-win32.bat
   - cmd: packaging\initiate-travis-build.bat
 deploy:
-- provider: GitHub
+  description: 'These release notes were defined in appveyor.yml.'
+  provider: GitHub
   auth_token:
     secure: MBivjW4RpFI0TRdHQb+PchNY5yQte+IOqerViefhEo6XqTgH8nAIvC9ibShVik8s
   artifact: setup
