@@ -3,10 +3,12 @@ setlocal EnableDelayedExpansion
 
 set PLATFORM=win32
 set ARCH=ia32
-set OUTPUT_DIR=dist\windows
+set OUTPUT_DIR=..\dist\windows
 set PACKAGE_DIR="%OUTPUT_DIR%\QMK Firmware Flasher-%PLATFORM%-%ARCH%"
 
 set WIX_DIR="C:\Program Files (x86)\WiX Toolset v3.10\bin"
+
+pushd %1
 
 :: Color setup
 for /F "tokens=1,2 delims=#" %%a in ('"prompt #$H#$E# & echo on & for %%b in (1) do rem"') do (
@@ -36,6 +38,8 @@ GOTO end
 exit /b
 
 :build
+cd %~dp0
+
 call npm install
 
 if not defined APPVEYOR (
@@ -45,11 +49,10 @@ if not defined APPVEYOR (
 
 call node package.js
 
-copy msi\* %PACKAGE_DIR%
-copy setup\* %PACKAGE_DIR%
+copy wix\* %PACKAGE_DIR%
 
-copy build\windows.ico %PACKAGE_DIR%
-copy build\icon.iconset\icon_32x32@2x.png %PACKAGE_DIR%\windows.png
+copy ..\build\windows.ico %PACKAGE_DIR%
+copy ..\build\icon.iconset\icon_32x32@2x.png %PACKAGE_DIR%\windows.png
 
 cd %PACKAGE_DIR%
 
@@ -83,5 +86,5 @@ echo.
 exit /b
 
 :end
-cd %~dp0
+popd
 endlocal
