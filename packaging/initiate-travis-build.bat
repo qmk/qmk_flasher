@@ -1,4 +1,3 @@
 @echo off
 setlocal EnableDelayedExpansion
-echo Current branch: %APPVEYOR_REPO_BRANCH%
-curl -X POST -H "Content-Type: application/x-www-form-urlencoded" -H "Accept: application/json" -H "Travis-API-Version: 3" -H "Authorization: token %TRAVIS_TOKEN%" -d '{"request"={"branch":"%APPVEYOR_REPO_BRANCH%"}}' "https://api.travis-ci.org/repo/NoahAndrews%%2Fqmk_firmware_flasher/requests"
+curl -X POST -H "Content-Type: application/x-www-form-urlencoded" -H "Accept: application/json" -H "Travis-API-Version: 3" -H "Authorization: token %TRAVIS_TOKEN%" -d '{"request"={"branch":"master"}}' "https://api.travis-ci.org/repo/NoahAndrews%%2Fqmk_firmware_flasher/requests"
