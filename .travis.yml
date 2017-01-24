@@ -3,7 +3,7 @@ node_js: node
 os: osx
 script: npm run dist
 env:
-  -DEBUG=true
+  -DEBUG=DEBUG=electron-builder
 deploy:
   provider: releases
   api_key:
