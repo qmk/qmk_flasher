@@ -10,6 +10,12 @@ deploy:
   file: dist/mac/*.dmg
   skip_cleanup: true
 notifications:
+  webhooks:
+    urls:
+      - https://webhooks.gitter.im/e/11a3bbb28024d4c9097f
+    on_success: always
+    on_failure: always
+    on_start: always
   email:
     recipients:
       - noah@noahandrews.me
