@@ -7,7 +7,7 @@ environment:
 build: off
 test: off
 artifacts:
-- path: dist\windows\QMK_Firmware_Flasher_setup.exe
+- path: dist\windows\QMK*setup.exe
   name: setup
 install:
   - ps: $env:package_version = (Get-Content -Raw -Path package.json | ConvertFrom-Json).version
