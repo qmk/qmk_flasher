@@ -7,6 +7,6 @@ let bintrayJson = fs.readFileSync(bintrayJsonPath, "utf8");
 
 let bintrayObj = JSON.parse(bintrayJson);
 
-bintrayObj.version.name = `v${process.env.npm_package_version}`;
+bintrayObj.version.name = process.env.npm_package_version;
 
 fs.writeFileSync(bintrayJsonPath, JSON.stringify(bintrayObj, null, 2));
