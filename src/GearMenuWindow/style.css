@@ -1,5 +1,7 @@
 .dropdown-menu {
+    font: menu;
     display: block;
     margin: 0;
     min-width: 100%;
+    -webkit-user-select:none;
 }
