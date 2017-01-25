@@ -20,6 +20,7 @@ let watcher;
 let bootloader_ready = false;
 let flash_in_progress = false;
 let flash_when_ready = false;
+let ui_mode = 'simple';
 
 //HTML entities
 let flashButton = $('#flash-hex');
@@ -29,9 +30,12 @@ let statusBox = $('#status');
 let optionsModal = $('#options-modal');
 let saveOptionsButton = $('#save-options-button');
 let bringToFrontCheckbox = $('#bring-to-front-checkbox');
-let hexChangedFlashButton;
-
+let simple_tab = $('#simple');
+let expert_tab = $('#expert');
+let expertFeatures = $('#expert-features');
+let simpleStatus = $('#simple-status');
 let gearMenuButton = $('#gear-menu');
+let hexChangedFlashButton;
 
 const flashImmediatelyButtonText = "Flash Keyboard";
 const flashWhenReadyButtonText = "Flash When Ready";
@@ -55,6 +59,31 @@ dfu_location = '"' + dfu_location + '"';
 loadOptionsState();
 
 $(document).ready(function() {
+// Setup the tabs
+  $('#simple').click(function() {
+    win_size = win.getSize();
+    if (win_size[1] > 330) {
+      simple_tab.css('background-color', '#ccc');
+      expert_tab.css('background-color', '#fff');
+      let y = win_size[1] - 330;
+      expertFeatures.hide();
+      simpleStatus.show();
+      win.setSize(win_size[0], y, true);
+    }
+  });
+
+  $('#expert').click(function() {
+    win_size = win.getSize();
+    if (win_size[1] < 330) {
+      simple_tab.css('background-color', '#fff');
+      expert_tab.css('background-color', '#ccc');
+      let y = win_size[1] + 330;
+      expertFeatures.show();
+      simpleStatus.hide();
+      win.setSize(win_size[0], y, true);
+    }
+  });
+
   // Handle drag-n-drop events
   $(document).on('dragenter dragover', function(event) {
     event.preventDefault();
@@ -104,16 +133,16 @@ $(document).ready(function() {
   exec(dfu_location + ' --version', function(error, stdout, stderr) {
     if (stderr.indexOf('dfu-programmer') > -1) {
       window.setTimeout(checkForBoard, 10);
-      sendStatus("Select a firmware file by clicking 'Choose .hex' or drag and drop a file onto this window.");
+      sendStatus("Select a firmware file by clicking 'Choose .hex' or drag and drop a file onto this window.", true);
     } else {
-      sendStatus("Could not run dfu-programmer! Please report this as a bug!");
-      sendStatus("<br>Debugging information:<br>");
-      sendStatus(error);
-      sendStatus("stdout:");
+      sendStatus("Could not run dfu-programmer! Please report this as a bug!", true);
+      sendStatus("<br>Debugging information:<br>", false);
+      sendStatus(error, false);
+      sendStatus("stdout:", false);
       writeStatus(stdout);
-      sendStatus("stderr:");
+      sendStatus("stderr:", false);
       writeStatus(stderr);
-      sendStatus("dfu location:");
+      sendStatus("dfu location:", false);
       writeStatus(dfu_location);
     }
   });
@@ -140,7 +169,7 @@ function checkFile(filename = pathField.val()) {
     if (filename.slice(-4).toUpperCase() == '.HEX') {
         return true;
     } else {
-        sendStatus("Invalid firmware file: " + filename);
+        sendStatus("Invalid firmware file: " + filename, true);
         return false;
     }
 }
@@ -207,7 +236,7 @@ function loadHex(filename) {
   if (bootloader_ready) {
     setFlashButtonImmediate();
   } else {
-    sendStatus("Press RESET on your keyboard's PCB.");
+    sendStatus("Press RESET on your keyboard's PCB.", true);
     flashButton.text(flashWhenReadyButtonText);
   }
 
@@ -268,14 +297,15 @@ function handleFlashButton() {
         if(!checkFile()) return;
         flash_when_ready = true;
         clearStatus();
-        sendStatus("The firmware will flash as soon as the keyboard is ready to receive it.");
-        sendStatus("Press the RESET button to prepare the keyboard.");
+        sendStatus("The firmware will flash as soon as the keyboard is ready to receive it.", false);
+        sendStatus("Press the RESET button to prepare the keyboard.", false);
         disableButton(flashButton);
     }
 }
 
 function clearStatus() {
   statusBox.text('');
+  simpleStatus.text('');
 }
 
 function writeStatus(text) {
@@ -283,8 +313,15 @@ function writeStatus(text) {
   statusBox.scrollTop(statusBox.scrollHeight);
 }
 
-function sendStatus(text) {
+function sendStatus(text, simple) {
+  // Write a line to the status window.
+  // Always writes to the advanced window. If simple is true it will write
+  // to the simple window as well.
   writeStatus('<b>' + text + "</b>\n");
+  if (simple) {
+    simpleStatus.append('<b>' + text + "</b>\n");
+    simpleStatus.scrollTop(simpleStatus.scrollHeight);
+  }
 }
 
 function loadFile() {
@@ -301,9 +338,9 @@ function flashFirmware() {
   disableButton(flashButton);
   sendHex(pathField.val(), function (success) {
       if (success) {
-          sendStatus("Flashing complete!");
+          sendStatus("Flashing complete!", true);
       } else {
-          sendStatus("An error occurred - please try again.");
+          sendStatus("An error occurred - please try again.", true);
       }
   });
 }
@@ -345,7 +382,7 @@ var escapeShell = function(cmd) {
 */
 
 function eraseChip(callback) {
-  sendStatus('dfu-programmer atmega32u4 erase --force');
+  sendStatus('dfu-programmer atmega32u4 erase --force', false);
   exec(dfu_location + ' atmega32u4 erase --force', function(error, stdout, stderr) {
     writeStatus(stdout);
     writeStatus(stderr);
@@ -359,7 +396,7 @@ function eraseChip(callback) {
 }
 
 function flashChip(file, callback) {
-  sendStatus('dfu-programmer atmega32u4 flash ' + file);
+  sendStatus('dfu-programmer atmega32u4 flash ' + file, false);
   exec(dfu_location + ' atmega32u4 flash ' + file, function(error, stdout, stderr) {
     writeStatus(stdout);
     writeStatus(stderr);
@@ -372,7 +409,7 @@ function flashChip(file, callback) {
 }
 
 function resetChip(callback) {
-  sendStatus('dfu-programmer atmega32u4 reset');
+  sendStatus('dfu-programmer atmega32u4 reset', false);
   exec(dfu_location + ' atmega32u4 reset', function(error, stdout, stderr) {
     writeStatus(stdout);
     writeStatus(stderr);

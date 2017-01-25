@@ -29,7 +29,7 @@ html, body {
 
 #file-path {
   position: absolute;
-  top: 20px;
+  top: 40px;
   left: 14px;
   width: 503px;
   height: 24px;
@@ -40,7 +40,7 @@ html, body {
 
 #load-file {
   position: absolute;
-  top: 20px;
+  top: 40px;
   right: 14px;
   width: 100px;
   height: 24px;
@@ -81,6 +81,54 @@ html, body {
   font-size: 25px;
 }
 
+#toolbar {
+  position: absolute;
+  top: 70px;
+  left: 14px;
+  width: 503px;
+}
+
+#simple-status {
+  font-size: 12px;
+  background-color: #eee;
+  border: #ccc solid 1px;
+  position: absolute;
+  top: 70px;
+  left: 14px;
+  height: 80px;
+  width: 613px;
+  border-radius: 2px;
+  overflow-y: scroll;
+  font-family: monospace;
+  white-space: pre-wrap;
+  padding: 7px;
+  -webkit-app-region: no-drag;
+  -webkit-user-select: text;
+}
+
+#toolbar {
+  position: absolute;
+  top: 70px;
+  left: 14px;
+  width: 503px;
+}
+
+#simple-status {
+  font-size: 12px;
+  background-color: #eee;
+  border: #ccc solid 1px;
+  position: absolute;
+  top: 70px;
+  left: 14px;
+  width: 613px;
+  border-radius: 2px;
+  overflow-y: scroll;
+  font-family: monospace;
+  white-space: pre-wrap;
+  padding: 7px;
+  -webkit-app-region: no-drag;
+  -webkit-user-select: text;
+}
 
 #status {
   font: message-box;
@@ -89,7 +137,7 @@ html, body {
   border: ActiveBorder solid 1px;
   position: absolute;
   left: 14px;
-  bottom: 62px;
+  bottom: 55px;
   height: 340px;
   width: 612px;
   border-radius: 2px;
