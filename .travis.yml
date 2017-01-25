@@ -3,21 +3,27 @@ node_js: node
 os: osx
 script: npm run dist
 deploy:
-  provider: releases
+- provider: releases
   api_key:
     secure: vv8g5479fmPlwbafE1CYxZwiK6+LYLUr0Oo0oz+hoTQeOKYTJFE15hmQLC2vUBcKaBB7yqoP9dPZyXQouhMws3mwGz2RmaprgCj1qbZei/l2RxIqQZVZjJJ1MicYF12LzT5DBJV93jXUsEimn584JLgrzDd1hV9IcUp3T6Six9FOou3lIxV+63Un/rMhPa13xku1EB5zixzCp4K7M575A41k2OBD5brZA3F/cKd37sjfUOU6KcJHhbzPSa+mild7lypT/rlcHwOfIp9lI3wXgLNLODJBfxmZQHloCsrCBYPT+28KWg/L5zMEWNOt4zFUYwicgI7yRw+Bm7Koj8WkYelAMHwr0GmCdSZLaJyg6EbA6o1B1D+dKImbL1iaJbGSg8BDseuOgOvx402DtkFGSUjWTD1eYepa+p3jj9xPaRY5eiYttN7gB42Qc0xz+xwMA/PGFKnKlwarviShp0R2B05T01uxun4ZudHH9bmPVwKPK6HYW4kSxHsidhkQucy/imHMefic8E1+IAO3gNXWJkVfNFzksqUf1ir6Ziz0zjAUr2rLCJkM3z9h0/55uyGI7TQ9vtqwgio8JYxqr4Vp2zvw3zEzI1GL4dC2gctB6+nYW0JVfTYiwrcJB/MfJMHPJnhxMbLyo9Jfk1PiwXcHT5363FdPhQNbNVLyM5ejbmk=
   file_glob: true
   file: dist/mac/*.dmg
   skip_cleanup: true
+
+- provider: bintray
+  file: "packaging\bintray-travis.json"
+  user: noahandrews
+  key:
+    secure: vMTP9Dz8yKqY0p503s95y9lLg9KOxT7o4RL8oA1JR+n4/k+UeZAtgZPNL9WjJzanb4GwlGjYEWGjPVG8BOFvSwWY9Q8P/meZpgmk9agg+crR4wojgCtP5M4oCgt5ASnwH7H+KSmkXXeBJI+2wTYcdZlNaRokLGbO+QJM9ZWOYTxBgJglVM/J+zo2d2YmzlQPdmibAX/sNn/7ddgGdj1K0NsxJDcF8zhxLYXL7v0scypqtbT6z7PcUe210LaSX3F7jfdqfvoRm/EMRoLm+B/0ulE0+zEx2C30EnzgQnXL9do+QIzAnF/lBrghr0yiy0CiU5wy9n0GTqTu3VlUd6T7yj05sB3FcybYXgeZUO37BHdVTqlO9Sqjb3GzmOrPYYzK7ndD3C9T8K1xrqe5ZcUyqwvIh9HtwoP7IezATYq//eLvRFOtVaeYAaOR5IApV8ub15cjKI/zxxy8QCCm/H0wSXcvZ7YSjE8KvMu9zbvWQ+MFBEBCums7L0ZLOQNBLUiW5/1i37g5c7i6+zS/8vCkuTCBktWItuPZVIDy5m0YJnzFV93sSLwu+ApzPIpZk8GERYqmiabw97rdho6CaY2ZDStDxJ70Ro0l8uWciW+mryCrtzJLZ1YfHOY71qsPVrALLYBpQPnqh76okuMLHlmEFbGGj+oBxOUEOUMffGHrT1s=
 notifications:
   webhooks:
     urls:
-      - https://webhooks.gitter.im/e/11a3bbb28024d4c9097f
+    - https://webhooks.gitter.im/e/11a3bbb28024d4c9097f
     on_success: always
     on_failure: always
     on_start: always
   email:
     recipients:
-      - noah@noahandrews.me
+    - noah@noahandrews.me
     on_success: always
     on_failure: always

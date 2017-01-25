@@ -1,0 +1,13 @@
+{
+  "package": {
+    "name": "qmk-firmware-flasher",
+    "repo": "generic",
+    "subject": "noahandrews"
+  },
+  "version": {
+    "name": "v0.5.2"
+  },
+  "files": [
+
+  ]
+}

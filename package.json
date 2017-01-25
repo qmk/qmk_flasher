@@ -1,14 +1,15 @@
 {
   "name": "qmk-firmware-flasher",
   "productName": "QMK Firmware Flasher",
-  "version": "0.5.8",
+  "version": "0.5.2",
   "description": "GUI app to load firmware onto atmega32u4 chips.",
   "main": "src/main.js",
   "scripts": {
     "start": "electron .",
-    "postinstall": "install-app-deps",
     "pack": "build",
-    "dist": "build"
+    "dist": "build",
+    "postinstall": "install-app-deps",
+    "preversion": "node packaging/update-bintray-version.js"
   },
   "repository": {
     "type": "git",

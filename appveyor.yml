@@ -9,17 +9,28 @@ test: off
 artifacts:
 - path: dist\windows\QMK*setup.exe
   name: setup
+- path: dist\windows\win32-x86.asar
 install:
   - ps: $env:package_version = (Get-Content -Raw -Path package.json | ConvertFrom-Json).version
-  - ps: Update-AppveyorBuild -Version "$env:package_version-$env:APPVEYOR_BUILD_NUMBER"
+  - ps: Update-AppveyorBuild -Version "$env:package_version"
   - ps: packaging\AppVeyor-dist-win32.ps1
   - cmd: packaging\initiate-travis-build.bat
 deploy:
+- provider: GitHub
   description: 'These release notes were defined in appveyor.yml.'
-  provider: GitHub
   auth_token:
     secure: MBivjW4RpFI0TRdHQb+PchNY5yQte+IOqerViefhEo6XqTgH8nAIvC9ibShVik8s
   artifact: setup
   draft: true
   prerelease: true
   force_update: true
+
+- provider: BinTray
+  username: noahandrews
+  subject: noahandrews
+  api_key:
+   secure: CNYEkhcPgrpAgu1T+BIVbb7TopdUAxzLlZabGrTX9ducIHwVHubZxjX+ukj7uu/M
+  repo: generic
+  package: qmk-firmware-flasher
+  publish: true
+  artifact: win32-x86-asar
