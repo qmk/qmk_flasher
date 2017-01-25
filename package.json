@@ -37,8 +37,9 @@
     "jquery": "~2.2"
   },
   "devDependencies": {
+    "electron": "1.4.11",
+    "electron-packager": "~8.4.0",
     "devtron": "^1.4.0",
-    "electron": "^1.4.10",
     "electron-builder": "^8.6.0"
   },
   "build": {
