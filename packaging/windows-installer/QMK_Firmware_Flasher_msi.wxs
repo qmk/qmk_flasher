@@ -24,6 +24,10 @@
               </File>
             </Component>
 
+            <Component Id='cmpUpdater'>
+                <File Id='filUpdater' KeyPath="yes" Source="SourceDir\updater.bat" />
+            </Component>
+
             <Component Id="cmp53330EB0705503507EE68033421150BD">
               <File Id="filD01A0F37B48CD539228E3AF5E17DAF3B" KeyPath="yes" Source="SourceDir\blink_image_resources_200_percent.pak" />
             </Component>
@@ -377,6 +381,7 @@
 
     <ComponentGroup Id="Everything">
       <ComponentRef Id="MainExecutable"/>
+      <ComponentRef Id="cmpUpdater" />
       <ComponentRef Id="ProgramMenuDir"/>
       <ComponentRef Id="cmp53330EB0705503507EE68033421150BD" />
       <ComponentRef Id="cmpFD5034BFE581FBC2830B753A4ECC3D30" />

@@ -55,7 +55,7 @@ if not defined APPVEYOR (
 
 call node package.js
 
-copy wix\* %PACKAGE_DIR%
+copy windows-installer\* %PACKAGE_DIR%
 
 copy ..\build\windows.ico %PACKAGE_DIR%
 copy ..\build\icon.iconset\icon_32x32@2x.png %PACKAGE_DIR%\windows.png
@@ -78,6 +78,7 @@ call %WIX_DIR%\light.exe -ext WixBalExtension QMK_Firmware_Flasher_setup.wixobj 
 if errorlevel 1 goto end
 
 copy "QMK Firmware Flasher*setup.exe" ..
+copy resources\app.asar ..\win32-x86.asar
 exit /b
 
 :: color function obtained from http://stackoverflow.com/a/5344911
