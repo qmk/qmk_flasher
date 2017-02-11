@@ -10,7 +10,7 @@
     "postinstall": "install-app-deps",
     "pack": "build",
     "dist": "build",
-    "postdist": "packaging/prepare-asar-mac.sh"
+    "postdist": "packaging/prepare-asar-mac.sh",
     "version": "node packaging/update-bintray-version.js && git add packaging/bintray-travis.json"
   },
   "repository": {
