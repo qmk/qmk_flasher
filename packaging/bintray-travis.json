@@ -9,8 +9,8 @@
   },
   "files": [
     {
-      "includePattern": "dist/mac/(.*)",
-      "uploadPattern": "docs/$1"
+      "includePattern": "dist/mac/(mac-.*.asar)",
+      "uploadPattern": "$1"
     }
   ]
 }
