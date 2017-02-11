@@ -12,5 +12,6 @@
       "includePattern": "dist/mac/(mac-.*.asar)",
       "uploadPattern": "$1"
     }
-  ]
+  ],
+  "publish": true
 }
