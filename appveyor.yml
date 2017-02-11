@@ -9,7 +9,7 @@ test: off
 artifacts:
 - path: dist\windows\QMK*setup.exe
   name: setup
-- path: dist\windows\win32-x86.asar
+- path: dist\windows\win32-x86*.asar
   name: win32-x86-asar
 install:
   - ps: $env:package_version = (Get-Content -Raw -Path package.json | ConvertFrom-Json).version

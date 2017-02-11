@@ -78,7 +78,7 @@ call %WIX_DIR%\light.exe -ext WixBalExtension QMK_Firmware_Flasher_setup.wixobj 
 if errorlevel 1 goto end
 
 copy "QMK Firmware Flasher*setup.exe" ..
-copy resources\app.asar ..\win32-x86.asar
+copy resources\app.asar ..\win32-x86-%VERSION%.asar
 exit /b
 
 :: color function obtained from http://stackoverflow.com/a/5344911

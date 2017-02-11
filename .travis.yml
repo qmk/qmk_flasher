@@ -11,7 +11,7 @@ deploy:
   skip_cleanup: true
 
 - provider: bintray
-  file: "packaging\bintray-travis.json"
+  file: "packaging/bintray-travis.json"
   user: noahandrews
   key:
     secure: vMTP9Dz8yKqY0p503s95y9lLg9KOxT7o4RL8oA1JR+n4/k+UeZAtgZPNL9WjJzanb4GwlGjYEWGjPVG8BOFvSwWY9Q8P/meZpgmk9agg+crR4wojgCtP5M4oCgt5ASnwH7H+KSmkXXeBJI+2wTYcdZlNaRokLGbO+QJM9ZWOYTxBgJglVM/J+zo2d2YmzlQPdmibAX/sNn/7ddgGdj1K0NsxJDcF8zhxLYXL7v0scypqtbT6z7PcUe210LaSX3F7jfdqfvoRm/EMRoLm+B/0ulE0+zEx2C30EnzgQnXL9do+QIzAnF/lBrghr0yiy0CiU5wy9n0GTqTu3VlUd6T7yj05sB3FcybYXgeZUO37BHdVTqlO9Sqjb3GzmOrPYYzK7ndD3C9T8K1xrqe5ZcUyqwvIh9HtwoP7IezATYq//eLvRFOtVaeYAaOR5IApV8ub15cjKI/zxxy8QCCm/H0wSXcvZ7YSjE8KvMu9zbvWQ+MFBEBCums7L0ZLOQNBLUiW5/1i37g5c7i6+zS/8vCkuTCBktWItuPZVIDy5m0YJnzFV93sSLwu+ApzPIpZk8GERYqmiabw97rdho6CaY2ZDStDxJ70Ro0l8uWciW+mryCrtzJLZ1YfHOY71qsPVrALLYBpQPnqh76okuMLHlmEFbGGj+oBxOUEOUMffGHrT1s=

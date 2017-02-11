@@ -7,5 +7,10 @@
   "version": {
     "name": "0.5.1"
   },
-  "files": []
+  "files": [
+    {
+      "includePattern": "dist/mac/(.*)",
+      "uploadPattern": "docs/$1"
+    }
+  ]
 }
