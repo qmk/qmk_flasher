@@ -6,9 +6,10 @@
   "main": "src/main.js",
   "scripts": {
     "start": "electron .",
+    "install": "electron-rebuild",
+    "postinstall": "install-app-deps",
     "pack": "build",
     "dist": "build",
-    "postinstall": "install-app-deps",
     "version": "node packaging/update-bintray-version.js && git add packaging/bintray-travis.json"
   },
   "repository": {
@@ -38,10 +39,11 @@
     "jquery": "~2.2"
   },
   "devDependencies": {
-    "electron": "1.4.11",
-    "electron-packager": "~8.4.0",
     "devtron": "^1.4.0",
-    "electron-builder": "^8.6.0"
+    "electron": "1.4.11",
+    "electron-builder": "^8.6.0",
+    "electron-packager": "~8.4.0",
+    "electron-rebuild": "~1.5.7"
   },
   "build": {
     "appId": "com.github.qmk-firmware-flasher",
