@@ -12,6 +12,7 @@ artifacts:
 - path: dist\windows\win32-x86*.asar
   name: win32-x86-asar
 install:
+  - ps: Install-Product node 7
   - ps: $env:package_version = (Get-Content -Raw -Path package.json | ConvertFrom-Json).version
   - ps: Update-AppveyorBuild -Version "$env:package_version"
   - ps: packaging\internal\AppVeyor-dist-win32.ps1
