@@ -55,7 +55,7 @@ if not defined APPVEYOR (
 
 call node package.js
 
-copy windows-installer\* %PACKAGE_DIR%
+copy internal\windows-installer\* %PACKAGE_DIR%
 
 copy ..\build\windows.ico %PACKAGE_DIR%
 copy ..\build\icon.iconset\icon_32x32@2x.png %PACKAGE_DIR%\windows.png

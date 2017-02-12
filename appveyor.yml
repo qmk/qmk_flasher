@@ -14,8 +14,8 @@ artifacts:
 install:
   - ps: $env:package_version = (Get-Content -Raw -Path package.json | ConvertFrom-Json).version
   - ps: Update-AppveyorBuild -Version "$env:package_version"
-  - ps: packaging\AppVeyor-dist-win32.ps1
-  - cmd: packaging\initiate-travis-build.bat
+  - ps: packaging\internal\AppVeyor-dist-win32.ps1
+  - cmd: packaging\internal\initiate-travis-build.bat
 deploy:
 - provider: GitHub
   description: 'These release notes were defined in appveyor.yml.'
