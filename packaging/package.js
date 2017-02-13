@@ -5,7 +5,7 @@ const os = require('os');
 packagerOptions = {
 	"dir": path.resolve(".."),
 	"out": path.resolve("..", "dist", "windows"),
-	"icon": path.resolve("..", "build", "windows.ico"),
+	"icon": path.resolve("..", "build", "icon"),
 	"platform": "win32",
 	"arch": "ia32",
 	"overwrite": true,

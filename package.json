@@ -50,9 +50,6 @@
     "appId": "com.github.qmk-firmware-flasher",
     "mac": {
       "category": "public.app-category.utilities"
-    },
-    "win": {
-      "iconUrl": "https://github.com/skullydazed/dfu-programmer-app/blob/master/build/windows.ico?raw=true"
     }
   }
 }

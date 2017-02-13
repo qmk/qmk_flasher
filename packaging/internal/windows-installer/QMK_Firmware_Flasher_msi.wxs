@@ -19,8 +19,8 @@
 
             <Component Id='MainExecutable' Guid='A6FDB7D0-5E65-4B46-B84C-C3EDDF7CD648'>
               <File Id='LauncherExe' Name='QMK Firmware Flasher.exe' DiskId='1' Source='SourceDir\QMK Firmware Flasher.exe' KeyPath='yes'>
-                <Shortcut Id="startmenuFirmwareFlasher" Directory="ApplicationProgramFolder" Name="Firmware Flasher" WorkingDirectory='INSTALLDIR' Icon="Windows.ico" IconIndex="0" Advertise="yes" Description="Tool to flash firmware to keyboards" />
-                <Shortcut Id="desktopFirmwwareFlasher" Directory="DesktopFolder" Name="QMK Firmware Flasher" WorkingDirectory='INSTALLDIR' Icon="Windows.ico" IconIndex="0" Advertise="yes" Description="Tool to flash firmware to keyboards" />
+                <Shortcut Id="startmenuFirmwareFlasher" Directory="ApplicationProgramFolder" Name="Firmware Flasher" WorkingDirectory='INSTALLDIR' Icon="icon.ico" IconIndex="0" Advertise="yes" Description="Tool to flash firmware to keyboards" />
+                <Shortcut Id="desktopFirmwwareFlasher" Directory="DesktopFolder" Name="QMK Firmware Flasher" WorkingDirectory='INSTALLDIR' Icon="icon.ico" IconIndex="0" Advertise="yes" Description="Tool to flash firmware to keyboards" />
               </File>
             </Component>
 
@@ -480,7 +480,7 @@
 
     <WixVariable Id="WixUILicenseRtf" Value="SourceDir\License.rtf" />
 
-    <Icon Id="Windows.ico" SourceFile="Windows.ico" />
+    <Icon Id="icon.ico" SourceFile="icon.ico" />
 
   </Product>
 </Wix>

@@ -57,7 +57,7 @@ call node package.js
 
 copy internal\windows-installer\* %PACKAGE_DIR%
 
-copy ..\build\windows.ico %PACKAGE_DIR%
+copy ..\build\icon.ico %PACKAGE_DIR%
 copy ..\build\icon.iconset\icon_32x32@2x.png %PACKAGE_DIR%\windows.png
 
 cd %PACKAGE_DIR%
