@@ -27,12 +27,6 @@ if((args.p === "mac" || args.p === "both") && os.platform() === "win32") {
   }*/
 }
 
-// TODO: We should only delete the files we're about to generate.
-fs.readdirSync(distDir)
-  .forEach(file => {
-    fs.removeSync(getFromDistDir(file));
-  });
-
 packagerOptions = {
 	"dir": path.resolve("__dirname", ".."),
 	"icon": path.resolve("__dirname", "..", "build", "icon"),
@@ -47,10 +41,14 @@ packagerOptions = {
 // if args.p === "windows-setup-installer" //This is intentionally undocumented.For use by the win32-dist.bat script ONLY.
 // set zip option to true
 if(args.p === "windows") {
+  deleteFilesWindows();
 	packageWindows(packagerOptions);
 } else if(args.p === "mac") {
+  deleteFilesMac()
 	packageMac(packagerOptions);
 } else if(args.p === "both") {
+  deleteFilesWindows();
+  deleteFilesMac();
   packageWindows(packagerOptions);
   packageMac(packagerOptions);
 } else {
@@ -84,6 +82,26 @@ function packageMac(options) {
     console.log("Done creating zip");
     fs.removeSync(macOutputPath);
   }
+}
+
+function deleteFilesWindows() {
+  fs.readdirSync(distDir)
+    .filter(file => {
+      return file.includes("win");
+    })
+    .forEach(file => {
+      fs.removeSync(getFromDistDir(file));
+    });
+}
+
+function deleteFilesMac() {
+  fs.readdirSync(distDir)
+    .filter(file => {
+      return file.includes("mac") || file.includes("darwin");
+    })
+    .forEach(file => {
+      fs.removeSync(getFromDistDir(file));
+    });
 }
 
 function getFromDistDir(path_) {
