@@ -1,5 +1,4 @@
 const execFileSync = require('child_process').execFileSync;
-const execSync = require('child_process').execSync;
 const path = require('path');
 const os = require('os');
 
@@ -13,6 +12,20 @@ const distDir = path.resolve("__dirname", "..", "dist");
 // TODO: If the windows installer script is calling this file, we should change the suffix appropriately.
 const windowsOutputPath = getFromDistDir("QMK-Firmware-Flasher-Windows-test");
 const macOutputPath = getFromDistDir("QMK-Firmware-Flasher-Mac-test");
+
+if((args.p === "mac" || args.p === "both") && os.platform() === "win32") {
+  console.log("Packaging the Mac version from Windows is not supported at this time.");
+  console.log("Subscribe to this issue for updates: https://github.com/electron-userland/electron-packager/issues/164");
+  process.exit(1);
+  /*
+  const execSync = require('child_process').execSync;
+  try {
+    execSync("net session >nul 2>&1"); // Check for admin privileges. See http://stackoverflow.com/a/11995662/4651874
+  } catch (e) {
+    console.log("This script must be run with admin privileges to package the Mac version using Windows.");
+    process.exit(1); // Exit with an error state
+  }*/
+}
 
 // TODO: We should only delete the files we're about to generate.
 fs.readdirSync(distDir)
@@ -30,15 +43,6 @@ packagerOptions = {
 	"out": distDir,
 	"ignore": ["dist", "packaging", ".idea"]
 };
-
-if((args.p === "mac" || args.p === "both") && os.platform() === "win32") {
-  try {
-    execSync("net session >nul 2>&1"); // Check for admin privileges. See http://stackoverflow.com/a/11995662/4651874
-  } catch (e) {
-    console.log("This script must be run with admin privileges to package the Mac version using Windows.");
-    process.exit(1); // Exit with an error state
-  }
-}
 
 // if args.p === "windows-setup-installer" //This is intentionally undocumented.For use by the win32-dist.bat script ONLY.
 // set zip option to true
@@ -71,7 +75,7 @@ function packageWindows(options) {
 function packageMac(options) {
   packagerOptions.platform = "darwin";
   packagerOptions.arch = "x64";
-  packager(packagerOptions);
+  packager(options);
   console.log("Done packaging");
   fs.renameSync(getFromDistDir("QMK Firmware Flasher-darwin-x64"), macOutputPath);
   if(!args.nozip) {
