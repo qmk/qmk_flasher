@@ -87,7 +87,7 @@ function packageMac(options) {
 function deleteFilesWindows() {
   fs.readdirSync(distDir)
     .filter(file => {
-      return file.includes("win");
+      return file.match(/win/i);
     })
     .forEach(file => {
       fs.removeSync(getFromDistDir(file));
@@ -97,7 +97,7 @@ function deleteFilesWindows() {
 function deleteFilesMac() {
   fs.readdirSync(distDir)
     .filter(file => {
-      return file.includes("mac") || file.includes("darwin");
+      return file.match(/mac/i) || file.match(/darwin/i);
     })
     .forEach(file => {
       fs.removeSync(getFromDistDir(file));
