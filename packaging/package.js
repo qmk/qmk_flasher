@@ -35,7 +35,7 @@ packagerOptions = {
 		"unpackDir": "dfu"
 	},
 	"out": distDir,
-	"ignore": ["dist", "packaging", ".idea"]
+	"ignore": ["packaging", ".idea"]
 };
 
 // if args.p === "windows-setup-installer" //This is intentionally undocumented.For use by the win32-dist.bat script ONLY.
