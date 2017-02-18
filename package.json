@@ -40,11 +40,15 @@
     "jquery": "~2.2"
   },
   "devDependencies": {
+    "7zip-bin": "^2.0.4",
+    "deasync": "^0.1.9",
     "devtron": "^1.4.0",
     "electron": "1.4.11",
     "electron-builder": "^8.6.0",
     "electron-packager": "~8.4.0",
-    "electron-rebuild": "~1.5.7"
+    "electron-rebuild": "~1.5.7",
+    "fs-extra": "^2.0.0",
+    "minimist": "^1.2.0"
   },
   "build": {
     "appId": "com.github.qmk-firmware-flasher",

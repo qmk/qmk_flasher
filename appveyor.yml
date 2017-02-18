@@ -19,7 +19,7 @@ install:
   - cmd: packaging\internal\initiate-travis-build.bat
 deploy:
 - provider: GitHub
-  description: 'These release notes were defined in appveyor.yml.'
+  description: 'These release notes were defined in appveyor.yml. DO NOT INSTALL THIS TEST VERSION.'
   auth_token:
     secure: MBivjW4RpFI0TRdHQb+PchNY5yQte+IOqerViefhEo6XqTgH8nAIvC9ibShVik8s
   artifact: setup
