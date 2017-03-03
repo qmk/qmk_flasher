@@ -4,6 +4,10 @@
     <title>QMK Firmware Flasher</title>
     <link href="../../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
+    <!-- <link href="themes/default.css" rel="stylesheet"> -->
+    <!-- <link href="themes/platform.css" rel="stylesheet"> -->
+    <!-- <link href="themes/modern-selectric.css" rel="stylesheet"> -->
+    <!-- <link href="themes/nantucket-selectric.css" rel="stylesheet"> -->
   </head>
   <body>
     <input type="text" id="file-path" class="form-control" placeholder="..." readonly />
@@ -25,15 +29,19 @@
             <h4 class="modal-title" id="options-modal-title">Options</h4>
           </div>
           <div class="modal-body">
-            <form>
-              <div class="checkbox">
-                <label>
-                  <input type="checkbox" id="bring-to-front-checkbox" aria-describedby="bring-to-front-help"> Bring window to front when the loaded
-                  firmware file changes
-                </label>
-                <span id="bring-to-front-help" class="help-block">
-                Useful for bringing the flasher to your attention once the firmware is done re-compiling.
-              </span>
+            <form class="form-inline">
+              <div class="option-item" data-toggle="tooltip" data-placement="top" title="Change how the flasher looks.">
+                <label for="theme-dropdown" class="control-label">Theme: </label>
+                <select name="theme-dropdown" id="theme-dropdown">
+                  <option value="default">Default</option>
+                  <option value="platform">Platform</option>
+                  <option value="modern-selectric">Modern Selectric</option>
+                  <option value="nantucket-selectric">Nantucket Selectric</option>
+                </select>
+              </div>
+              <div class="option-item" id="bring-to-front" data-toggle="tooltip" data-placement="top" title="Useful for bringing the flasher to your attention once the firmware is done re-compiling.">
+								<input class="option-checkbox" type="checkbox" id="bring-to-front-checkbox">
+                <label for="bring-to-front-checkbox">Bring window to front when the loaded firmware file changes</label>
               </div>
             </form>
           </div>

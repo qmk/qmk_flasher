@@ -29,6 +29,7 @@ let statusBox = $('#status');
 let optionsModal = $('#options-modal');
 let saveOptionsButton = $('#save-options-button');
 let bringToFrontCheckbox = $('#bring-to-front-checkbox');
+let currentTheme = $('#theme-dropdown');
 let hexChangedFlashButton;
 
 let gearMenuButton = $('#gear-menu');
@@ -55,6 +56,13 @@ dfu_location = '"' + dfu_location + '"';
 loadOptionsState();
 
 $(document).ready(function() {
+  currentTheme.val(ipcRenderer.sendSync('get-setting-theme'));
+  $("<link/>", {
+     rel: "stylesheet",
+     type: "text/css",
+     href: "themes/" + ipcRenderer.sendSync('get-setting-theme') + ".css"
+  }).appendTo("head");
+
   // Handle drag-n-drop events
   $(document).on('dragenter dragover', function(event) {
     event.preventDefault();
@@ -94,11 +102,24 @@ $(document).ready(function() {
   });
 
   saveOptionsButton.bind('click', function (event) {
-    optionsModal.modal('hide');
+    themeBefore = ipcRenderer.sendSync('get-setting-theme');
     ipcRenderer.send('set-settings', {
-      focusWindowOnHexChange: bringToFrontCheckbox.is(":checked")
+      focusWindowOnHexChange: bringToFrontCheckbox.is(":checked"),
+      theme: currentTheme.val()
     });
+    themeAfter = ipcRenderer.sendSync('get-setting-theme');
+
+    if (themeBefore != themeAfter) {
+        win.webContents.reload();
+    }
+
+    optionsModal.modal('hide');
   });
+
+  // Enable tooltips
+  $(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+  })
 
   // Ready to go
   exec(dfu_location + ' --version', function(error, stdout, stderr) {

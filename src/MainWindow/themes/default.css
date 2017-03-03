@@ -1,0 +1,13 @@
+.button {
+  border: 1px solid hsl(0, 0%, 83%);
+}
+
+#gear-menu > span {
+  font-size: 25px;
+}
+
+#status {
+  font-size: 12px;
+  background-color: #eee;
+  border: #ccc solid 1px;
+}

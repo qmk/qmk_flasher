@@ -13,18 +13,11 @@
 html, body {
   height: 100%;
   -webkit-app-region: drag;
-  font: message-box;
-  color: WindowText;
-  background-color: Window;
 }
 
 .button {
   border: 1px solid hsl(0, 0%, 83%);
   border-radius: 6px;
-}
-
-.btn, .button {
-  font: icon;
 }
 
 #file-path {
@@ -83,10 +76,8 @@ html, body {
 
 
 #status {
-  font: message-box;
+  font-family: monospace;
   font-size: 12px;
-  background-color: #ddd;
-  border: ActiveBorder solid 1px;
   position: absolute;
   left: 14px;
   bottom: 62px;
@@ -101,4 +92,12 @@ html, body {
 
 #status, #status b {
   -webkit-user-select: text;
+}
+
+.option-item {
+  margin-top: 2ex;
+}
+
+.option-checkbox {
+  margin-left: 8ex !important;
 }
