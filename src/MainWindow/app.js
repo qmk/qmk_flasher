@@ -128,6 +128,11 @@ $(document).ready(function() {
     shell.openExternal(this.href);
   });
 
+  // Enable tooltips
+  $(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+  })
+
   // Ready to go
   exec(dfu_location + ' --version', function(error, stdout, stderr) {
     if (stderr.indexOf('dfu-programmer') > -1) {
