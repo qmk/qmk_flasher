@@ -21,4 +21,5 @@ html, body, .modal-content {
   font-size: 12px;
   color: #dad4c4;
   background-color: #0a2040;
+  border: 1px solid #f7b03c;
 }
