@@ -22,22 +22,22 @@ let flash_in_progress = false;
 let flash_when_ready = false;
 
 //HTML entities
-let flashButton = $('#flash-hex');
-let loadButton = $('#load-file');
-let pathField = $('#file-path');
-let statusBox = $('#status');
-let optionsModal = $('#options-modal');
-let saveOptionsButton = $('#save-options-button');
-let bringToFrontCheckbox = $('#bring-to-front-checkbox');
-let currentTheme = $('#theme-dropdown');
-let hexChangedFlashButton;
+let $bringToFront = $('#bring-to-front');
+let $currentTheme = $('#current-theme');
+let $filePath = $('#file-path');
+let $flashHex = $('#flash-hex');
+let $gearMenuButton = $('#gear-menu');
+let $loadFile = $('#load-file');
+let $optionsModal = $('#options-modal');
+let $saveOptions = $('#save-options');
+let $status = $('#status');
 
-let gearMenuButton = $('#gear-menu');
+let $hexChangedFlash;
 
 const flashImmediatelyButtonText = "Flash Keyboard";
 const flashWhenReadyButtonText = "Flash When Ready";
 
-flashButton.text(flashImmediatelyButtonText);
+$flashHex.text(flashImmediatelyButtonText);
 
 if (process.platform == "win32") {
   dfu_location = dfu_location + '.exe'
@@ -56,7 +56,7 @@ dfu_location = '"' + dfu_location + '"';
 loadOptionsState();
 
 $(document).ready(function() {
-  currentTheme.val(ipcRenderer.sendSync('get-setting-theme'));
+  $currentTheme.val(ipcRenderer.sendSync('get-setting-theme'));
   $("<link/>", {
      rel: "stylesheet",
      type: "text/css",
@@ -85,27 +85,27 @@ $(document).ready(function() {
   });
 
   // Bind actions to our buttons
-  loadButton.bind('click', function (event) {
+  $loadFile.bind('click', function (event) {
     loadHex(loadFile()[0]);
   });
 
-  flashButton.bind('click', function (event) {
+  $flashHex.bind('click', function (event) {
     handleFlashButton();
   });
 
-  gearMenuButton.bind('click', function (event) {
+  $gearMenuButton.bind('click', function (event) {
     ipcRenderer.send('show-menu');
   });
 
-  optionsModal.on('hidden.bs.modal', function (e) {
+  $optionsModal.on('hidden.bs.modal', function (e) {
     loadOptionsState();
   });
 
-  saveOptionsButton.bind('click', function (event) {
+  $saveOptions.bind('click', function (event) {
     themeBefore = ipcRenderer.sendSync('get-setting-theme');
     ipcRenderer.send('set-settings', {
-      focusWindowOnHexChange: bringToFrontCheckbox.is(":checked"),
-      theme: currentTheme.val()
+      focusWindowOnHexChange: $bringToFront.is(":checked"),
+      theme: $currentTheme.val()
     });
     themeAfter = ipcRenderer.sendSync('get-setting-theme');
 
@@ -113,7 +113,7 @@ $(document).ready(function() {
         win.webContents.reload();
     }
 
-    optionsModal.modal('hide');
+    $optionsModal.modal('hide');
   });
 
   // Enable tooltips
@@ -150,14 +150,14 @@ function openAboutDialog() {
 }
 
 function openOptions() {
-  optionsModal.modal('show');
+  $optionsModal.modal('show');
 }
 
 function loadOptionsState() {
-  bringToFrontCheckbox.prop('checked', ipcRenderer.sendSync('get-setting-focus-window-on-hex-change'));
+  $bringToFront.prop('checked', ipcRenderer.sendSync('get-setting-focus-window-on-hex-change'));
 }
 
-function checkFile(filename = pathField.val()) {
+function checkFile(filename = $filePath.val()) {
     if (filename.slice(-4).toUpperCase() == '.HEX') {
         return true;
     } else {
@@ -166,7 +166,7 @@ function checkFile(filename = pathField.val()) {
     }
 }
 
-function checkFileSilent(filename = pathField.val()) {
+function checkFileSilent(filename = $filePath.val()) {
     return filename.slice(-4).toUpperCase() == '.HEX';
 }
 
@@ -207,7 +207,7 @@ function displayHexFileChangedPrompt(useNativeDialog) {
     });
 
     hexChangedModal.init(function () {
-      hexChangedFlashButton = hexChangedModal.find("[data-bb-handler='confirm']");
+      $hexChangedFlash = hexChangedModal.find("[data-bb-handler='confirm']");
     });
   }
 }
@@ -219,17 +219,17 @@ function loadHex(filename) {
     return;
   }
 
-  pathField.val(filename);
+  $filePath.val(filename);
   clearStatus();
 
 
-  enableButton(flashButton);
+  enableButton($flashHex);
 
   if (bootloader_ready) {
     setFlashButtonImmediate();
   } else {
     sendStatus("Press RESET on your keyboard's PCB.");
-    flashButton.text(flashWhenReadyButtonText);
+    $flashHex.text(flashWhenReadyButtonText);
   }
 
   watcher = chokidar.watch(filename, {});
@@ -268,21 +268,21 @@ function enableButton(button) {
 }
 
 function setFlashButtonImmediate() {
-  flashButton.text(flashImmediatelyButtonText);
-  if(hexChangedFlashButton){
-    hexChangedFlashButton.text(flashImmediatelyButtonText);
+  $flashHex.text(flashImmediatelyButtonText);
+  if($hexChangedFlash){
+    $hexChangedFlash.text(flashImmediatelyButtonText);
   }
 }
 
 function setFlashButtonWhenReady() {
-  flashButton.text(flashWhenReadyButtonText);
-  if(hexChangedFlashButton){
-    hexChangedFlashButton.text(flashWhenReadyButtonText);
+  $flashHex.text(flashWhenReadyButtonText);
+  if($hexChangedFlash){
+    $hexChangedFlash.text(flashWhenReadyButtonText);
   }
 }
 
 function handleFlashButton() {
-    if(flashButton.text() == flashImmediatelyButtonText){
+    if($flashHex.text() == flashImmediatelyButtonText){
         clearStatus();
         flashFirmware();
     } else {
@@ -291,17 +291,17 @@ function handleFlashButton() {
         clearStatus();
         sendStatus("The firmware will flash as soon as the keyboard is ready to receive it.");
         sendStatus("Press the RESET button to prepare the keyboard.");
-        disableButton(flashButton);
+        disableButton($flashHex);
     }
 }
 
 function clearStatus() {
-  statusBox.text('');
+  $status.text('');
 }
 
 function writeStatus(text) {
-  statusBox.append(text);
-  statusBox.scrollTop(statusBox.scrollHeight);
+  $status.append(text);
+  $status.scrollTop(statusBox.scrollHeight);
 }
 
 function sendStatus(text) {
@@ -319,8 +319,8 @@ function loadFile() {
 
 function flashFirmware() {
   if(!checkFile()) return;
-  disableButton(flashButton);
-  sendHex(pathField.val(), function (success) {
+  disableButton($flashHex);
+  sendHex($filePath.val(), function (success) {
       if (success) {
           sendStatus("Flashing complete!");
       } else {
@@ -412,7 +412,7 @@ function checkForBoard() {
         if (!bootloader_ready && checkFileSilent()) clearStatus();
         bootloader_ready = true;
         if (checkFileSilent()) {
-          enableButton(flashButton);
+          enableButton($flashHex);
           setFlashButtonImmediate();
           if(flash_when_ready) {
             flashFirmware();
@@ -422,12 +422,12 @@ function checkForBoard() {
         bootloader_ready = false;
         if(checkFileSilent()) {
           if(!flash_when_ready){
-            enableButton(flashButton);
+            enableButton($flashHex);
           }
           setFlashButtonWhenReady();
         } else {
           setFlashButtonImmediate();
-          disableButton(flashButton);
+          disableButton($flashHex);
         }
       }
     });
