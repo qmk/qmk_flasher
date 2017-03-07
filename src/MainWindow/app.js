@@ -23,7 +23,8 @@ let flash_when_ready = false;
 let ui_mode = 'simple';
 
 //HTML entities
-<<<<<<< HEAD
+let $autoFlash = $('#auto-flash');
+let $rebootMCU = $('#reboot-mcu');
 let $bringToFront = $('#bring-to-front');
 let $currentTheme = $('#current-theme');
 let $filePath = $('#file-path');
@@ -38,6 +39,7 @@ let $hexChangedFlash;
 
 const flashImmediatelyButtonText = "Flash Keyboard";
 const flashWhenReadyButtonText = "Flash When Ready";
+const pressResetText = "Press RESET on your keyboard's PCB.";
 
 $flashHex.text(flashImmediatelyButtonText);
 
@@ -64,6 +66,26 @@ $(document).ready(function() {
      type: "text/css",
      href: "themes/" + $currentTheme.val() + ".css"
   }).appendTo("head");
+
+  $autoFlash.click(function() {
+    if ($autoFlash.hasClass('active')) {
+      $autoFlash.text('AutoFlash: Off')
+    } else {
+      $autoFlash.text('AutoFlash: On')
+    }
+  });
+
+  $rebootMCU.click(function() {
+    if (bootloader_ready) {
+      resetChip(function(success) {
+        if (success) {
+          sendStatus(pressResetText, true);
+        } else {
+          sendStatus('Could not reset MCU!', true);
+        }
+      });
+    }
+  });
 
   // Handle drag-n-drop events
   $(document).on('dragenter dragover', function(event) {
@@ -159,6 +181,10 @@ $(document).ready(function() {
   });
 });
 
+function autoFlashEnabled() {
+  return ui_mode == 'expert' && $autoFlash.hasClass('active')
+}
+
 function openAboutDialog() {
   bootbox.alert({
     size: "small",
@@ -232,23 +258,31 @@ function displayHexFileChangedPrompt(useNativeDialog) {
 }
 
 function loadHex(filename) {
-  if(watcher) watcher.close();
   // Load a file and prepare to flash it.
+  if(watcher) watcher.close();
+
   if(!checkFile(filename)) {
     return;
   }
 
   $filePath.val(filename);
   clearStatus();
-
-
   enableButton($flashHex);
 
   if (bootloader_ready) {
-    setFlashButtonImmediate();
+    if (autoFlashEnabled()) {
+      clearStatus();
+      flashFirmware();
+    } else {
+      enableButton(flashButton);
+      setFlashButtonImmediate();
+    }
   } else {
-    sendStatus("Press RESET on your keyboard's PCB.", true);
-    $flashHex.text(flashWhenReadyButtonText);
+    if (!autoFlashEnabled()) {
+      enableButton(flashButton);
+      flashButton.text(flashWhenReadyButtonText);
+    }
+    sendStatus(pressResetText, true);
   }
 
   watcher = chokidar.watch(filename, {});
@@ -268,9 +302,7 @@ function loadHex(filename) {
     } else {
       displayHexFileChangedPrompt(false);
     }
-
   });
-
 }
 
 function disableButton(button) {
@@ -278,7 +310,6 @@ function disableButton(button) {
     button.removeClass('btn-success');
     button.addClass('btn-secondary');
 }
-
 
 function enableButton(button) {
     button.prop('disabled', false);
@@ -301,7 +332,7 @@ function setFlashButtonWhenReady() {
 }
 
 function handleFlashButton() {
-    if($flashHex.text() == flashImmediatelyButtonText){
+    if ($flashHex.text() == flashImmediatelyButtonText) {
         clearStatus();
         flashFirmware();
     } else {
@@ -311,6 +342,7 @@ function handleFlashButton() {
         sendStatus("The firmware will flash as soon as the keyboard is ready to receive it.");
         sendStatus("Press the RESET button to prepare the keyboard.");
         disableButton($flashHex);
+        disableButton($rebootMCU);
     }
 }
 
@@ -345,9 +377,13 @@ function loadFile() {
 function flashFirmware() {
   if(!checkFile()) return;
   disableButton($flashHex);
+  disableButton($rebootMCU);
   sendHex($filePath.val(), function (success) {
       if (success) {
           sendStatus("Flashing complete!", true);
+          if (autoFlashEnabled()) {
+            sendStatus(pressResetText, true);
+          }
       } else {
           sendStatus("An error occurred - please try again.", true);
       }
@@ -433,13 +469,18 @@ function checkForBoard() {
         if (checkFileSilent()) {
           enableButton($flashHex);
           setFlashButtonImmediate();
-          if(flash_when_ready) {
+          if (flash_when_ready || autoFlashEnabled()) {
             flashFirmware();
+          } else {
+            enableButton(flashButton);
+            enableButton($rebootMCU);
+            setFlashButtonImmediate();
           }
         }
       } else {
         bootloader_ready = false;
-        if(checkFileSilent()) {
+        disableButton($rebootMCU);
+        if(checkFileSilent() && !autoFlashEnabled()) {
           if(!flash_when_ready){
             enableButton($flashHex);
           }
@@ -451,5 +492,9 @@ function checkForBoard() {
       }
     });
   }
-  window.setTimeout(checkForBoard, 5000);
+  if (bootloader_ready || autoFlashEnabled()) {
+    window.setTimeout(checkForBoard, 500);
+  } else {
+    window.setTimeout(checkForBoard, 5000);
+  }
 }
