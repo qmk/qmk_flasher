@@ -6,26 +6,17 @@
     <link href="style.css" rel="stylesheet">
   </head>
   <body>
-    <center>
-      <div id="tabs" class="btn-group" role="group" aria-label="...">
-        <button id="simple" type="button" class="btn btn-default" style="background-color:#ccc">Simple</button>
-        <button id="expert" type="button" class="btn btn-default">Expert</button>
-      </div>
-    </center>
+    <!-- UI Widgets - These are all positioned absolutely in CSS -->
     <span id="file-path"/>...</span>
     <button id="load-file">Choose .hex</button>
-    <button id="flash-hex" class="btn btn-secondary" disabled></button>
     <button id="gear-menu" class="btn btn-default">
       <span class="glyphicon glyphicon-cog"></span>
       <span class="caret"></span>
     </button>
+    <button id="reboot-mcu" type="button" class="btn btn-secondary advanced-feature" disabled>Reboot MCU</button>
+    <button id="flash-hex" class="btn btn-secondary" disabled></button>
+    <button id="auto-flash" type="button" class="btn btn-success advanced-feature" title="Flash the keyboard as soon as everything is ready." data-toggle="button">AutoFlash: Off</button>
     <span id="status"></span>
-    <div id="expert-features" style="display:none;">
-      <div id="toolbar" style="display: block">
-        <button id="auto-flash" type="button" class="btn btn-success" title="Flash the keyboard as soon as everything is ready." data-toggle="button">AutoFlash: Off</button>
-        <button id="reboot-mcu" type="button" class="btn btn-secondary" title="Take the keyboard out of flash mode.">Reboot MCU</button>
-      </div>
-    </div>
 
     <div class="modal fade" id="options-modal" tabindex="-1" role="dialog" aria-labelledby="options-modal-title">
       <div class="modal-dialog" role="document">
@@ -36,6 +27,7 @@
             </button>
             <h4 class="modal-title" id="options-modal-title">Options</h4>
           </div>
+
           <div class="modal-body">
             <form class="form-inline">
               <div class="option-item" data-toggle="tooltip" data-placement="top" title="Change how the flasher looks.">
@@ -47,12 +39,17 @@
                   <option value="nantucket-selectric">Nantucket Selectric</option>
                 </select>
               </div>
-              <div class="option-item" id="bring-to-front" data-toggle="tooltip" data-placement="top" title="Useful for bringing the flasher to your attention once the firmware is done re-compiling.">
+              <div class="option-item" data-toggle="tooltip" data-placement="top" title="Turns on features that advanced users may want/need.">
+                <input class="option-checkbox" type="checkbox" id="advanced-mode">
+                <label for="advanced-mode">Enable advanced mode.</label>
+              </div>
+              <div class="option-item" data-toggle="tooltip" data-placement="top" title="Useful for bringing the flasher to your attention once the firmware is done re-compiling.">
 								<input class="option-checkbox" type="checkbox" id="bring-to-front">
                 <label for="bring-to-front">Bring window to front when the loaded firmware file changes</label>
               </div>
             </form>
           </div>
+
           <div class="modal-footer">
             <button type="button" id="cancel-options" class="btn btn-default" data-dismiss="modal">Cancel</button>
             <button type="button" id="save-options" class="btn btn-primary">Save changes</button>

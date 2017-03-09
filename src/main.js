@@ -74,6 +74,7 @@ app.on('ready', function() {
 
   if (process.platform == "darwin") {
     default_settings = {
+      'advancedMode': false,
       'focusWindowOnHexChange': false,
       'theme': 'platform'
     }
@@ -142,11 +143,19 @@ app.on('ready', function() {
     }
   });
 
+  ipcMain.on('get-setting-advanced-mode', (event) => {
+    if(isSettingsInitialized) {
+      event.returnValue = settingsCache.advancedMode;
+    }
+  });
+
   ipcMain.on('set-settings', (event, updatedSettings) => {
     settingsCache.focusWindowOnHexChange = updatedSettings.focusWindowOnHexChange;
     settings.set('focusWindowOnHexChange', updatedSettings.focusWindowOnHexChange);
     settingsCache.theme = updatedSettings.theme;
     settings.set('theme', updatedSettings.theme);
+    settingsCache.advancedMode = updatedSettings.advancedMode;
+    settings.set('advancedMode', updatedSettings.advancedMode);
   });
 
   /* Setup the mac menu items

@@ -20,16 +20,17 @@ let watcher;
 let bootloader_ready = false;
 let flash_in_progress = false;
 let flash_when_ready = false;
-let ui_mode = 'simple';
 
 //HTML entities
+let $advancedFeatures = $('.advanced-feature');
+let $advancedMode = $('#advanced-mode');
 let $autoFlash = $('#auto-flash');
 let $rebootMCU = $('#reboot-mcu');
 let $bringToFront = $('#bring-to-front');
 let $currentTheme = $('#current-theme');
 let $filePath = $('#file-path');
 let $flashHex = $('#flash-hex');
-let $gearMenuButton = $('#gear-menu');
+let $gearMenu = $('#gear-menu');
 let $loadFile = $('#load-file');
 let $optionsModal = $('#options-modal');
 let $saveOptions = $('#save-options');
@@ -60,14 +61,22 @@ dfu_location = '"' + dfu_location + '"';
 loadOptionsState();
 
 $(document).ready(function() {
-  $currentTheme.val(ipcRenderer.sendSync('get-setting-theme'));
   $("<link/>", {
      rel: "stylesheet",
      type: "text/css",
      href: "themes/" + $currentTheme.val() + ".css"
   }).appendTo("head");
 
+  console.log(ipcRenderer.sendSync('get-setting-advanced-mode'))
+  if (ipcRenderer.sendSync('get-setting-advanced-mode')) {
+    $advancedFeatures.show();
+  } else {
+    $advancedFeatures.hide();
+  }
+
   $autoFlash.click(function() {
+    // Turns autoflash on or off. This function is called before
+    // jquery toggles the active status.
     if ($autoFlash.hasClass('active')) {
       $autoFlash.text('AutoFlash: Off')
     } else {
@@ -76,12 +85,14 @@ $(document).ready(function() {
   });
 
   $rebootMCU.click(function() {
+    // Resets the MCU
     if (bootloader_ready) {
       resetChip(function(success) {
         if (success) {
-          sendStatus(pressResetText, true);
+          clearStatus();
+          sendStatus(pressResetText);
         } else {
-          sendStatus('Could not reset MCU!', true);
+          sendStatus('Could not reset MCU!');
         }
       });
     }
@@ -117,7 +128,7 @@ $(document).ready(function() {
     handleFlashButton();
   });
 
-  $gearMenuButton.bind('click', function (event) {
+  $gearMenu.bind('click', function (event) {
     ipcRenderer.send('show-menu');
   });
 
@@ -127,11 +138,19 @@ $(document).ready(function() {
 
   $saveOptions.bind('click', function (event) {
     themeBefore = ipcRenderer.sendSync('get-setting-theme');
-    ipcRenderer.send('set-settings', {
+    newSettings = {
       focusWindowOnHexChange: $bringToFront.is(":checked"),
-      theme: $currentTheme.val()
-    });
+      theme: $currentTheme.val(),
+      advancedMode: $advancedMode.is(":checked")
+    }
+    ipcRenderer.send('set-settings', newSettings);
     themeAfter = ipcRenderer.sendSync('get-setting-theme');
+
+    if ($advancedMode.is(":checked")) {
+      $advancedFeatures.show();
+    } else {
+      $advancedFeatures.hide();
+    }
 
     if (themeBefore != themeAfter) {
         win.webContents.reload();
@@ -161,7 +180,7 @@ $(document).ready(function() {
   exec(dfu_location + ' --version', function(error, stdout, stderr) {
     if (stderr.indexOf('dfu-programmer') > -1) {
       window.setTimeout(checkForBoard, 10);
-      sendStatus("Select a firmware file by clicking 'Choose .hex' or drag and drop a file onto this window.", true);
+      sendStatus("Select a firmware file by clicking 'Choose .hex' or drag and drop a file onto this window.");
     } else {
       if (process.platform === 'win32') {
         sendStatus("Could not run dfu-programmer! Have you installed the driver?");
@@ -173,16 +192,16 @@ $(document).ready(function() {
       sendStatus(error);
       sendStatus("stdout:");
       writeStatus(stdout);
-      sendStatus("stderr:", false);
+      sendStatus("stderr:");
       writeStatus(stderr);
-      sendStatus("dfu location:", false);
+      sendStatus("dfu location:");
       writeStatus(dfu_location);
     }
   });
 });
 
 function autoFlashEnabled() {
-  return ui_mode == 'expert' && $autoFlash.hasClass('active')
+  return ipcRenderer.sendSync('get-setting-advanced-mode') && $autoFlash.hasClass('active');
 }
 
 function openAboutDialog() {
@@ -199,19 +218,21 @@ function openOptions() {
 }
 
 function loadOptionsState() {
+  $currentTheme.val(ipcRenderer.sendSync('get-setting-theme'));
   $bringToFront.prop('checked', ipcRenderer.sendSync('get-setting-focus-window-on-hex-change'));
+  $advancedMode.prop('checked', ipcRenderer.sendSync('get-setting-advanced-mode'));
 }
 
-function checkFile(filename = $filePath.val()) {
+function checkFile(filename = $filePath.text()) {
     if (filename.slice(-4).toUpperCase() == '.HEX') {
         return true;
     } else {
-        sendStatus("Invalid firmware file: " + filename, true);
+        sendStatus("Invalid firmware file: " + filename);
         return false;
     }
 }
 
-function checkFileSilent(filename = $filePath.val()) {
+function checkFileSilent(filename = $filePath.text()) {
     return filename.slice(-4).toUpperCase() == '.HEX';
 }
 
@@ -265,24 +286,25 @@ function loadHex(filename) {
     return;
   }
 
-  $filePath.val(filename);
+  $filePath.text(filename);
   clearStatus();
-  enableButton($flashHex);
 
   if (bootloader_ready) {
     if (autoFlashEnabled()) {
       clearStatus();
       flashFirmware();
     } else {
-      enableButton(flashButton);
+      enableButton($flashHex);
+      enableButton($rebootMCU);
       setFlashButtonImmediate();
+      sendStatus("Ready To Flash!");
     }
   } else {
     if (!autoFlashEnabled()) {
-      enableButton(flashButton);
-      flashButton.text(flashWhenReadyButtonText);
+      enableButton($flashHex);
+      $flashHex.text(flashWhenReadyButtonText);
     }
-    sendStatus(pressResetText, true);
+    sendStatus(pressResetText);
   }
 
   watcher = chokidar.watch(filename, {});
@@ -355,13 +377,8 @@ function writeStatus(text) {
   $status.scrollTop($status.scrollHeight);
 }
 
-function sendStatus(text, simple) {
+function sendStatus(text) {
   // Write a line to the status window.
-  // If simple is false it will not write to the status window when
-  // ui_mode == 'simple'
-  if (!simple && ui_mode == 'simple') {
-    return;
-  }
   writeStatus('<b>' + text + '</b>\n');
 }
 
@@ -378,14 +395,16 @@ function flashFirmware() {
   if(!checkFile()) return;
   disableButton($flashHex);
   disableButton($rebootMCU);
-  sendHex($filePath.val(), function (success) {
+  sendHex($filePath.text(), function (success) {
       if (success) {
-          sendStatus("Flashing complete!", true);
+          sendStatus("Flashing complete!");
           if (autoFlashEnabled()) {
-            sendStatus(pressResetText, true);
+            sendStatus(pressResetText);
+          } else {
+            sendStatus("Load another hex or press RESET on a keyboard.")
           }
       } else {
-          sendStatus("An error occurred - please try again.", true);
+          sendStatus("An error occurred - please try again.");
       }
   });
 }
@@ -421,7 +440,7 @@ function sendHex(file, callback) {
 }
 
 function eraseChip(callback) {
-  sendStatus('dfu-programmer atmega32u4 erase --force', false);
+  sendStatus('dfu-programmer atmega32u4 erase --force');
   exec(dfu_location + ' atmega32u4 erase --force', function(error, stdout, stderr) {
     writeStatus(stdout);
     writeStatus(stderr);
@@ -435,7 +454,7 @@ function eraseChip(callback) {
 }
 
 function flashChip(file, callback) {
-  sendStatus('dfu-programmer atmega32u4 flash ' + file, false);
+  sendStatus('dfu-programmer atmega32u4 flash ' + file);
   exec(dfu_location + ' atmega32u4 flash ' + file, function(error, stdout, stderr) {
     writeStatus(stdout);
     writeStatus(stderr);
@@ -448,7 +467,7 @@ function flashChip(file, callback) {
 }
 
 function resetChip(callback) {
-  sendStatus('dfu-programmer atmega32u4 reset', false);
+  sendStatus('dfu-programmer atmega32u4 reset');
   exec(dfu_location + ' atmega32u4 reset', function(error, stdout, stderr) {
     writeStatus(stdout);
     writeStatus(stderr);
@@ -464,20 +483,24 @@ function checkForBoard() {
   if (!flash_in_progress) {
     exec(dfu_location + ' atmega32u4 get bootloader-version', function(error, stdout, stderr) {
       if (stdout.indexOf("Bootloader Version:") > -1) {
-        if (!bootloader_ready && checkFileSilent()) clearStatus();
-        bootloader_ready = true;
-        if (checkFileSilent()) {
-          enableButton($flashHex);
-          setFlashButtonImmediate();
-          if (flash_when_ready || autoFlashEnabled()) {
-            flashFirmware();
-          } else {
-            enableButton(flashButton);
-            enableButton($rebootMCU);
-            setFlashButtonImmediate();
+        if (!bootloader_ready && checkFileSilent()) {
+          clearStatus();
+        }
+
+        if (!bootloader_ready) {
+          bootloader_ready = true;
+          if (checkFileSilent()) {
+            if (flash_when_ready || autoFlashEnabled()) {
+              flashFirmware();
+            } else {
+              enableButton($flashHex);
+              enableButton($rebootMCU);
+              setFlashButtonImmediate();
+              sendStatus("Ready To Flash!");
+            }
           }
         }
-      } else {
+      } else if (bootloader_ready) {
         bootloader_ready = false;
         disableButton($rebootMCU);
         if(checkFileSilent() && !autoFlashEnabled()) {
@@ -492,7 +515,10 @@ function checkForBoard() {
       }
     });
   }
-  if (bootloader_ready || autoFlashEnabled()) {
+
+  if (bootloader_ready) {
+    window.setTimeout(checkForBoard, 1000);
+  } else if (autoFlashEnabled()) {
     window.setTimeout(checkForBoard, 500);
   } else {
     window.setTimeout(checkForBoard, 5000);
