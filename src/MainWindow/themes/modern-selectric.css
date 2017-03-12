@@ -10,10 +10,18 @@ html, body, .modal-content {
 }
 
 .dropdown-menu {
+  background-color: #a40214;
+  color: #e5e4df;
   font: menu;
 }
 
 #gear-menu > span {
+  color: #a40214;
+  font-size: 25px;
+}
+
+#gear-menu:hover > span {
+  color: #a40214;
   font-size: 25px;
 }
 

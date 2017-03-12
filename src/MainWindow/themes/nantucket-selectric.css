@@ -15,6 +15,7 @@ html, body, .modal-content {
 
 #gear-menu > span {
   font-size: 25px;
+  color: #0a2040;
 }
 
 #file-path, #status {
