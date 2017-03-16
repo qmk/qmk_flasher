@@ -301,7 +301,7 @@ function clearStatus() {
 
 function writeStatus(text) {
   $status.append(text);
-  $status.scrollTop(statusBox.scrollHeight);
+  $status.scrollTop($status.scrollHeight);
 }
 
 function sendStatus(text) {

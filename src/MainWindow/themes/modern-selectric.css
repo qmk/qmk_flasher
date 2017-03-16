@@ -30,3 +30,8 @@ html, body, .modal-content {
   background-color: #005699;
   border: #212224 solid 1px;
 }
+
+select, option {
+  background-color: #e5e4df;
+  color: #212224;
+}

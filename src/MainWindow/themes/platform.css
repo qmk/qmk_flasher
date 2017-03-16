@@ -26,3 +26,7 @@ html, body, .modal-content {
   background-color: #ddd;
   border: ActiveBorder solid 1px;
 }
+
+#load-file {
+  font-size: 12px;
+}

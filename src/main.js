@@ -53,13 +53,16 @@ app.on('ready', function() {
 
 
   let focusWindowByDefault = true;
-  if(process.platform == "darwin") focusWindowByDefault = false;
+  if(process.platform == "darwin") {
+    focusWindowByDefault = false;
+  }
 
   settings.defaults({
     focusWindowOnHexChange: focusWindowByDefault,
     theme: 'default'
   });
 
+  settings.applyDefaultsSync();
   settings.get().then(result => {
     settingsCache = result;
     isSettingsInitialized = true;
