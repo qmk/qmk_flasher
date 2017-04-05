@@ -25,21 +25,25 @@
             <h4 class="modal-title" id="options-modal-title">Options</h4>
           </div>
           <div class="modal-body">
-            <form>
-              <div class="checkbox">
-                <label>
-                  <input type="checkbox" id="bring-to-front-checkbox" aria-describedby="bring-to-front-help"> Bring window to front when the loaded
-                  firmware file changes
-                </label>
-                <span id="bring-to-front-help" class="help-block">
-                Useful for bringing the flasher to your attention once the firmware is done re-compiling.
-              </span>
+            <form class="form-inline">
+              <div class="option-item" data-toggle="tooltip" data-placement="top" title="Change how the flasher looks.">
+                <label for="current-theme" class="control-label">Theme: </label>
+                <select name="current-theme" id="current-theme">
+                  <option value="default">Default</option>
+                  <option value="platform">Platform</option>
+                  <option value="modern-selectric">Modern Selectric</option>
+                  <option value="nantucket-selectric">Nantucket Selectric</option>
+                </select>
+              </div>
+              <div class="option-item" id="bring-to-front" data-toggle="tooltip" data-placement="top" title="Useful for bringing the flasher to your attention once the firmware is done re-compiling.">
+								<input class="option-checkbox" type="checkbox" id="bring-to-front">
+                <label for="bring-to-front">Bring window to front when the loaded firmware file changes</label>
               </div>
             </form>
           </div>
           <div class="modal-footer">
-            <button type="button" id="cancel-options-button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            <button type="button" id="save-options-button" class="btn btn-primary">Save changes</button>
+            <button type="button" id="cancel-options" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <button type="button" id="save-options" class="btn btn-primary">Save changes</button>
           </div>
         </div>
       </div>

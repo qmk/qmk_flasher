@@ -53,12 +53,16 @@ app.on('ready', function() {
 
 
   let focusWindowByDefault = true;
-  if(process.platform == "darwin") focusWindowByDefault = false;
+  if(process.platform == "darwin") {
+    focusWindowByDefault = false;
+  }
 
   settings.defaults({
-    focusWindowOnHexChange: focusWindowByDefault
+    focusWindowOnHexChange: focusWindowByDefault,
+    theme: 'default'
   });
 
+  settings.applyDefaultsSync();
   settings.get().then(result => {
     settingsCache = result;
     isSettingsInitialized = true;
@@ -105,9 +109,17 @@ app.on('ready', function() {
     }
   });
 
+  ipcMain.on('get-setting-theme', (event) => {
+    if(isSettingsInitialized) {
+      event.returnValue = settingsCache.theme;
+    }
+  });
+
   ipcMain.on('set-settings', (event, updatedSettings) => {
     settingsCache.focusWindowOnHexChange = updatedSettings.focusWindowOnHexChange;
     settings.set('focusWindowOnHexChange', updatedSettings.focusWindowOnHexChange);
+    settingsCache.theme = updatedSettings.theme;
+    settings.set('theme', updatedSettings.theme);
   });
 
   // Setup the mac menu items

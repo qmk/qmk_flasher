@@ -1,0 +1,26 @@
+html, body, .modal-content {
+  color: #0a2040;
+  background-color: #ebe7dd;
+}
+
+.btn, .button {
+  background-color: #a40214;
+  color: #dad4c4;
+  border: none;
+}
+
+.dropdown-menu {
+  font: menu;
+}
+
+#gear-menu > span {
+  font-size: 25px;
+  color: #0a2040;
+}
+
+#file-path, #status {
+  font-size: 12px;
+  color: #dad4c4;
+  background-color: #0a2040;
+  border: 1px solid #f7b03c;
+}

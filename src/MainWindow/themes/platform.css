@@ -1,0 +1,32 @@
+html, body, .modal-content {
+  font: message-box;
+  color: WindowText;
+  background-color: Window;
+}
+
+.button {
+  border: 1px solid hsl(0, 0%, 83%);
+}
+
+.btn, .button {
+  font: icon;
+}
+
+.dropdown-menu {
+  font: menu;
+}
+
+#gear-menu > span {
+  font-size: 25px;
+}
+
+#status {
+  font: message-box;
+  font-size: 12px;
+  background-color: #ddd;
+  border: ActiveBorder solid 1px;
+}
+
+#load-file {
+  font-size: 13px;
+}
