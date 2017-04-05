@@ -1,0 +1,17 @@
+{
+  "package": {
+    "name": "qmk-firmware-flasher",
+    "repo": "generic",
+    "subject": "noahandrews"
+  },
+  "version": {
+    "name": "0.5.1"
+  },
+  "files": [
+    {
+      "includePattern": "dist/mac/(mac-.*.asar)",
+      "uploadPattern": "$1"
+    }
+  ],
+  "publish": true
+}

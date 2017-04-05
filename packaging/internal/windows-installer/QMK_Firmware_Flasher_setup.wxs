@@ -1,0 +1,31 @@
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:bal="http://schemas.microsoft.com/wix/BalExtension">
+  <Bundle
+    Name="Firmware Flasher"
+    Version="!(bind.packageVersion.MainPackage32)"
+    Manufacturer="QMK"
+    Condition="(VersionNT >= v6.0)"
+    UpgradeCode="2437992B-5A60-46B9-A816-FB9C51DB6611">
+    <BootstrapperApplicationRef Id="WixStandardBootstrapperApplication.RtfLicense">
+        <bal:WixStandardBootstrapperApplication
+          LicenseFile="LICENSE.rtf"
+          LogoFile="Windows.png"
+          ShowVersion="yes" />
+    </BootstrapperApplicationRef>
+    <Variable Name="InstallFolder" Type="string" Value="[ProgramFilesFolder]QMK\Firmware Flasher"/>
+    
+    <Chain>
+      <MsiPackage
+       Id="MainPackage32"
+       SourceFile="QMK_Firmware_Flasher_32-bit.msi"
+       InstallCondition="NOT VersionNT64">
+        <MsiProperty Name="INSTALLLOCATION" Value="[InstallFolder]" />
+      </MsiPackage> 
+      <MsiPackage
+       Id="MainPackage64"
+       SourceFile="QMK_Firmware_Flasher_64-bit.msi"
+       InstallCondition="VersionNT64">
+        <MsiProperty Name="INSTALLLOCATION" Value="[InstallFolder]" />
+      </MsiPackage>
+    </Chain>
+  </Bundle>
+</Wix>

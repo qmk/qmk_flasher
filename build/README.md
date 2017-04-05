@@ -8,13 +8,13 @@ The source file for the icon is icon.svg. This is a vector image scaled to
 
 ## Windows Icon
 
-The windows icon was created using this tool:
+The windows icon (icon.ico) was created using this tool:
 
     <https://www.icoconverter.com>
 
 ## Mac Icon
 
-The Mac icon is built from files in Icon.iconset. We need the following
+The Mac icon (icon.icns) is built from files in Icon.iconset. We need the following
 resolutions and filenames, and only these files:
 
 * 128x128: icon.iconset/icon_128x128.png

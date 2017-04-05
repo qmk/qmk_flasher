@@ -6,9 +6,12 @@
   "main": "src/main.js",
   "scripts": {
     "start": "electron .",
+    "install": "electron-rebuild",
     "postinstall": "install-app-deps",
     "pack": "build",
-    "dist": "build"
+    "dist": "build",
+    "postdist": "packaging/internal/prepare-asar-mac.sh",
+    "version": "node packaging/internal/update-bintray-version.js && git add packaging/internal/bintray-travis.json"
   },
   "repository": {
     "type": "git",
@@ -37,17 +40,20 @@
     "jquery": "~2.2"
   },
   "devDependencies": {
+    "7zip-bin": "^2.0.4",
+    "deasync": "^0.1.9",
     "devtron": "^1.4.0",
-    "electron": "^1.4.10",
-    "electron-builder": "^8.6.0"
+    "electron": "1.4.11",
+    "electron-builder": "^8.6.0",
+    "electron-packager": "~8.4.0",
+    "electron-rebuild": "~1.5.7",
+    "fs-extra": "^2.0.0",
+    "minimist": "^1.2.0"
   },
   "build": {
     "appId": "com.github.qmk-firmware-flasher",
     "mac": {
       "category": "public.app-category.utilities"
-    },
-    "win": {
-      "iconUrl": "https://github.com/skullydazed/dfu-programmer-app/blob/master/build/windows.ico?raw=true"
     }
   }
 }

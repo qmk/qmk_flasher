@@ -1,0 +1,486 @@
+<?xml version='1.0' encoding='windows-1252'?>
+<Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'
+     xmlns:difxapp="http://schemas.microsoft.com/wix/DifxAppExtension">
+  <Product Name='Firmware Flasher' Manufacturer='QMK'
+		Id='936206DD-192B-40C8-80FA-3354A98D3844'
+		UpgradeCode='F43ED636-ED6D-453B-B2C8-3EEB8F13D6A7'
+    Language='1033' Codepage='1252'
+    Version='!(bind.FileVersion.LauncherExe)'>
+
+    <Package Id='*' Keywords='Installer' Description="QMK Firmware Flasher Installer" InstallScope="perMachine"
+        Manufacturer='QMK'
+        InstallerVersion='100' Languages='1033' Compressed='yes' SummaryCodepage='1252' />
+
+    <Media Id='1' Cabinet='ff.cab' EmbedCab='no' />
+    <Directory Id='TARGETDIR' Name='SourceDir'>
+      <Directory Id='ProgramFilesFolder' Name='PFiles'>
+        <Directory Id='QMK' Name='QMK'>
+          <Directory Id='INSTALLDIR' Name='Firmware Flasher'>
+
+            <Component Id='MainExecutable' Guid='A6FDB7D0-5E65-4B46-B84C-C3EDDF7CD648'>
+              <File Id='LauncherExe' Name='QMK Firmware Flasher.exe' DiskId='1' Source='SourceDir\QMK Firmware Flasher.exe' KeyPath='yes'>
+                <Shortcut Id="startmenuFirmwareFlasher" Directory="ApplicationProgramFolder" Name="Firmware Flasher" WorkingDirectory='INSTALLDIR' Icon="icon.ico" IconIndex="0" Advertise="yes" Description="Tool to flash firmware to keyboards" />
+                <Shortcut Id="desktopFirmwwareFlasher" Directory="DesktopFolder" Name="QMK Firmware Flasher" WorkingDirectory='INSTALLDIR' Icon="icon.ico" IconIndex="0" Advertise="yes" Description="Tool to flash firmware to keyboards" />
+              </File>
+            </Component>
+
+            <Component Id='cmpUpdater'>
+                <File Id='filUpdater' KeyPath="yes" Source="SourceDir\updater.bat" />
+            </Component>
+
+            <Component Id="cmp53330EB0705503507EE68033421150BD">
+              <File Id="filD01A0F37B48CD539228E3AF5E17DAF3B" KeyPath="yes" Source="SourceDir\blink_image_resources_200_percent.pak" />
+            </Component>
+
+            <Component Id="cmpFD5034BFE581FBC2830B753A4ECC3D30">
+              <File Id="fil4B549630DDC9EC26CC48CDF3CD6D6825" KeyPath="yes" Source="SourceDir\content_resources_200_percent.pak" />
+            </Component>
+
+            <Component Id="cmpA15848F112CBDA54D378FF281289E12C">
+              <File Id="filA48A54FC25069B37B423ACAD76955CD4" KeyPath="yes" Source="SourceDir\content_shell.pak" />
+            </Component>
+
+            <Component Id="cmpB26D9778897A0B59AFD716C2649CF4DD">
+              <File Id="fil85620143DFACBD3E6B8BD94CC488E167" KeyPath="yes" Source="SourceDir\d3dcompiler_47.dll" />
+            </Component>
+
+            <Component Id="cmpB116C378300C9BB4B6B13E200B38751E">
+              <File Id="fil7A961D3741F65CE97EE144F52621D11D" KeyPath="yes" Source="SourceDir\ffmpeg.dll" />
+            </Component>
+
+            <Component Id="cmpD2BB2905ED2C609FE6753B1BB81FDC84">
+              <File Id="fil36DB9047D1FCD91BC2B54446815CFF36" KeyPath="yes" Source="SourceDir\icudtl.dat" />
+            </Component>
+
+            <Component Id="cmp192B6DD8289AEA4C032978A6FBA5B35F">
+              <File Id="filE90055699C8DD7ECA63D3A00914D8EE7" KeyPath="yes" Source="SourceDir\libEGL.dll" />
+            </Component>
+
+            <Component Id="cmp25A8A82FB3D6F86E398A2D2C5D4B6912">
+              <File Id="filC1BA1C47C55BC36DAB5363CE5BDB0BE2" KeyPath="yes" Source="SourceDir\libGLESv2.dll" />
+            </Component>
+
+            <Component Id="cmpAB47319942B15DD779801642BCF94AF0">
+              <File Id="fil435E87447B9E493CF0CC5C601802FAD4" KeyPath="yes" Source="SourceDir\LICENSE" />
+            </Component>
+
+            <Component Id="cmpA0F19EEB1AE381144EEDC321C2A2BC93">
+              <File Id="fil25CE58272B55DEE7C39FB764EBCF5742" KeyPath="yes" Source="SourceDir\LICENSES.chromium.html" />
+            </Component>
+
+            <Component Id="cmp3E34F7E477A3A900D67DCF69651D3890">
+              <File Id="filECCD657B305A1E828780CA901C2BF5C0" KeyPath="yes" Source="SourceDir\natives_blob.bin" />
+            </Component>
+
+            <Component Id="cmp328AE72CD87E308B04BF7B55B3F3D151">
+              <File Id="fil7C08A2A82574CF5520C41ACDB695E450" KeyPath="yes" Source="SourceDir\node.dll" />
+            </Component>
+
+            <Component Id="cmp339B39E5CCB4C3D57423B12033DAD899">
+              <File Id="filCEAEA7693A0EA32767883B7BD1D08DEB" KeyPath="yes" Source="SourceDir\snapshot_blob.bin" />
+            </Component>
+
+            <Component Id="cmpDC0356008023AC344F55623912E54FC5">
+              <File Id="filD7B78CAFA372023729D9724C94714992" KeyPath="yes" Source="SourceDir\ui_resources_200_percent.pak" />
+            </Component>
+
+            <Component Id="cmpE0232A692F9D22AD5D53FEE1324C10D7">
+              <File Id="fil03E8B3FE9EC9F92BF1F5D93F0B798DAB" KeyPath="yes" Source="SourceDir\version" />
+            </Component>
+
+            <Component Id="cmp290286E01C3C1755F404B015D6D0A9C1">
+              <File Id="fil2EA64EA4FC7573D4C61B1C15268D1862" KeyPath="yes" Source="SourceDir\views_resources_200_percent.pak" />
+            </Component>
+
+            <Component Id="cmp1888059C9A550A397444C4DE23EF355C">
+              <File Id="fil2A32AEB086B4AFA89750A2946A874C59" KeyPath="yes" Source="SourceDir\xinput1_3.dll" />
+            </Component>
+
+            <Directory Id="dir1FE3C7C5CF04CAB028E1DFA1824CF619" Name="locales">
+              <Component Id="cmpFDDC47AA4CC878C680C9F1D2DE0AA9C4">
+                <File Id="fil294D56F5154674D6F574CEE3D5DF4638" KeyPath="yes" Source="SourceDir\locales\am.pak" />
+              </Component>
+
+              <Component Id="cmp5E808F853B1D53FD92B4AA61DAE9A8F7">
+                <File Id="filDE1C9F08241390D6182116BAB1CD502E" KeyPath="yes" Source="SourceDir\locales\ar.pak" />
+              </Component>
+
+              <Component Id="cmp9C86F98DDD9CE753050755F81333CBBC">
+                <File Id="fil69EDBBECA5ADB63D5F17211E4E07E1A9" KeyPath="yes" Source="SourceDir\locales\bg.pak" />
+              </Component>
+
+              <Component Id="cmp219B68B0452A6673AFB90F607E57B8E3">
+                <File Id="fil6C1020CF0C97B93BE05E71503395BC85" KeyPath="yes" Source="SourceDir\locales\bn.pak" />
+              </Component>
+
+              <Component Id="cmp1AFD281FCE7B96D4CE451702272C221A">
+                <File Id="fil25BBD59B0F970DDA2AA443FF9ECB4C50" KeyPath="yes" Source="SourceDir\locales\ca.pak" />
+              </Component>
+
+              <Component Id="cmp7616DE4204E3A6A630CA633B6969C1AB">
+                <File Id="fil6295F55E07C7F7EE1E29739559096B91" KeyPath="yes" Source="SourceDir\locales\cs.pak" />
+              </Component>
+
+              <Component Id="cmpAB172246EA28931FD15CC857AAA083EC">
+                <File Id="fil033C5422FEA57E6B9DC92801851D2C9A" KeyPath="yes" Source="SourceDir\locales\da.pak" />
+              </Component>
+
+              <Component Id="cmpCDA6767EC8EFA097AFFD732F2172C8FF">
+                <File Id="fil71B84DCE2FF59151530AC90A0BC90FDA" KeyPath="yes" Source="SourceDir\locales\de.pak" />
+              </Component>
+
+              <Component Id="cmp972437C4DA24805E82429D4092574C71">
+                <File Id="fil288CECB2C25580647087E7FE423607F6" KeyPath="yes" Source="SourceDir\locales\el.pak" />
+              </Component>
+
+              <Component Id="cmpA5655388547C38846EB0F7FB33CEAFEB">
+                <File Id="fil16D0A9B138471C751738753C7A5D8CBA" KeyPath="yes" Source="SourceDir\locales\en-GB.pak" />
+              </Component>
+
+              <Component Id="cmp8530737321359797E57F76CB5DC1B4C6">
+                <File Id="filED7AD5A207D7DB379E327C34E6EE5580" KeyPath="yes" Source="SourceDir\locales\en-US.pak" />
+              </Component>
+
+              <Component Id="cmp6C301F02EE6DEC06FB4EC26A6FA72A98">
+                <File Id="fil7C1F9D48196E067CE3436AE9CF96420E" KeyPath="yes" Source="SourceDir\locales\es-419.pak" />
+              </Component>
+
+              <Component Id="cmpF3AA08767125ED3C7AC79B5FC383104E">
+                <File Id="filB19F097B44A150FE933EDCD1917EEBAC" KeyPath="yes" Source="SourceDir\locales\es.pak" />
+              </Component>
+
+              <Component Id="cmpFB9B900961B08FEBC22C0480D05ADBC8">
+                <File Id="fil32CB33D2713A6D13A2526DA515140B44" KeyPath="yes" Source="SourceDir\locales\et.pak" />
+              </Component>
+
+              <Component Id="cmp549BAF5C0CF1BB1C0F44B20C250474E2">
+                <File Id="filF0E0A88FFE92B8B1B51D688D9DDDC047" KeyPath="yes" Source="SourceDir\locales\fa.pak" />
+              </Component>
+
+              <Component Id="cmp81851E9D2C682BAC56177E0033C09494">
+                <File Id="fil7200BBADC74639F5C84CC79122676609" KeyPath="yes" Source="SourceDir\locales\fake-bidi.pak" />
+              </Component>
+
+              <Component Id="cmp986B46419BF95CAFA172C17D5ED0FE3B">
+                <File Id="filCB3CC37766F637A21CF3632E65C84094" KeyPath="yes" Source="SourceDir\locales\fi.pak" />
+              </Component>
+
+              <Component Id="cmpBFBEA408C1B3558904B3AF4F807485FB">
+                <File Id="fil204A94B6DAF65177FFC92F2938BFFD37" KeyPath="yes" Source="SourceDir\locales\fil.pak" />
+              </Component>
+
+              <Component Id="cmpB7025EE7A3C480B709EABA05BCD6567A">
+                <File Id="fil30E8F9FC8D5CC69F554AEFBF77789A5F" KeyPath="yes" Source="SourceDir\locales\fr.pak" />
+              </Component>
+
+              <Component Id="cmp83FF992EF8D9266DC3EF347965C902C2">
+                <File Id="filB7936855D5A62AD2FA185AC81C95562C" KeyPath="yes" Source="SourceDir\locales\gu.pak" />
+              </Component>
+
+              <Component Id="cmp763A3013EAF0CE33A2C0769FF97B5ACB">
+                <File Id="filDFB300DE4D5E62FF110BE12A42A23548" KeyPath="yes" Source="SourceDir\locales\he.pak" />
+              </Component>
+
+              <Component Id="cmpB271F298DD73EE343E7FC21C18D2C79D">
+                <File Id="filA1D83F2BA75581E62BC50BB15AAA47AB" KeyPath="yes" Source="SourceDir\locales\hi.pak" />
+              </Component>
+
+              <Component Id="cmp282E86858EB56834B9159929081016BE">
+                <File Id="fil2A8ADC7B11615824E61EBFB46E0C5051" KeyPath="yes" Source="SourceDir\locales\hr.pak" />
+              </Component>
+
+              <Component Id="cmp9931DD75BBD641138297D2FA94D3DC15">
+                <File Id="filCFB09D2A149E2EA87DAF16B9832F3C5F" KeyPath="yes" Source="SourceDir\locales\hu.pak" />
+              </Component>
+
+              <Component Id="cmp12F14F30D20B90E302DC1B5DC9AD119D">
+                <File Id="fil4CDEA162BEFDDB54A7ADEDEBF67F6202" KeyPath="yes" Source="SourceDir\locales\id.pak" />
+              </Component>
+
+              <Component Id="cmp8EDF219B05B36C7F74FEAFD8539C39AD">
+                <File Id="fil98BC5560DB202F19EEEC5047DD321754" KeyPath="yes" Source="SourceDir\locales\it.pak" />
+              </Component>
+
+              <Component Id="cmp28A4AC5B96E52C18E6B8420F0F3BF10B">
+                <File Id="fil16C7801B331A802A913F2C7230F3B9CF" KeyPath="yes" Source="SourceDir\locales\ja.pak" />
+              </Component>
+
+              <Component Id="cmpD5D0AC53BC9A258E01A8416BCC4270FA">
+                <File Id="fil0CA0EB6FA7E917E546772635799BC415" KeyPath="yes" Source="SourceDir\locales\kn.pak" />
+              </Component>
+
+              <Component Id="cmp60346BF09A2C5F2FCA24124DC2B8B623">
+                <File Id="filBED7F1467E53CCF43B5355E29778B410" KeyPath="yes" Source="SourceDir\locales\ko.pak" />
+              </Component>
+
+              <Component Id="cmp3403025233BF3CF94AE318320756824A">
+                <File Id="fil390DE97320D05FCA40CCC12E8B4797B4" KeyPath="yes" Source="SourceDir\locales\lt.pak" />
+              </Component>
+
+              <Component Id="cmp11219ABBD4DB0B0619313E898DFEE1C2">
+                <File Id="filAFC50C2C730AEB8E2AABFB9019EEC9B7" KeyPath="yes" Source="SourceDir\locales\lv.pak" />
+              </Component>
+
+              <Component Id="cmp5EF5FBA20063CF70E1E805EC6B652C80">
+                <File Id="fil8C325E0906B66CA7C15062FEF6F539BF" KeyPath="yes" Source="SourceDir\locales\ml.pak" />
+              </Component>
+
+              <Component Id="cmp0C8F2C19CB309D1F4699C76B562D4E0B">
+                <File Id="fil440A0249CCD9FE1A21DC41FF9626DD1D" KeyPath="yes" Source="SourceDir\locales\mr.pak" />
+              </Component>
+
+              <Component Id="cmpB7EE7C6C89B77B00220AFE0C9947272E">
+                <File Id="fil1B18DBC30054990CA7A60349E3157630" KeyPath="yes" Source="SourceDir\locales\ms.pak" />
+              </Component>
+
+              <Component Id="cmp2740C69A06E9A570EF4F4F801F19F438">
+                <File Id="fil989626DACD81C10C4C0363ED4817CE44" KeyPath="yes" Source="SourceDir\locales\nb.pak" />
+              </Component>
+
+              <Component Id="cmpB3487A6370C5801E50DF19EB3B3CDE3E">
+                <File Id="fil09245467CBD13E82A69B7BCE5D0B95A2" KeyPath="yes" Source="SourceDir\locales\nl.pak" />
+              </Component>
+
+              <Component Id="cmpA84FA298A80CAD2247624B0DC0912EFE">
+                <File Id="fil9FD56F49E098D5AE66184DD1894F674F" KeyPath="yes" Source="SourceDir\locales\pl.pak" />
+              </Component>
+
+              <Component Id="cmp120FA845D38BAC207A7BDD7BD11D07E1">
+                <File Id="fil282D4D2449A7F8787BA02C19B3CEE11D" KeyPath="yes" Source="SourceDir\locales\pt-BR.pak" />
+              </Component>
+
+              <Component Id="cmp7C0A0A14255CFBF68E94374ED0B6CC35">
+                <File Id="filB8E278B0DAEDE990E45EC31DA785CEDD" KeyPath="yes" Source="SourceDir\locales\pt-PT.pak" />
+              </Component>
+
+              <Component Id="cmpC90245350DD9B2029EB0EC50B34CB17A">
+                <File Id="fil4A2D0D7C7B71E78B797C73814A2B873B" KeyPath="yes" Source="SourceDir\locales\ro.pak" />
+              </Component>
+
+              <Component Id="cmpACE4EC7D0F60BA8732C11E7E7B7E7491">
+                <File Id="fil2A14D762E7CFAE19FF147D783962DA6B" KeyPath="yes" Source="SourceDir\locales\ru.pak" />
+              </Component>
+
+              <Component Id="cmp8EEE881963D9724F039919F673F70854">
+                <File Id="fil4C9BE2B14DDE1F6776F7F58810C261F0" KeyPath="yes" Source="SourceDir\locales\sk.pak" />
+              </Component>
+
+              <Component Id="cmpEA7B8724356945607018C7D5EA16AE20">
+                <File Id="fil6F5CDCB17B58CF690A13E34776A03F75" KeyPath="yes" Source="SourceDir\locales\sl.pak" />
+              </Component>
+
+              <Component Id="cmp75E66A8148F726E0DE348EEECBC436ED">
+                <File Id="fil36640DF54F2D715E677F94314C28163A" KeyPath="yes" Source="SourceDir\locales\sr.pak" />
+              </Component>
+
+              <Component Id="cmp978D21E92900E0940EB92CCEFE0855F6">
+                <File Id="filC60084A4EC4D2DBD3E34C10D16CAAACD" KeyPath="yes" Source="SourceDir\locales\sv.pak" />
+              </Component>
+
+              <Component Id="cmp9413D7930AA4A7678124A08F123D9099">
+                <File Id="fil88C7D4A9F51589CD98AFEB5D81AAA614" KeyPath="yes" Source="SourceDir\locales\sw.pak" />
+              </Component>
+
+              <Component Id="cmpF4D894684F7ED00C6E6FD21A85FE9000">
+                <File Id="filB3CEE15B9407857A5451C25738C32129" KeyPath="yes" Source="SourceDir\locales\ta.pak" />
+              </Component>
+
+              <Component Id="cmpB5B9E994CED3120D49192578972B720B">
+                <File Id="fil7B5399644DCA28CFA79000C14B007054" KeyPath="yes" Source="SourceDir\locales\te.pak" />
+              </Component>
+
+              <Component Id="cmp661B673AA69A99E149899BACE2697D96">
+                <File Id="filBE6D10674C6892EEDF415370ABDEF1F2" KeyPath="yes" Source="SourceDir\locales\th.pak" />
+              </Component>
+
+              <Component Id="cmp9CB53609DD012D17354782849A52BE18">
+                <File Id="fil0A0BBD04698986F807254071989469EF" KeyPath="yes" Source="SourceDir\locales\tr.pak" />
+              </Component>
+
+              <Component Id="cmpBB69FD94009BB7FBA20649B4F2F4B81B">
+                <File Id="fil10C5F504CD4D8C3D2DD90672FB701BBC" KeyPath="yes" Source="SourceDir\locales\uk.pak" />
+              </Component>
+
+              <Component Id="cmpEFAC99E9DA7A4F77D9EF31814804DAF9">
+                <File Id="filD40B417D6DEFDE9BA95138CA7080105A" KeyPath="yes" Source="SourceDir\locales\vi.pak" />
+              </Component>
+
+              <Component Id="cmp712FA2B606A34B5C2350C4AE73F1343A">
+                <File Id="filE438E95B2A7B1C7DFFAF5F77ED62F839" KeyPath="yes" Source="SourceDir\locales\zh-CN.pak" />
+              </Component>
+
+              <Component Id="cmp7DFFEB4EA2E7FFFCDFDA535E4C210209">
+                <File Id="filE35DCF956956BA5BDEB6B8B071EC7D84" KeyPath="yes" Source="SourceDir\locales\zh-TW.pak" />
+              </Component>
+            </Directory>
+
+            <Directory Id="dir519071B453D5E8EE41B65D2BBC4DFF3D" Name="resources">
+              <Component Id="cmpF62A02B77AEBBE2976D693A628104742">
+                <File Id="fil5D1696D06744BD6AFE68F54587FBB1B3" KeyPath="yes" Source="SourceDir\resources\app.asar" />
+              </Component>
+
+              <Component Id="cmp99627A540BB1007FDA6FE6024FC0AC73">
+                <File Id="fil5E6BCA08DC3B02F9EA95203E0EF547B6" KeyPath="yes" Source="SourceDir\resources\electron.asar" />
+              </Component>
+
+              <Directory Id="dirAsarUnpacked" Name="app.asar.unpacked">
+                <Directory Id="dir237C6600C303A43EA38B2FA714F5A03F" Name="dfu">
+                  <Component Id="cmp8E4B6D1AF625B3E3359B44D10CA6D5FE">
+                    <File Id="filC06323BDAC7570BB960B0C45884F44E4" KeyPath="yes" Source="SourceDir\resources\app.asar.unpacked\dfu\dfu-programmer.exe" />
+                  </Component>
+                  <Component Id="cmpLibusbDll">
+                    <File Id="filLibusbDllx86" KeyPath="yes" Name="libusb0.dll" Source="SourceDir\resources\app.asar.unpacked\dfu\dfu-prog-usb-1.2.2\x86\libusb0_x86.dll" />
+                  </Component>
+                  <Directory Id="dirB1318A7C062D82AF1F25D3C9602343CC" Name="driver">
+                    <Directory Id="dirDriverx64" Name="amd64">
+                      <Component Id="cmpDriverx64" Permanent="yes" Guid="{39C3C579-301D-4243-8A3D-7869F1D766EF}">
+                        <File Id="filC6EC2BC8D1BD8B5F46EA6D55618BB4DF" Source="SourceDir\resources\app.asar.unpacked\dfu\dfu-prog-usb-1.2.2\amd64\libusb0.dll" />
+                        <File Id="filF5E957B4118F5F1DC7477B1CE9641FB0" Source="SourceDir\resources\app.asar.unpacked\dfu\dfu-prog-usb-1.2.2\amd64\libusb0.sys" />
+                      </Component>
+                    </Directory>
+                    <Directory Id="dirC02E578028508AAF993D04A4C4CF2998" Name="ia64">
+                        <Component Id="cmpDriveria64" Permanent="yes" Guid="{44D136D0-63FD-4314-B50F-E7BF6D9D3376}">
+                            <File Id="filCE5AED9597B46A4A7BE3B7B5BE8287D3" KeyPath="yes" Source="SourceDir\resources\app.asar.unpacked\dfu\dfu-prog-usb-1.2.2\ia64\libusb0.dll" />
+                            <File Id="fil3FAF9CA4DAB03D61B326137107C0BAFA" Source="SourceDir\resources\app.asar.unpacked\dfu\dfu-prog-usb-1.2.2\ia64\libusb0.sys" />
+                        </Component>
+                    </Directory>
+                    <Directory Id="dir166D84551288B847CCCFDA27C43B99C9" Name="x86">
+                        <Component Id="cmpDriverx86" Permanent="yes" Guid="{976841FA-6364-4A49-A996-D20DC3C31BAF}">
+                            <File Id="filB67CC8794381963116E748D7DB8229D6" Source="SourceDir\resources\app.asar.unpacked\dfu\dfu-prog-usb-1.2.2\x86\libusb0.sys" />
+                            <File Id="fil6F6BAE7A80C71AB77BBB57A48BE7E7E2" KeyPath="yes" Source="SourceDir\resources\app.asar.unpacked\dfu\dfu-prog-usb-1.2.2\x86\libusb0_x86.dll" />
+                        </Component>
+                    </Directory>
+                    <Component Id="cmpDriver" Permanent="yes" Guid="{B3FD9EB2-E316-4603-A537-ECB28598D213}">
+                      <File Id="filE4F5D3325491A1A22D63112930C1A3B3" Source="SourceDir\resources\app.asar.unpacked\dfu\dfu-prog-usb-1.2.2\atmel_usb_dfu.cat" />
+                      <File Id="filC029E403E413FE215154D15D1C4758F9" KeyPath="yes" Source="SourceDir\resources\app.asar.unpacked\dfu\dfu-prog-usb-1.2.2\atmel_usb_dfu.inf" />
+                      <difxapp:Driver PlugAndPlayPrompt="no" AddRemovePrograms="yes"/>
+                    </Component>
+                    <Component Id="cmp9D70B54BE1A6A1B01FD09C4B64826700">
+                      <File Id="fil95FEB0BEDBD3049C2AE924A9C62C3BD3" KeyPath="yes" Source="SourceDir\resources\app.asar.unpacked\dfu\dfu-prog-usb-1.2.2\COPYING_GPL.txt" />
+                    </Component>
+                  </Directory>
+                </Directory>
+              </Directory>
+            </Directory>
+          </Directory>
+        </Directory>
+      </Directory>
+
+      <Directory Id="ProgramMenuFolder" Name="Programs">
+        <Directory Id="ApplicationProgramFolder" Name="QMK">
+          <Component Id="ProgramMenuDir" Guid="B90360D2-57C6-4EA3-9B03-7B767B369548">
+            <RemoveFolder Id='ApplicationProgramFolder' On='uninstall' />
+            <RegistryValue Root='HKCU' Key='Software\[Manufacturer]\[ProductName]' Type='string' Value='' KeyPath='yes' />
+          </Component>
+        </Directory>
+      </Directory>
+
+      <Directory Id="DesktopFolder" Name="Desktop" />
+    </Directory>
+
+
+    <ComponentGroup Id="Everything">
+      <ComponentRef Id="MainExecutable"/>
+      <ComponentRef Id="cmpUpdater" />
+      <ComponentRef Id="ProgramMenuDir"/>
+      <ComponentRef Id="cmp53330EB0705503507EE68033421150BD" />
+      <ComponentRef Id="cmpFD5034BFE581FBC2830B753A4ECC3D30" />
+      <ComponentRef Id="cmpA15848F112CBDA54D378FF281289E12C" />
+      <ComponentRef Id="cmpB26D9778897A0B59AFD716C2649CF4DD" />
+      <ComponentRef Id="cmpB116C378300C9BB4B6B13E200B38751E" />
+      <ComponentRef Id="cmpD2BB2905ED2C609FE6753B1BB81FDC84" />
+      <ComponentRef Id="cmp192B6DD8289AEA4C032978A6FBA5B35F" />
+      <ComponentRef Id="cmp25A8A82FB3D6F86E398A2D2C5D4B6912" />
+      <ComponentRef Id="cmpAB47319942B15DD779801642BCF94AF0" />
+      <ComponentRef Id="cmpA0F19EEB1AE381144EEDC321C2A2BC93" />
+      <ComponentRef Id="cmp3E34F7E477A3A900D67DCF69651D3890" />
+      <ComponentRef Id="cmp328AE72CD87E308B04BF7B55B3F3D151" />
+      <ComponentRef Id="cmp339B39E5CCB4C3D57423B12033DAD899" />
+      <ComponentRef Id="cmpDC0356008023AC344F55623912E54FC5" />
+      <ComponentRef Id="cmpE0232A692F9D22AD5D53FEE1324C10D7" />
+      <ComponentRef Id="cmp290286E01C3C1755F404B015D6D0A9C1" />
+      <ComponentRef Id="cmp1888059C9A550A397444C4DE23EF355C" />
+      <ComponentRef Id="cmpFDDC47AA4CC878C680C9F1D2DE0AA9C4" />
+      <ComponentRef Id="cmp5E808F853B1D53FD92B4AA61DAE9A8F7" />
+      <ComponentRef Id="cmp9C86F98DDD9CE753050755F81333CBBC" />
+      <ComponentRef Id="cmp219B68B0452A6673AFB90F607E57B8E3" />
+      <ComponentRef Id="cmp1AFD281FCE7B96D4CE451702272C221A" />
+      <ComponentRef Id="cmp7616DE4204E3A6A630CA633B6969C1AB" />
+      <ComponentRef Id="cmpAB172246EA28931FD15CC857AAA083EC" />
+      <ComponentRef Id="cmpCDA6767EC8EFA097AFFD732F2172C8FF" />
+      <ComponentRef Id="cmp972437C4DA24805E82429D4092574C71" />
+      <ComponentRef Id="cmpA5655388547C38846EB0F7FB33CEAFEB" />
+      <ComponentRef Id="cmp8530737321359797E57F76CB5DC1B4C6" />
+      <ComponentRef Id="cmp6C301F02EE6DEC06FB4EC26A6FA72A98" />
+      <ComponentRef Id="cmpF3AA08767125ED3C7AC79B5FC383104E" />
+      <ComponentRef Id="cmpFB9B900961B08FEBC22C0480D05ADBC8" />
+      <ComponentRef Id="cmp549BAF5C0CF1BB1C0F44B20C250474E2" />
+      <ComponentRef Id="cmp81851E9D2C682BAC56177E0033C09494" />
+      <ComponentRef Id="cmp986B46419BF95CAFA172C17D5ED0FE3B" />
+      <ComponentRef Id="cmpBFBEA408C1B3558904B3AF4F807485FB" />
+      <ComponentRef Id="cmpB7025EE7A3C480B709EABA05BCD6567A" />
+      <ComponentRef Id="cmp83FF992EF8D9266DC3EF347965C902C2" />
+      <ComponentRef Id="cmp763A3013EAF0CE33A2C0769FF97B5ACB" />
+      <ComponentRef Id="cmpB271F298DD73EE343E7FC21C18D2C79D" />
+      <ComponentRef Id="cmp282E86858EB56834B9159929081016BE" />
+      <ComponentRef Id="cmp9931DD75BBD641138297D2FA94D3DC15" />
+      <ComponentRef Id="cmp12F14F30D20B90E302DC1B5DC9AD119D" />
+      <ComponentRef Id="cmp8EDF219B05B36C7F74FEAFD8539C39AD" />
+      <ComponentRef Id="cmp28A4AC5B96E52C18E6B8420F0F3BF10B" />
+      <ComponentRef Id="cmpD5D0AC53BC9A258E01A8416BCC4270FA" />
+      <ComponentRef Id="cmp60346BF09A2C5F2FCA24124DC2B8B623" />
+      <ComponentRef Id="cmp3403025233BF3CF94AE318320756824A" />
+      <ComponentRef Id="cmp11219ABBD4DB0B0619313E898DFEE1C2" />
+      <ComponentRef Id="cmp5EF5FBA20063CF70E1E805EC6B652C80" />
+      <ComponentRef Id="cmp0C8F2C19CB309D1F4699C76B562D4E0B" />
+      <ComponentRef Id="cmpB7EE7C6C89B77B00220AFE0C9947272E" />
+      <ComponentRef Id="cmp2740C69A06E9A570EF4F4F801F19F438" />
+      <ComponentRef Id="cmpB3487A6370C5801E50DF19EB3B3CDE3E" />
+      <ComponentRef Id="cmpA84FA298A80CAD2247624B0DC0912EFE" />
+      <ComponentRef Id="cmp120FA845D38BAC207A7BDD7BD11D07E1" />
+      <ComponentRef Id="cmp7C0A0A14255CFBF68E94374ED0B6CC35" />
+      <ComponentRef Id="cmpC90245350DD9B2029EB0EC50B34CB17A" />
+      <ComponentRef Id="cmpACE4EC7D0F60BA8732C11E7E7B7E7491" />
+      <ComponentRef Id="cmp8EEE881963D9724F039919F673F70854" />
+      <ComponentRef Id="cmpEA7B8724356945607018C7D5EA16AE20" />
+      <ComponentRef Id="cmp75E66A8148F726E0DE348EEECBC436ED" />
+      <ComponentRef Id="cmp978D21E92900E0940EB92CCEFE0855F6" />
+      <ComponentRef Id="cmp9413D7930AA4A7678124A08F123D9099" />
+      <ComponentRef Id="cmpF4D894684F7ED00C6E6FD21A85FE9000" />
+      <ComponentRef Id="cmpB5B9E994CED3120D49192578972B720B" />
+      <ComponentRef Id="cmp661B673AA69A99E149899BACE2697D96" />
+      <ComponentRef Id="cmp9CB53609DD012D17354782849A52BE18" />
+      <ComponentRef Id="cmpBB69FD94009BB7FBA20649B4F2F4B81B" />
+      <ComponentRef Id="cmpEFAC99E9DA7A4F77D9EF31814804DAF9" />
+      <ComponentRef Id="cmp712FA2B606A34B5C2350C4AE73F1343A" />
+      <ComponentRef Id="cmp7DFFEB4EA2E7FFFCDFDA535E4C210209" />
+      <ComponentRef Id="cmpF62A02B77AEBBE2976D693A628104742" />
+      <ComponentRef Id="cmp99627A540BB1007FDA6FE6024FC0AC73" />
+    </ComponentGroup>
+
+    <ComponentGroup Id="DfuStuff">
+      <ComponentRef Id="cmpLibusbDll" />
+      <ComponentRef Id="cmpDriverx64"/>
+      <ComponentRef Id="cmpDriveria64"/>
+      <ComponentRef Id="cmpDriverx86"/>
+      <ComponentRef Id="cmpDriver"/>
+      <ComponentRef Id="cmp8E4B6D1AF625B3E3359B44D10CA6D5FE" />
+      <ComponentRef Id="cmp9D70B54BE1A6A1B01FD09C4B64826700" />
+    </ComponentGroup>
+
+    <Feature Id='Complete' Level='1'>
+      <ComponentGroupRef Id='Everything' />
+      <ComponentGroupRef Id='DfuStuff' />
+    </Feature>
+    
+    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" />
+
+    <UIRef Id="WixUI_InstallDir" />
+    <UIRef Id="WixUI_ErrorProgressText" />
+
+    <WixVariable Id="WixUILicenseRtf" Value="SourceDir\License.rtf" />
+
+    <Icon Id="icon.ico" SourceFile="icon.ico" />
+
+  </Product>
+</Wix>
