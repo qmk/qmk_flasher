@@ -47,8 +47,8 @@ Setup your environment:
 
 ## Make Windows Package
 
-The `dist-win32.sh` script will build a release in `~/QMK Firmware Flasher`.
+The `dist-win32.sh` script will build a release in `~/dist/win32`.
 
-## Make OS X Package
+## Make macOS Package
 
-Use `npm run pack` on OS X to make a DMG that can be distributed.
+The `dist-darwin.sh` script will build a release in `~/dist/darwin`.

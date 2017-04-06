@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jackhumbert/qmk_firmware_flasher.git"
+    "url": "git+https://github.com/qmk/qmk_firmware_flasher.git"
   },
   "keywords": [
     "dfu-programmer",
@@ -25,9 +25,9 @@
   "author": "Jack Humbert",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/jackhumbert/qmk_firmware_flasher/issues"
+    "url": "https://github.com/qmk/qmk_firmware_flasher/issues"
   },
-  "homepage": "https://github.com/jackhumbert/qmk_firmware_flasher",
+  "homepage": "https://github.com/qmk/qmk_firmware_flasher",
   "dependencies": {
     "bootbox": "~4.4",
     "bootstrap": "~3.3",
@@ -43,11 +43,20 @@
   },
   "build": {
     "appId": "com.github.qmk-firmware-flasher",
+    "fileAssociation": [
+      {
+        "ext": "hex",
+        "description": "Atmel Firmware File",
+        "role": "Viewer"
+      }
+    ],
+    "forceCodeSigning": false,
     "mac": {
-      "category": "public.app-category.utilities"
+      "category": "public.app-category.utilities",
+      "target": "zip"
     },
     "win": {
-      "iconUrl": "https://github.com/skullydazed/dfu-programmer-app/blob/master/build/windows.ico?raw=true"
+      "iconUrl": "https://github.com/qmk/qmk_firmware_flasher/blob/master/build/windows.ico?raw=true"
     }
   }
 }
