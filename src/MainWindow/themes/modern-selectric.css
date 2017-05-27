@@ -28,6 +28,7 @@ html, body, .modal-content {
 #file-path, #status {
   font-size: 12px;
   background-color: #005699;
+  color: #e5e4df;
   border: #212224 solid 1px;
 }
 
