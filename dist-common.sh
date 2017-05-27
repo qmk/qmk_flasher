@@ -19,7 +19,6 @@ check_zip() {
 
 # Make sure our environment is setup properly
 if [ -d "$output_dir" ]; then
-	[ "$(uname)" = "Darwin" ] && say 'Warning! Look out!'
 	echo '*** About to wipe out the '"$output_dir"' directory.'
 	echo '*** You have 10 seconds to press Ctrl-C!'
 	for i in 10 9 8 7 6 5 4 3 2 1; do
