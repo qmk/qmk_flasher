@@ -121,13 +121,25 @@ $(document).ready(function() {
     $('[data-toggle="tooltip"]').tooltip()
   })
 
+  //open links externally by default
+  var shell = require('electron').shell;
+  $(document).on('click', 'a[href^="http"]', function(event) {
+    event.preventDefault();
+    shell.openExternal(this.href);
+  });
+
   // Ready to go
   exec(dfu_location + ' --version', function(error, stdout, stderr) {
     if (stderr.indexOf('dfu-programmer') > -1) {
       window.setTimeout(checkForBoard, 10);
       sendStatus("Select a firmware file by clicking 'Choose .hex' or drag and drop a file onto this window.");
     } else {
-      sendStatus("Could not run dfu-programmer! Please report this as a bug!");
+      if (process.platform === 'win32') {
+        sendStatus("Could not run dfu-programmer! Have you installed the driver?");
+        sendStatus("<br>Try using <a href=\"https://github.com/qmk/qmk_driver_installer/releases\">qmk_driver_installer</a> to fix it.");
+      } else {
+        sendStatus("Could not run dfu-programmer! Please report this as a bug!");
+      }
       sendStatus("<br>Debugging information:<br>");
       sendStatus(error);
       sendStatus("stdout:");
