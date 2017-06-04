@@ -2,7 +2,7 @@
 # Build a distributable windows package on a Linux or OS X host
 #
 # Once you have built this copy the zip file to a windows host with NSIS
-# installed and use qmk_firmware_flasher.win32.nsi to build a .exe installer.
+# installed and use qmk_flasher.win32.nsi to build a .exe installer.
 
 plat=win32
 arch=ia32
@@ -35,13 +35,13 @@ electron-packager ./ --platform=$plat --arch=$arch \
 	--out "$output_dir" \
 	--overwrite=true \
 	--prune
-cp build/windows.ico qmk_firmware_flasher.win32.nsi "${output_dir}/${package_dir}"
+cp build/windows.ico qmk_flasher.win32.nsi "${output_dir}/${package_dir}"
 
 # Zip up the package
 ( 
 	cp LICENSE.md "$output_dir"/"$package_dir"
 	cd "$output_dir"
 	mv "$package_dir/LICENSE $package_dir/LICENSE.electron.txt"
-	zip -r "$zip_file" "$package_dir"
+	zip -y -r "$zip_file" "$package_dir"
 )
 check_zip

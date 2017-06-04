@@ -6,8 +6,8 @@
 
 We welcome contributions from everyone. Contributions may take the form of
 code, documentation, bug reports, feature requests, and any other activity
-that will improve QMK Firmware Flasher. We ask that you follow a few 
-guidelines when contributing:
+that will improve QMK Flasher. We ask that you follow a few guidelines when 
+contributing:
 
 * Be excellent to each other
 * The primary audience for this tool is non-technical

@@ -62,7 +62,7 @@ section "install"
 
 	# Start Menu
 	createDirectory "$SMPROGRAMS\${COMPANYNAME}"
-	createShortCut "$SMPROGRAMS\${COMPANYNAME}\${APPNAME}.lnk" "$INSTDIR\QMK Firmware Flasher.exe" "" "$INSTDIR\windows.ico"
+	createShortCut "$SMPROGRAMS\${COMPANYNAME}\${APPNAME}.lnk" "$INSTDIR\QMK Flasher.exe" "" "$INSTDIR\windows.ico"
 
 	# Registry information for add/remove programs
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAME}" "DisplayName" "${APPNAME} - ${DESCRIPTION}"

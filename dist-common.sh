@@ -1,7 +1,7 @@
 #!/bin/sh
 
 output_dir=dist/$plat
-package_dir="QMK Firmware Flasher-$plat-$arch"
+package_dir="QMK Flasher-$plat-$arch"
 version_number=$(awk '/"version":/ {print $2}' package.json | cut -f 2 -d '"')
 zip_file="${package_dir}-${version_number}.zip"
 CSC_IDENTITY_AUTO_DISCOVERY=false

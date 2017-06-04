@@ -25,7 +25,7 @@ echo '*** Creating package archive.'
 	cp LICENSE.md "$output_dir"/"$package_dir"
 	cd "$output_dir"/"$package_dir"
 	mv LICENSE LICENSE.electron.txt
-	zip -r "../$zip_file" 'QMK Firmware Flasher.app' \
+	zip -y -r "../$zip_file" 'QMK Flasher.app' \
 		LICENSE.md LICENSE.electron.txt LICENSES.chromium.html
 )
 check_zip
