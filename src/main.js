@@ -24,6 +24,8 @@ if(shouldQuit) {
 }
 
 app.on('ready', function() {
+  /* Initialize the main window
+   */
   let mainWinOptions = {show: false, frame: true, resizable: false, icon: __dirname + 'build/icon.iconset/icon_128x128.png'};
   if (process.platform == 'win32') {
     mainWinOptions.width = 659;
@@ -52,22 +54,34 @@ app.on('ready', function() {
   });
 
 
-  let focusWindowByDefault = true;
-  if(process.platform == "darwin") {
-    focusWindowByDefault = false;
+  /* Setup the default settings.
+   */
+  default_settings = {
+    'focusWindowOnHexChange': true,
+    'theme': 'default'
   }
 
-  settings.defaults({
-    focusWindowOnHexChange: focusWindowByDefault,
-    theme: 'default'
-  });
+  if (process.platform == "darwin") {
+    default_settings = {
+      'focusWindowOnHexChange': false,
+      'theme': 'platform'
+    }
+  }
 
-  settings.applyDefaultsSync();
-  settings.get().then(result => {
-    settingsCache = result;
-    isSettingsInitialized = true;
-  });
+  for (var key in default_settings) {
+    if (!settings.has(key)) {
+      console.log('Initializing setting: ' + key + '=' + default_settings[key]);
+      settings.set(key, default_settings[key]);
+    }
+  }
 
+  /* Populate the settings cache
+   */
+  settingsCache = settings.getAll();
+  isSettingsInitialized = true;
+
+  /* Initialize the gear menu window
+   */
   let menuWinXOffset;
   let menuWinYOffset;
   if (process.platform == "darwin") {
@@ -122,7 +136,8 @@ app.on('ready', function() {
     settings.set('theme', updatedSettings.theme);
   });
 
-  // Setup the mac menu items
+  /* Setup the mac menu items
+   */
   if (process.platform === 'darwin') {
     const template = [
       {
