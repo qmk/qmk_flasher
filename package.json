@@ -20,7 +20,8 @@
     "keyboard",
     "mechanical keyboard",
     "qmk",
-    "qmk-firmware-flasher"
+    "qmk-firmware-flasher",
+    "qmk-flasher"
   ],
   "author": "Jack Humbert",
   "license": "MIT",
@@ -31,15 +32,15 @@
   "dependencies": {
     "bootbox": "~4.4",
     "bootstrap": "~3.3",
-    "chokidar": "~1.6",
+    "chokidar": "~1.7",
     "electron-debug": "~1.1",
     "electron-settings": "~2.2.2",
     "jquery": "~2.2"
   },
   "devDependencies": {
     "devtron": "^1.4.0",
-    "electron": "^1.4.10",
-    "electron-builder": "^8.6.0"
+    "electron": "^1.6.10",
+    "electron-builder": "^18.3.5"
   },
   "build": {
     "appId": "com.github.qmk-firmware-flasher",

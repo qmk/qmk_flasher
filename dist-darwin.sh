@@ -17,7 +17,8 @@ electron-packager ./ --platform=$plat --arch=$arch \
 	--icon=build/icon.iconset \
 	--out="$output_dir" \
 	--overwrite=true \
-	--prune
+	--prune \
+	--ignore '.*dist/.*'
 
 # Zip up the OSX package
 echo '*** Creating package archive.'

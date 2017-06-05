@@ -3,7 +3,7 @@
 
 # All the settings can be tweaked by editing the !defines at the top of this script
 !define APPNAME "QMK Flasher"
-!define COMPANYNAME "QMK"
+!define COMPANYNAME QMK
 !define DESCRIPTION "Flash atmega32u4 devices over DFU."
 # These three must be integers
 !define VERSIONMAJOR 0
@@ -55,7 +55,7 @@ section "install"
 
 	# Install the Atmel bootloader driver
 	DetailPrint "Installing driver..."
-	nsExec::ExecToLog '"C:\Windows\System32\PnPutil.exe" -i -a "$INSTDIR\resources\app\dfu\dfu-prog-usb-1.2.2\atmel_usb_dfu.inf"'
+	nsExec::ExecToLog '"C:\Windows\System32\PnPutil.exe" -i -a "$INSTDIR\resources\app.asar.unpacked\dfu\dfu-prog-usb-1.2.2\atmel_usb_dfu.inf"'
 
 	# Uninstaller
 	writeUninstaller "$INSTDIR\uninstall.exe"

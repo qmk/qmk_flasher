@@ -22,7 +22,7 @@ if [ -d "$output_dir" ]; then
 	echo '*** About to wipe out the '"$output_dir"' directory.'
 	echo '*** You have 10 seconds to press Ctrl-C!'
 	for i in 10 9 8 7 6 5 4 3 2 1; do
-		echo '*** '$i
+		echo "*** $i"
 		sleep 1
 	done
 	rm -r "$output_dir"
@@ -32,6 +32,17 @@ if ! [ -d dfu -a -d src ]; then
 	echo '*** This must be run from the top-level qmk_firmware_flasher directory!'
 	exit 1
 fi
+
+if [ $(($(date +%s) - $(stat -f %c node_modules))) -gt 3600 ]; then
+	npm uninstall -g electron-packager
+fi
+echo '*** About to wipe out the "node_modules" directory.'
+echo '*** You have 5 seconds to press Ctrl-C!'
+for i in 5 4 3 2 1; do
+	echo "*** $i"
+	sleep 1
+done
+rm -r node_modules
 
 if ! npm list -g electron-packager 2>&1 > /dev/null; then
 	echo '*** Installing prerequisite electron-packager globally.'

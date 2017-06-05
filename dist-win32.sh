@@ -34,7 +34,8 @@ electron-packager ./ --platform=$plat --arch=$arch \
 	--icon=build/windows.ico \
 	--out "$output_dir" \
 	--overwrite=true \
-	--prune
+	--prune \
+	--ignore '.*dist/.*'
 cp build/windows.ico qmk_flasher.win32.nsi "${output_dir}/${package_dir}"
 
 # Zip up the package
