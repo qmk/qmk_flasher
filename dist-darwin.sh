@@ -18,7 +18,7 @@ electron-packager ./ --platform=$plat --arch=$arch \
 	--out="$output_dir" \
 	--overwrite=true \
 	--prune \
-	--ignore '.*dist/.*'
+	--ignore 'dist/darwin'
 
 # Zip up the OSX package
 echo '*** Creating package archive.'

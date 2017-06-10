@@ -11,6 +11,6 @@ set PACKAGE_DIR="%OUTPUT_DIR%\QMK Flasher-%PLATFORM%-%ARCH%"
 
 call npm install
 
-call electron-packager . --platform=%PLATFORM% --arch=%ARCH% --out %OUTPUT_DIR% --overwrite
+call electron-packager . --platform=%PLATFORM% --arch=%ARCH% --out %OUTPUT_DIR% --overwrite=true --asar.unpackDir=**/{dfu,node_modules/fsevents} --icon=build\windows.ico --prune
 
 copy qmk_flasher.win32.nsi %PACKAGE_DIR%

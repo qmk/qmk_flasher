@@ -18,14 +18,14 @@ check_zip() {
 }
 
 # Make sure our environment is setup properly
-if [ -d "$output_dir" ]; then
-	echo '*** About to wipe out the '"$output_dir"' directory.'
+if [ -d "$output_dir" -o -d "dist" ]; then
+	echo '*** About to wipe out the '"$output_dir"' and "dist" directory.'
 	echo '*** You have 10 seconds to press Ctrl-C!'
 	for i in 10 9 8 7 6 5 4 3 2 1; do
 		echo "*** $i"
 		sleep 1
 	done
-	rm -r "$output_dir"
+	rm -r "$output_dir" "dist"
 fi
 
 if ! [ -d dfu -a -d src ]; then
