@@ -26,7 +26,7 @@ html, body {
   -webkit-user-select: text;
   position: absolute;
   top: 10px;
-  right: 120px;
+  right: 240px;
   left: 14px;
   height: 24px;
   -webkit-app-region: no-drag;
@@ -35,22 +35,23 @@ html, body {
   width: auto;
 }
 
-#load-file {
+#load-file, #flash-hex {
   position: absolute;
   top: 10px;
-  right: 14px;
-  width: 100px;
   height: 24px;
-  border: 1px solid hsl(0, 0%, 83%);
   border-radius: 6px;
+  margin: 0;
+  padding: 0;
+}
+
+#load-file {
+  width: 100px;
+  right: 136px;
 }
 
 #flash-hex {
-  position: absolute;
-  left: 35%;
-  right: 35%;
-  bottom: 14px;
-  width: 200px;
+  width: 120px;
+  right: 14px;
 }
 
 #flash-hex:hover {

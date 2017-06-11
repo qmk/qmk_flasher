@@ -1,7 +1,6 @@
 html, body, .modal-content {
   font: message-box;
   color: WindowText;
-  background-color: Window;
 }
 
 .button {
@@ -29,4 +28,8 @@ html, body, .modal-content {
 
 #load-file {
   font-size: 13px;
+}
+
+#auto-flash.active {
+  background-color: #5cb85c !important;
 }

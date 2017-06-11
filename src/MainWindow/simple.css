@@ -1,0 +1,111 @@
+* {
+  -webkit-user-select: none;
+}
+
+:focus {
+  outline: none;
+}
+
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  -webkit-app-region: drag;
+}
+
+#file-path {
+  font-size: 12px;
+  background-color: #eee;
+  border-radius: 2px;
+  font-family: monospace;
+  white-space: pre-wrap;
+  padding: 7px;
+  -webkit-user-select: text;
+  position: absolute;
+  top: 10px;
+  right: 120px;
+  left: 14px;
+  height: 24px;
+  -webkit-app-region: no-drag;
+  -webkit-user-select: text;
+  text-overflow: ellipsis;
+  width: auto;
+}
+
+#load-file {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  width: 100px;
+  height: 24px;
+  border-radius: 6px;
+  margin: 0;
+  padding: 0;
+}
+
+#flash-hex {
+  position: absolute;
+  left: 35%;
+  right: 35%;
+  bottom: 14px;
+  width: 200px;
+}
+
+#flash-hex:hover {
+  cursor: default;
+}
+
+#flash-hex:disabled:hover {
+  cursor: not-allowed;
+}
+
+#gear-menu {
+  position: absolute;
+  bottom: 16px;
+  left: 14px;
+  padding: 0;
+  border: none;
+  outline: none;
+  background: none;
+}
+
+#gear-menu > span {
+  font-size: 25px;
+}
+
+#status {
+  font-family: monospace;
+  font-size: 12px;
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  top: 45px;
+  bottom: 65px;
+  border-radius: 2px;
+  overflow-y: scroll;
+  white-space: pre-wrap;
+  padding: 7px;
+  -webkit-app-region: no-drag;
+}
+
+#status, #status b {
+  -webkit-user-select: text;
+}
+
+.option-item {
+  margin-top: 2ex;
+}
+
+.option-checkbox {
+  margin-left: 8ex !important;
+}
+
+#auto-flash {
+  display: none !important;
+}
+
+#reboot-mcu {
+  display: none !important;
+}

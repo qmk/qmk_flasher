@@ -3,19 +3,18 @@
   <head>
     <title>QMK Flasher</title>
     <link href="../../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="style.css" rel="stylesheet">
   </head>
   <body>
     <!-- UI Widgets - These are all positioned absolutely in CSS -->
     <span id="file-path"/>...</span>
-    <button id="load-file" class="button">Choose .hex</button>
+    <button id="load-file" type="button" class="btn btn-secondary">Choose .hex</button>
     <button id="gear-menu" class="btn btn-default">
       <span class="glyphicon glyphicon-cog"></span>
       <span class="caret"></span>
     </button>
-    <button id="reboot-mcu" type="button" class="btn btn-secondary advanced-feature" disabled>Reboot MCU</button>
-    <button id="flash-hex" class="btn btn-secondary" disabled></button>
-    <button id="auto-flash" type="button" class="btn btn-success advanced-feature" title="Flash the keyboard as soon as everything is ready." data-toggle="button">AutoFlash: Off</button>
+    <button id="reboot-mcu" type="button" class="btn btn-secondary" disabled>Reboot MCU</button>
+    <button id="flash-hex" type="button" class="btn btn-secondary" disabled>Flash</button>
+    <button id="auto-flash" type="button" class="btn btn-secondary" data-toggle="button">AutoFlash</button>
     <span id="status"></span>
 
     <div class="modal fade" id="options-modal" tabindex="-1" role="dialog" aria-labelledby="options-modal-title">
@@ -30,7 +29,7 @@
 
           <div class="modal-body">
             <form class="form-inline">
-              <div class="option-item" data-toggle="tooltip" data-placement="top">
+              <div class="option-item">
                 <label for="current-theme" class="control-label">Theme: </label>
                 <select name="current-theme" id="current-theme">
                   <option value="default">Default</option>
@@ -39,11 +38,11 @@
                   <option value="nantucket-selectric">Nantucket Selectric</option>
                 </select>
               </div>
-              <div class="option-item" data-toggle="tooltip" data-placement="top">
+              <div class="option-item">
                 <input class="option-checkbox" type="checkbox" id="advanced-mode">
                 <label for="advanced-mode">Enable advanced mode.</label>
               </div>
-              <div class="option-item" data-toggle="tooltip" data-placement="top">
+              <div class="option-item">
                 <input class="option-checkbox" type="checkbox" id="bring-to-front">
                 <label for="bring-to-front">Bring window to front when the loaded firmware file changes</label>
               </div>

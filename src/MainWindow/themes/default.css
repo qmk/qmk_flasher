@@ -11,3 +11,7 @@
   background-color: #eee;
   border: #ccc solid 1px;
 }
+
+#auto-flash.active {
+  background-color: #5cb85c !important;
+}

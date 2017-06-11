@@ -13,16 +13,32 @@ const bootbox = require('bootbox');
 
 const win = remote.getCurrentWindow();
 
+/* Figure out how to invoke dfu-programmer
+ */
 let dfu_location = pathModule.normalize('dfu/dfu-programmer');
-let watcher;
+if (process.platform == "win32") {
+  dfu_location = dfu_location + '.exe'
+}
 
-// State variables
+try {
+    fs.accessSync(dfu_location, fs.F_OK);
+} catch (err) {
+    // Running in deployed mode, use the app copy
+    dfu_location = pathModule.resolve(app.getAppPath(), '..', 'app.asar.unpacked', dfu_location);
+}
+
+//Place after all modifications to dfu_location have been made.
+dfu_location = '"' + dfu_location + '"';
+
+/* State variables
+ */
 let bootloader_ready = false;
 let flash_in_progress = false;
 let flash_when_ready = false;
+let watcher;
 
-//HTML entities
-let $advancedFeatures = $('.advanced-feature');
+/* HTML entities
+ */
 let $advancedMode = $('#advanced-mode');
 let $autoFlash = $('#auto-flash');
 let $rebootMCU = $('#reboot-mcu');
@@ -38,54 +54,31 @@ let $status = $('#status');
 
 let $hexChangedFlash;
 
-const flashImmediatelyButtonText = "Flash Keyboard";
+/* Setup some text strings
+ */
+const flashImmediatelyButtonText = "Flash";
 const flashWhenReadyButtonText = "Flash When Ready";
 const pressResetText = "Press RESET on your keyboard's PCB.";
 
 $flashHex.text(flashImmediatelyButtonText);
 
-if (process.platform == "win32") {
-  dfu_location = dfu_location + '.exe'
-}
-
-try {
-    fs.accessSync(dfu_location, fs.F_OK);
-} catch (err) {
-    // Running in deployed mode, use the app copy
-    dfu_location = pathModule.resolve(app.getAppPath(), '..', 'app.asar.unpacked', dfu_location);
-}
-
-//Place after all modifications to dfu_location have been made.
-dfu_location = '"' + dfu_location + '"';
-
+/* Populate the HTML entities that use user preferences.
+ */
 loadOptionsState();
 
 $(document).ready(function() {
-  $("<link/>", {
-     rel: "stylesheet",
-     type: "text/css",
-     href: "themes/" + $currentTheme.val() + ".css"
-  }).appendTo("head");
-
-  console.log(ipcRenderer.sendSync('get-setting-advanced-mode'))
-  if (ipcRenderer.sendSync('get-setting-advanced-mode')) {
-    $advancedFeatures.show();
+  /* Setup stylesheets.
+   */
+  if ($advancedMode.is(":checked")) {
+    $("<link/>", {rel: "stylesheet", type: "text/css", href: "advanced.css"}).appendTo("head");
   } else {
-    $advancedFeatures.hide();
+    $("<link/>", {rel: "stylesheet", type: "text/css", href: "simple.css"}).appendTo("head");
   }
+  $("<link/>", {rel: "stylesheet", type: "text/css", href: "themes/" + $currentTheme.val() + ".css"}).appendTo("head");
 
-  $autoFlash.click(function() {
-    // Turns autoflash on or off. This function is called before
-    // jquery toggles the active status.
-    if ($autoFlash.hasClass('active')) {
-      $autoFlash.text('AutoFlash: Off')
-    } else {
-      $autoFlash.text('AutoFlash: On')
-    }
-  });
-
+  /* Reset the MCU
+   */
   $rebootMCU.click(function() {
-    // Resets the MCU
     if (bootloader_ready) {
       resetChip(function(success) {
         if (success) {
@@ -98,7 +91,8 @@ $(document).ready(function() {
     }
   });
 
-  // Handle drag-n-drop events
+  /* Handle drag-n-drop events
+   */
   $(document).on('dragenter dragover', function(event) {
     event.preventDefault();
     event.stopPropagation();
@@ -119,7 +113,8 @@ $(document).ready(function() {
     loadHex(path);
   });
 
-  // Bind actions to our buttons
+  /* Bind actions to our buttons
+   */
   $loadFile.bind('click', function (event) {
     loadHex(loadFile()[0]);
   });
@@ -145,38 +140,20 @@ $(document).ready(function() {
     }
     ipcRenderer.send('set-settings', newSettings);
     themeAfter = ipcRenderer.sendSync('get-setting-theme');
-
-    if ($advancedMode.is(":checked")) {
-      $advancedFeatures.show();
-    } else {
-      $advancedFeatures.hide();
-    }
-
-    if (themeBefore != themeAfter) {
-        win.webContents.reload();
-    }
-
     $optionsModal.modal('hide');
+    win.webContents.reload();
   });
 
-  // Enable tooltips
-  $(function () {
-    $('[data-toggle="tooltip"]').tooltip()
-  })
-
-  //open links externally by default
+  /* Open links externally by default
+   */
   var shell = require('electron').shell;
   $(document).on('click', 'a[href^="http"]', function(event) {
     event.preventDefault();
     shell.openExternal(this.href);
   });
 
-  // Enable tooltips
-  $(function () {
-    $('[data-toggle="tooltip"]').tooltip()
-  })
-
-  // Ready to go
+  /* Ready to go
+   */
   exec(dfu_location + ' --version', function(error, stdout, stderr) {
     if (stderr.indexOf('dfu-programmer') > -1) {
       window.setTimeout(checkForBoard, 10);
@@ -243,6 +220,8 @@ function displayHexFileChangedPrompt(useNativeDialog) {
   const messageText = "The hex file has changed. Would you like to flash the new version?";
 
   if (useNativeDialog) {
+    /* Use a native dialog on macOS
+     */
     dialog.showMessageBox(win, {
       buttons: [confirmButtonText, "Cancel"],
       defaultId: 0,
@@ -253,7 +232,9 @@ function displayHexFileChangedPrompt(useNativeDialog) {
         handleFlashButton();
       }
     })
-  } else { // On platforms other than Mac, use Bootbox for the prompt
+  } else {
+    /* Use Bootbox on all other platforms.
+     */
     const hexChangedModal = bootbox.confirm({
       message: messageText,
       buttons: {
@@ -279,7 +260,8 @@ function displayHexFileChangedPrompt(useNativeDialog) {
 }
 
 function loadHex(filename) {
-  // Load a file and prepare to flash it.
+  /* Load a file and prepare to flash it.
+   */
   if(watcher) watcher.close();
 
   if(!checkFile(filename)) {
@@ -348,7 +330,7 @@ function setFlashButtonImmediate() {
 
 function setFlashButtonWhenReady() {
   $flashHex.text(flashWhenReadyButtonText);
-  if($hexChangedFlash){
+  if($hexChangedFlash) {
     $hexChangedFlash.text(flashWhenReadyButtonText);
   }
 }
@@ -373,16 +355,23 @@ function clearStatus() {
 }
 
 function writeStatus(text) {
+  /* Write a line to the status window. Should only be used to write
+   * command output.
+   */
   $status.append(text);
   $status.scrollTop($status.scrollHeight);
 }
 
 function sendStatus(text) {
-  // Write a line to the status window.
+  /* Send a bold line to the status window. Should be used for most
+   * status updates.
+   */
   writeStatus('<b>' + text + '</b>\n');
 }
 
 function loadFile() {
+  /* Glue code to open a native file dialog box.
+   */
   return dialog.showOpenDialog({
     properties: [ 'openFile' ],
     filters: [
@@ -396,43 +385,45 @@ function flashFirmware() {
   disableButton($flashHex);
   disableButton($rebootMCU);
   sendHex($filePath.text(), function (success) {
-      if (success) {
-          sendStatus("Flashing complete!");
-          if (autoFlashEnabled()) {
-            sendStatus(pressResetText);
-          } else {
-            sendStatus("Load another hex or press RESET on a keyboard.")
-          }
+    if (success) {
+      sendStatus("Flashing complete!");
+      if (autoFlashEnabled()) {
+        sendStatus(pressResetText);
       } else {
-          sendStatus("An error occurred - please try again.");
+        sendStatus("Load another hex or press RESET on a keyboard.")
       }
+    } else {
+      sendStatus("An error occurred - please try again.");
+    }
   });
 }
 
 function sendHex(file, callback) {
+  /* Do all the steps necessary to flash the hex to the keyboard.
+   * Called after all checks have been performed.
+   */
   flash_in_progress = true;
   flash_when_ready = false;
+
   eraseChip(function(success) {
     if (success) {
-      // continue
       flashChip(file, function(success) {
         if (success) {
-          // continue
           resetChip(function(success) {
             if (success) {
-              // completed successfully
               callback(true);
             } else {
+              console.log('Error resetting chip, see status window.')
               callback(false)
             }
           });
         } else {
-          // memory error / other
+          console.log('Error resetting chip, memory/other.')
           callback(false);
         }
       });
     } else {
-      // no device / other error
+      console.log('Error resetting chip, no device/other.')
       callback(false);
     }
   });
