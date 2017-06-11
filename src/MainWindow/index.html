@@ -8,14 +8,15 @@
     <!-- UI Widgets - These are all positioned absolutely in CSS -->
     <span id="file-path"/>...</span>
     <button id="load-file" type="button" class="btn btn-secondary">Choose .hex</button>
+    <button id="flash-hex" type="button" class="btn btn-secondary" disabled>Flash</button>
+    <button id="reboot-mcu" type="button" class="btn btn-secondary" disabled>Reboot MCU</button>
+    <button id="erase-eeprom" type="button" class="btn btn-secondary" disabled>Erase EEPROM</button>
+    <button id="auto-flash" type="button" class="btn btn-secondary" data-toggle="button">AutoFlash</button>
+    <span id="status"></span>
     <button id="gear-menu" class="btn btn-default">
       <span class="glyphicon glyphicon-cog"></span>
       <span class="caret"></span>
     </button>
-    <button id="reboot-mcu" type="button" class="btn btn-secondary" disabled>Reboot MCU</button>
-    <button id="flash-hex" type="button" class="btn btn-secondary" disabled>Flash</button>
-    <button id="auto-flash" type="button" class="btn btn-secondary" data-toggle="button">AutoFlash</button>
-    <span id="status"></span>
 
     <div class="modal fade" id="options-modal" tabindex="-1" role="dialog" aria-labelledby="options-modal-title">
       <div class="modal-dialog" role="document">

@@ -15,6 +15,7 @@ const win = remote.getCurrentWindow();
 
 /* Figure out how to invoke dfu-programmer
  */
+let eeprom_reset_location = pathModule.normalize('dfu/eeprom_reset.hex');
 let dfu_location = pathModule.normalize('dfu/dfu-programmer');
 if (process.platform == "win32") {
   dfu_location = dfu_location + '.exe'
@@ -25,10 +26,12 @@ try {
 } catch (err) {
     // Running in deployed mode, use the app copy
     dfu_location = pathModule.resolve(app.getAppPath(), '..', 'app.asar.unpacked', dfu_location);
+    eeprom_reset_location = pathModule.resolve(app.getAppPath(), '..', 'app.asar.unpacked', eeprom_reset_location);
 }
 
 //Place after all modifications to dfu_location have been made.
 dfu_location = '"' + dfu_location + '"';
+eeprom_reset_location = '"' + eeprom_reset_location + '"';
 
 /* State variables
  */
@@ -42,6 +45,7 @@ let watcher;
 let $advancedMode = $('#advanced-mode');
 let $autoFlash = $('#auto-flash');
 let $rebootMCU = $('#reboot-mcu');
+let $eraseEEPROM = $('#erase-eeprom');
 let $bringToFront = $('#bring-to-front');
 let $currentTheme = $('#current-theme');
 let $filePath = $('#file-path');
@@ -76,7 +80,7 @@ $(document).ready(function() {
   }
   $("<link/>", {rel: "stylesheet", type: "text/css", href: "themes/" + $currentTheme.val() + ".css"}).appendTo("head");
 
-  /* Reset the MCU
+  /* Reboot the MCU
    */
   $rebootMCU.click(function() {
     if (bootloader_ready) {
@@ -86,6 +90,20 @@ $(document).ready(function() {
           sendStatus(pressResetText);
         } else {
           sendStatus('Could not reset MCU!');
+        }
+      });
+    }
+  });
+
+  /* Reset the EEPROM
+   */
+  $eraseEEPROM.click(function() {
+    if (bootloader_ready) {
+      eraseEEPROM(function(success) {
+        if (success) {
+          sendStatus(pressResetText);
+        } else {
+          sendStatus('Could not erase EEPROM!');
         }
       });
     }
@@ -278,6 +296,7 @@ function loadHex(filename) {
     } else {
       enableButton($flashHex);
       enableButton($rebootMCU);
+      enableButton($eraseEEPROM);
       setFlashButtonImmediate();
       sendStatus("Ready To Flash!");
     }
@@ -346,6 +365,7 @@ function handleFlashButton() {
         sendStatus("The firmware will flash as soon as the keyboard is ready to receive it.");
         sendStatus("Press the RESET button to prepare the keyboard.");
         disableButton($flashHex);
+        disableButton($eraseEEPROM);
         disableButton($rebootMCU);
     }
 }
@@ -384,6 +404,7 @@ function flashFirmware() {
   if(!checkFile()) return;
   disableButton($flashHex);
   disableButton($rebootMCU);
+  disableButton($eraseEEPROM);
   sendHex($filePath.text(), function (success) {
     if (success) {
       sendStatus("Flashing complete!");
@@ -431,8 +452,10 @@ function sendHex(file, callback) {
 }
 
 function eraseChip(callback) {
-  sendStatus('dfu-programmer atmega32u4 erase --force');
-  exec(dfu_location + ' atmega32u4 erase --force', function(error, stdout, stderr) {
+  let dfu_args = ' atmega32u4 erase --force';
+  sendStatus('dfu-programmer' + dfu_args);
+  console.log(dfu_location + dfu_args);
+  exec(dfu_location + dfu_args, function(error, stdout, stderr) {
     writeStatus(stdout);
     writeStatus(stderr);
     const regex = /.*Success.*\r?\n|\rChecking memory from .* Empty.*/;
@@ -445,8 +468,10 @@ function eraseChip(callback) {
 }
 
 function flashChip(file, callback) {
-  sendStatus('dfu-programmer atmega32u4 flash ' + file);
-  exec(dfu_location + ' atmega32u4 flash ' + file, function(error, stdout, stderr) {
+  let dfu_args = ' atmega32u4 flash ' + file;
+  sendStatus('dfu-programmer' + dfu_args);
+  console.log(dfu_location + dfu_args);
+  exec(dfu_location + dfu_args, function(error, stdout, stderr) {
     writeStatus(stdout);
     writeStatus(stderr);
     if (stderr.indexOf("Validating...  Success") > -1) {
@@ -458,8 +483,10 @@ function flashChip(file, callback) {
 }
 
 function resetChip(callback) {
-  sendStatus('dfu-programmer atmega32u4 reset');
-  exec(dfu_location + ' atmega32u4 reset', function(error, stdout, stderr) {
+  let dfu_args = ' atmega32u4 reset';
+  sendStatus('dfu-programmer' + dfu_args);
+  console.log(dfu_location + dfu_args);
+  exec(dfu_location + dfu_args, function(error, stdout, stderr) {
     writeStatus(stdout);
     writeStatus(stderr);
 	if (stderr == "") {
@@ -468,6 +495,59 @@ function resetChip(callback) {
       callback(false);
     }
   });
+}
+
+function flashEEPROM(callback) {
+  let dfu_args = ' atmega32u4 flash --eeprom ' + eeprom_reset_location;
+
+  sendStatus('dfu-programmer' + dfu_args);
+  console.log(dfu_location + dfu_args);
+
+  exec(dfu_location + dfu_args, function(error, stdout, stderr) {
+    writeStatus(stdout);
+    writeStatus(stderr);
+    if (stderr.indexOf("Validating...  Success") > -1) {
+	  callback(true);
+    } else {
+      callback(false);
+    }
+  });
+}
+
+function eraseEEPROM(callback) {
+  flash_in_progress = true;
+
+  eraseChip(function(success) {
+    if (success) {
+      flashEEPROM(function(success) {
+        if (success) {
+          flashChip($filePath.text(), function(success) {
+            if (success) {
+              resetChip(function(success) {
+                if (success) {
+                  callback(true);
+                } else {
+                  console.log('Error resetting chip, see status window.')
+                  callback(false)
+                }
+              });
+            } else {
+              console.log('Error flashing new firmware, see status window.')
+              callback(false)
+            }
+          });
+        } else {
+          console.log('Error erasing EEPROM, see status window.')
+          callback(false);
+        }
+      });
+    } else {
+      console.log('Error erasing flash, see status window.')
+      callback(false);
+    }
+  });
+
+  flash_in_progress = false;
 }
 
 function checkForBoard() {
@@ -486,6 +566,7 @@ function checkForBoard() {
             } else {
               enableButton($flashHex);
               enableButton($rebootMCU);
+              enableButton($eraseEEPROM);
               setFlashButtonImmediate();
               sendStatus("Ready To Flash!");
             }
@@ -494,6 +575,7 @@ function checkForBoard() {
       } else if (bootloader_ready) {
         bootloader_ready = false;
         disableButton($rebootMCU);
+        disableButton($eraseEEPROM);
         if(checkFileSilent() && !autoFlashEnabled()) {
           if(!flash_when_ready){
             enableButton($flashHex);

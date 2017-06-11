@@ -102,10 +102,6 @@ html, body {
   margin-left: 8ex !important;
 }
 
-#auto-flash {
-  display: none !important;
-}
-
-#reboot-mcu {
+#auto-flash, #reboot-mcu, #erase-eeprom {
   display: none !important;
 }

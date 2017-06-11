@@ -114,3 +114,9 @@ html, body {
   bottom: 14px;
   left: 64px;
 }
+
+#erase-eeprom {
+  position: absolute;
+  bottom: 14px;
+  left: 185px;
+}

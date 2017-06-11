@@ -1,5 +1,5 @@
 const electron = require('electron');  // Module to control application life.
-require('electron-debug')({showDevTools: false});
+require('electron-debug')({showDevTools: false, enabled: true});
 const {app} = electron;
 const {BrowserWindow} = electron;
 const {ipcMain} = electron;
