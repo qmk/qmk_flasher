@@ -4,24 +4,24 @@ html, body, .modal-content {
 }
 
 .btn, .button {
-  background-color: #a40214;
+  background-color: #005699;
   color: #e5e4df;
-  border: none;
+  border: #212224 solid 1px;
 }
 
 .dropdown-menu {
-  background-color: #a40214;
+  background-color: #005699;
   color: #e5e4df;
   font: menu;
 }
 
 #gear-menu > span {
-  color: #a40214;
+  color: #005699;
   font-size: 25px;
 }
 
 #gear-menu:hover > span {
-  color: #a40214;
+  color: #005699;
   font-size: 25px;
 }
 
@@ -35,4 +35,8 @@ html, body, .modal-content {
 select, option {
   background-color: #e5e4df;
   color: #212224;
+}
+
+#auto-flash.active {
+  background-color: #a40214 !important;
 }

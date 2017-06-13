@@ -13,32 +13,10 @@ const bootbox = require('bootbox');
 
 const win = remote.getCurrentWindow();
 
+/* Figure out how to invoke dfu-programmer
+ */
+let eeprom_reset_location = pathModule.normalize('dfu/eeprom_reset.hex');
 let dfu_location = pathModule.normalize('dfu/dfu-programmer');
-let watcher;
-
-// State variables
-let bootloader_ready = false;
-let flash_in_progress = false;
-let flash_when_ready = false;
-
-//HTML entities
-let $bringToFront = $('#bring-to-front');
-let $currentTheme = $('#current-theme');
-let $filePath = $('#file-path');
-let $flashHex = $('#flash-hex');
-let $gearMenuButton = $('#gear-menu');
-let $loadFile = $('#load-file');
-let $optionsModal = $('#options-modal');
-let $saveOptions = $('#save-options');
-let $status = $('#status');
-
-let $hexChangedFlash;
-
-const flashImmediatelyButtonText = "Flash Keyboard";
-const flashWhenReadyButtonText = "Flash When Ready";
-
-$flashHex.text(flashImmediatelyButtonText);
-
 if (process.platform == "win32") {
   dfu_location = dfu_location + '.exe'
 }
@@ -48,22 +26,91 @@ try {
 } catch (err) {
     // Running in deployed mode, use the app copy
     dfu_location = pathModule.resolve(app.getAppPath(), '..', 'app.asar.unpacked', dfu_location);
+    eeprom_reset_location = pathModule.resolve(app.getAppPath(), '..', 'app.asar.unpacked', eeprom_reset_location);
 }
 
 //Place after all modifications to dfu_location have been made.
 dfu_location = '"' + dfu_location + '"';
+eeprom_reset_location = '"' + eeprom_reset_location + '"';
 
+/* State variables
+ */
+let bootloader_ready = false;
+let flash_in_progress = false;
+let flash_when_ready = false;
+let watcher;
+
+/* HTML entities
+ */
+let $advancedMode = $('#advanced-mode');
+let $autoFlash = $('#auto-flash');
+let $rebootMCU = $('#reboot-mcu');
+let $eraseEEPROM = $('#erase-eeprom');
+let $bringToFront = $('#bring-to-front');
+let $currentTheme = $('#current-theme');
+let $filePath = $('#file-path');
+let $flashHex = $('#flash-hex');
+let $gearMenu = $('#gear-menu');
+let $loadFile = $('#load-file');
+let $optionsModal = $('#options-modal');
+let $saveOptions = $('#save-options');
+let $status = $('#status');
+
+let $hexChangedFlash;
+
+/* Setup some text strings
+ */
+const flashImmediatelyButtonText = "Flash";
+const flashWhenReadyButtonText = "Flash When Ready";
+const pressResetText = "Press RESET on your keyboard's PCB.";
+
+$flashHex.text(flashImmediatelyButtonText);
+
+/* Populate the HTML entities that use user preferences.
+ */
 loadOptionsState();
 
 $(document).ready(function() {
-  $currentTheme.val(ipcRenderer.sendSync('get-setting-theme'));
-  $("<link/>", {
-     rel: "stylesheet",
-     type: "text/css",
-     href: "themes/" + ipcRenderer.sendSync('get-setting-theme') + ".css"
-  }).appendTo("head");
+  /* Setup stylesheets.
+   */
+  if ($advancedMode.is(":checked")) {
+    $("<link/>", {rel: "stylesheet", type: "text/css", href: "advanced.css"}).appendTo("head");
+  } else {
+    $("<link/>", {rel: "stylesheet", type: "text/css", href: "simple.css"}).appendTo("head");
+  }
+  $("<link/>", {rel: "stylesheet", type: "text/css", href: "themes/" + $currentTheme.val() + ".css"}).appendTo("head");
 
-  // Handle drag-n-drop events
+  /* Reboot the MCU
+   */
+  $rebootMCU.click(function() {
+    if (bootloader_ready) {
+      resetChip(function(success) {
+        if (success) {
+          clearStatus();
+          sendStatus(pressResetText);
+        } else {
+          sendStatus('Could not reset MCU!');
+        }
+      });
+    }
+  });
+
+  /* Reset the EEPROM
+   */
+  $eraseEEPROM.click(function() {
+    if (bootloader_ready) {
+      eraseEEPROM(function(success) {
+        if (success) {
+          sendStatus(pressResetText);
+        } else {
+          sendStatus('Could not erase EEPROM!');
+        }
+      });
+    }
+  });
+
+  /* Handle drag-n-drop events
+   */
   $(document).on('dragenter dragover', function(event) {
     event.preventDefault();
     event.stopPropagation();
@@ -84,7 +131,8 @@ $(document).ready(function() {
     loadHex(path);
   });
 
-  // Bind actions to our buttons
+  /* Bind actions to our buttons
+   */
   $loadFile.bind('click', function (event) {
     loadHex(loadFile()[0]);
   });
@@ -93,7 +141,7 @@ $(document).ready(function() {
     handleFlashButton();
   });
 
-  $gearMenuButton.bind('click', function (event) {
+  $gearMenu.bind('click', function (event) {
     ipcRenderer.send('show-menu');
   });
 
@@ -103,32 +151,27 @@ $(document).ready(function() {
 
   $saveOptions.bind('click', function (event) {
     themeBefore = ipcRenderer.sendSync('get-setting-theme');
-    ipcRenderer.send('set-settings', {
+    newSettings = {
       focusWindowOnHexChange: $bringToFront.is(":checked"),
-      theme: $currentTheme.val()
-    });
-    themeAfter = ipcRenderer.sendSync('get-setting-theme');
-
-    if (themeBefore != themeAfter) {
-        win.webContents.reload();
+      theme: $currentTheme.val(),
+      advancedMode: $advancedMode.is(":checked")
     }
-
+    ipcRenderer.send('set-settings', newSettings);
+    themeAfter = ipcRenderer.sendSync('get-setting-theme');
     $optionsModal.modal('hide');
+    win.webContents.reload();
   });
 
-  // Enable tooltips
-  $(function () {
-    $('[data-toggle="tooltip"]').tooltip()
-  })
-
-  //open links externally by default
+  /* Open links externally by default
+   */
   var shell = require('electron').shell;
   $(document).on('click', 'a[href^="http"]', function(event) {
     event.preventDefault();
     shell.openExternal(this.href);
   });
 
-  // Ready to go
+  /* Ready to go
+   */
   exec(dfu_location + ' --version', function(error, stdout, stderr) {
     if (stderr.indexOf('dfu-programmer') > -1) {
       window.setTimeout(checkForBoard, 10);
@@ -152,6 +195,10 @@ $(document).ready(function() {
   });
 });
 
+function autoFlashEnabled() {
+  return ipcRenderer.sendSync('get-setting-advanced-mode') && $autoFlash.hasClass('active');
+}
+
 function openAboutDialog() {
   bootbox.alert({
     size: "small",
@@ -166,10 +213,12 @@ function openOptions() {
 }
 
 function loadOptionsState() {
+  $currentTheme.val(ipcRenderer.sendSync('get-setting-theme'));
   $bringToFront.prop('checked', ipcRenderer.sendSync('get-setting-focus-window-on-hex-change'));
+  $advancedMode.prop('checked', ipcRenderer.sendSync('get-setting-advanced-mode'));
 }
 
-function checkFile(filename = $filePath.val()) {
+function checkFile(filename = $filePath.text()) {
     if (filename.slice(-4).toUpperCase() == '.HEX') {
         return true;
     } else {
@@ -178,7 +227,7 @@ function checkFile(filename = $filePath.val()) {
     }
 }
 
-function checkFileSilent(filename = $filePath.val()) {
+function checkFileSilent(filename = $filePath.text()) {
     return filename.slice(-4).toUpperCase() == '.HEX';
 }
 
@@ -189,6 +238,8 @@ function displayHexFileChangedPrompt(useNativeDialog) {
   const messageText = "The hex file has changed. Would you like to flash the new version?";
 
   if (useNativeDialog) {
+    /* Use a native dialog on macOS
+     */
     dialog.showMessageBox(win, {
       buttons: [confirmButtonText, "Cancel"],
       defaultId: 0,
@@ -199,7 +250,9 @@ function displayHexFileChangedPrompt(useNativeDialog) {
         handleFlashButton();
       }
     })
-  } else { // On platforms other than Mac, use Bootbox for the prompt
+  } else {
+    /* Use Bootbox on all other platforms.
+     */
     const hexChangedModal = bootbox.confirm({
       message: messageText,
       buttons: {
@@ -225,23 +278,34 @@ function displayHexFileChangedPrompt(useNativeDialog) {
 }
 
 function loadHex(filename) {
+  /* Load a file and prepare to flash it.
+   */
   if(watcher) watcher.close();
-  // Load a file and prepare to flash it.
+
   if(!checkFile(filename)) {
     return;
   }
 
-  $filePath.val(filename);
+  $filePath.text(filename);
   clearStatus();
 
-
-  enableButton($flashHex);
-
   if (bootloader_ready) {
-    setFlashButtonImmediate();
+    if (autoFlashEnabled()) {
+      clearStatus();
+      flashFirmware();
+    } else {
+      enableButton($flashHex);
+      enableButton($rebootMCU);
+      enableButton($eraseEEPROM);
+      setFlashButtonImmediate();
+      sendStatus("Ready To Flash!");
+    }
   } else {
-    sendStatus("Press RESET on your keyboard's PCB.");
-    $flashHex.text(flashWhenReadyButtonText);
+    if (!autoFlashEnabled()) {
+      enableButton($flashHex);
+      $flashHex.text(flashWhenReadyButtonText);
+    }
+    sendStatus(pressResetText);
   }
 
   watcher = chokidar.watch(filename, {});
@@ -261,9 +325,7 @@ function loadHex(filename) {
     } else {
       displayHexFileChangedPrompt(false);
     }
-
   });
-
 }
 
 function disableButton(button) {
@@ -271,7 +333,6 @@ function disableButton(button) {
     button.removeClass('btn-success');
     button.addClass('btn-secondary');
 }
-
 
 function enableButton(button) {
     button.prop('disabled', false);
@@ -288,13 +349,13 @@ function setFlashButtonImmediate() {
 
 function setFlashButtonWhenReady() {
   $flashHex.text(flashWhenReadyButtonText);
-  if($hexChangedFlash){
+  if($hexChangedFlash) {
     $hexChangedFlash.text(flashWhenReadyButtonText);
   }
 }
 
 function handleFlashButton() {
-    if($flashHex.text() == flashImmediatelyButtonText){
+    if ($flashHex.text() == flashImmediatelyButtonText) {
         clearStatus();
         flashFirmware();
     } else {
@@ -304,6 +365,8 @@ function handleFlashButton() {
         sendStatus("The firmware will flash as soon as the keyboard is ready to receive it.");
         sendStatus("Press the RESET button to prepare the keyboard.");
         disableButton($flashHex);
+        disableButton($eraseEEPROM);
+        disableButton($rebootMCU);
     }
 }
 
@@ -312,15 +375,23 @@ function clearStatus() {
 }
 
 function writeStatus(text) {
+  /* Write a line to the status window. Should only be used to write
+   * command output.
+   */
   $status.append(text);
   $status.scrollTop($status.scrollHeight);
 }
 
 function sendStatus(text) {
-  writeStatus('<b>' + text + "</b>\n");
+  /* Send a bold line to the status window. Should be used for most
+   * status updates.
+   */
+  writeStatus('<b>' + text + '</b>\n');
 }
 
 function loadFile() {
+  /* Glue code to open a native file dialog box.
+   */
   return dialog.showOpenDialog({
     properties: [ 'openFile' ],
     filters: [
@@ -332,54 +403,59 @@ function loadFile() {
 function flashFirmware() {
   if(!checkFile()) return;
   disableButton($flashHex);
-  sendHex($filePath.val(), function (success) {
-      if (success) {
-          sendStatus("Flashing complete!");
+  disableButton($rebootMCU);
+  disableButton($eraseEEPROM);
+  sendHex($filePath.text(), function (success) {
+    if (success) {
+      sendStatus("Flashing complete!");
+      if (autoFlashEnabled()) {
+        sendStatus(pressResetText);
       } else {
-          sendStatus("An error occurred - please try again.");
+        sendStatus("Load another hex or press RESET on a keyboard.")
       }
+    } else {
+      sendStatus("An error occurred - please try again.");
+    }
   });
 }
 
 function sendHex(file, callback) {
+  /* Do all the steps necessary to flash the hex to the keyboard.
+   * Called after all checks have been performed.
+   */
   flash_in_progress = true;
   flash_when_ready = false;
+
   eraseChip(function(success) {
     if (success) {
-      // continue
       flashChip(file, function(success) {
         if (success) {
-          // continue
           resetChip(function(success) {
             if (success) {
-              // completed successfully
               callback(true);
             } else {
+              console.log('Error resetting chip, see status window.')
               callback(false)
             }
           });
         } else {
-          // memory error / other
+          console.log('Error resetting chip, memory/other.')
           callback(false);
         }
       });
     } else {
-      // no device / other error
+      console.log('Error resetting chip, no device/other.')
       callback(false);
     }
   });
   flash_in_progress = false;
 }
 
-/*
-var escapeShell = function(cmd) {
-  return ''+cmd.replace(/(["\s'$`\\\(\)])/g,'\\$1')+'';
-};
-*/
-
 function eraseChip(callback) {
-  sendStatus('dfu-programmer atmega32u4 erase --force');
-  exec(dfu_location + ' atmega32u4 erase --force', function(error, stdout, stderr) {
+  let dfu_args = ' atmega32u4 erase --force';
+  sendStatus('dfu-programmer' + dfu_args);
+  console.log(dfu_location + dfu_args);
+  exec(dfu_location + dfu_args, function(error, stdout, stderr) {
     writeStatus(stdout);
     writeStatus(stderr);
     const regex = /.*Success.*\r?\n|\rChecking memory from .* Empty.*/;
@@ -392,8 +468,10 @@ function eraseChip(callback) {
 }
 
 function flashChip(file, callback) {
-  sendStatus('dfu-programmer atmega32u4 flash ' + file);
-  exec(dfu_location + ' atmega32u4 flash ' + file, function(error, stdout, stderr) {
+  let dfu_args = ' atmega32u4 flash ' + file;
+  sendStatus('dfu-programmer' + dfu_args);
+  console.log(dfu_location + dfu_args);
+  exec(dfu_location + dfu_args, function(error, stdout, stderr) {
     writeStatus(stdout);
     writeStatus(stderr);
     if (stderr.indexOf("Validating...  Success") > -1) {
@@ -405,8 +483,10 @@ function flashChip(file, callback) {
 }
 
 function resetChip(callback) {
-  sendStatus('dfu-programmer atmega32u4 reset');
-  exec(dfu_location + ' atmega32u4 reset', function(error, stdout, stderr) {
+  let dfu_args = ' atmega32u4 reset';
+  sendStatus('dfu-programmer' + dfu_args);
+  console.log(dfu_location + dfu_args);
+  exec(dfu_location + dfu_args, function(error, stdout, stderr) {
     writeStatus(stdout);
     writeStatus(stderr);
 	if (stderr == "") {
@@ -417,22 +497,86 @@ function resetChip(callback) {
   });
 }
 
+function flashEEPROM(callback) {
+  let dfu_args = ' atmega32u4 flash --eeprom ' + eeprom_reset_location;
+
+  sendStatus('dfu-programmer' + dfu_args);
+  console.log(dfu_location + dfu_args);
+
+  exec(dfu_location + dfu_args, function(error, stdout, stderr) {
+    writeStatus(stdout);
+    writeStatus(stderr);
+    if (stderr.indexOf("Validating...  Success") > -1) {
+	  callback(true);
+    } else {
+      callback(false);
+    }
+  });
+}
+
+function eraseEEPROM(callback) {
+  flash_in_progress = true;
+
+  eraseChip(function(success) {
+    if (success) {
+      flashEEPROM(function(success) {
+        if (success) {
+          flashChip($filePath.text(), function(success) {
+            if (success) {
+              resetChip(function(success) {
+                if (success) {
+                  callback(true);
+                } else {
+                  console.log('Error resetting chip, see status window.')
+                  callback(false)
+                }
+              });
+            } else {
+              console.log('Error flashing new firmware, see status window.')
+              callback(false)
+            }
+          });
+        } else {
+          console.log('Error erasing EEPROM, see status window.')
+          callback(false);
+        }
+      });
+    } else {
+      console.log('Error erasing flash, see status window.')
+      callback(false);
+    }
+  });
+
+  flash_in_progress = false;
+}
+
 function checkForBoard() {
   if (!flash_in_progress) {
     exec(dfu_location + ' atmega32u4 get bootloader-version', function(error, stdout, stderr) {
       if (stdout.indexOf("Bootloader Version:") > -1) {
-        if (!bootloader_ready && checkFileSilent()) clearStatus();
-        bootloader_ready = true;
-        if (checkFileSilent()) {
-          enableButton($flashHex);
-          setFlashButtonImmediate();
-          if(flash_when_ready) {
-            flashFirmware();
+        if (!bootloader_ready && checkFileSilent()) {
+          clearStatus();
+        }
+
+        if (!bootloader_ready) {
+          bootloader_ready = true;
+          if (checkFileSilent()) {
+            if (flash_when_ready || autoFlashEnabled()) {
+              flashFirmware();
+            } else {
+              enableButton($flashHex);
+              enableButton($rebootMCU);
+              enableButton($eraseEEPROM);
+              setFlashButtonImmediate();
+              sendStatus("Ready To Flash!");
+            }
           }
         }
-      } else {
+      } else if (bootloader_ready) {
         bootloader_ready = false;
-        if(checkFileSilent()) {
+        disableButton($rebootMCU);
+        disableButton($eraseEEPROM);
+        if(checkFileSilent() && !autoFlashEnabled()) {
           if(!flash_when_ready){
             enableButton($flashHex);
           }
@@ -444,5 +588,12 @@ function checkForBoard() {
       }
     });
   }
-  window.setTimeout(checkForBoard, 5000);
+
+  if (bootloader_ready) {
+    window.setTimeout(checkForBoard, 1000);
+  } else if (autoFlashEnabled()) {
+    window.setTimeout(checkForBoard, 500);
+  } else {
+    window.setTimeout(checkForBoard, 5000);
+  }
 }

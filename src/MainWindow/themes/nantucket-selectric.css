@@ -4,9 +4,9 @@ html, body, .modal-content {
 }
 
 .btn, .button {
-  background-color: #a40214;
+  background-color: #0a2040;
   color: #dad4c4;
-  border: none;
+  border: 1px solid #f7b03c;
 }
 
 .dropdown-menu {
@@ -23,4 +23,8 @@ html, body, .modal-content {
   color: #dad4c4;
   background-color: #0a2040;
   border: 1px solid #f7b03c;
+}
+
+#auto-flash.active {
+  background-color: #a40214 !important;
 }

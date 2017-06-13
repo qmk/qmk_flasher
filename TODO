@@ -1,0 +1,2 @@
+* AutoFlash doesn't immediately flash when turned on and conditions are right
+* Reboot MCU doesn't work before a file has been selected

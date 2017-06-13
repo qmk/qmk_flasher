@@ -1,5 +1,5 @@
 const electron = require('electron');  // Module to control application life.
-require('electron-debug')({showDevTools: false});
+require('electron-debug')({showDevTools: false, enabled: true});
 const {app} = electron;
 const {BrowserWindow} = electron;
 const {ipcMain} = electron;
@@ -24,15 +24,26 @@ if(shouldQuit) {
 }
 
 app.on('ready', function() {
-  /* Initialize the main window
-   */
-  let mainWinOptions = {show: false, frame: true, resizable: false, icon: __dirname + 'build/icon.iconset/icon_128x128.png'};
+  let mainWinOptions = {
+    show: false,
+    frame: true,
+    resizable: true,
+    maximizable: false,
+    fullscreen: false,
+    fullscreenable: false,
+    title: 'QMK Firmware Flasher',
+    icon: __dirname + 'build/icon.iconset/icon_128x128.png'
+  };
   if (process.platform == 'win32') {
     mainWinOptions.width = 659;
-    mainWinOptions.height = 510;
+    mainWinOptions.height = 430;
+    mainWinOptions.minWidth = 659;
+    mainWinOptions.minHeight = 290;
   } else {
     mainWinOptions.width = 640;
-    mainWinOptions.height = 480;
+    mainWinOptions.height = 400;
+    mainWinOptions.minWidth = 640;
+    mainWinOptions.minHeight = 260;
   }
 
   mainWin = new BrowserWindow(mainWinOptions);
@@ -63,6 +74,7 @@ app.on('ready', function() {
 
   if (process.platform == "darwin") {
     default_settings = {
+      'advancedMode': false,
       'focusWindowOnHexChange': false,
       'theme': 'platform'
     }
@@ -84,12 +96,12 @@ app.on('ready', function() {
    */
   let menuWinXOffset;
   let menuWinYOffset;
-  if (process.platform == "darwin") {
-    menuWinXOffset = 10;
-    menuWinYOffset = 470;
+  if (process.platform == 'win32') {
+    menuWinXOffset = 20;   // From left edge
+    menuWinYOffset = -20;  // From bottom edge
   } else {
-    menuWinXOffset = 20;
-    menuWinYOffset = 490;
+    menuWinXOffset = 10;   // From left edge
+    menuWinYOffset = -10;  // From bottom edge
   }
 
   menuWin = new BrowserWindow({
@@ -109,9 +121,11 @@ app.on('ready', function() {
   global.mainWinId = mainWin.id;
 
   ipcMain.on('show-menu', () => {
+    left_edge = mainWin.getPosition()[0];
+    bottom_edge = mainWin.getPosition()[1] + mainWin.getSize()[1];
     menuWin.setPosition(
-      mainWin.getPosition()[0] + menuWinXOffset,
-      mainWin.getPosition()[1] + menuWinYOffset,
+      left_edge + menuWinXOffset,
+      bottom_edge + menuWinYOffset,
       false
     );
     menuWin.show();
@@ -129,11 +143,19 @@ app.on('ready', function() {
     }
   });
 
+  ipcMain.on('get-setting-advanced-mode', (event) => {
+    if(isSettingsInitialized) {
+      event.returnValue = settingsCache.advancedMode;
+    }
+  });
+
   ipcMain.on('set-settings', (event, updatedSettings) => {
     settingsCache.focusWindowOnHexChange = updatedSettings.focusWindowOnHexChange;
     settings.set('focusWindowOnHexChange', updatedSettings.focusWindowOnHexChange);
     settingsCache.theme = updatedSettings.theme;
     settings.set('theme', updatedSettings.theme);
+    settingsCache.advancedMode = updatedSettings.advancedMode;
+    settings.set('advancedMode', updatedSettings.advancedMode);
   });
 
   /* Setup the mac menu items
