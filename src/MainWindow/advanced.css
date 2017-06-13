@@ -15,6 +15,11 @@ html, body {
   -webkit-app-region: drag;
 }
 
+.button {
+  border: 1px solid hsl(0, 0%, 83%);
+  border-radius: 6px;
+}
+
 #file-path {
   font-size: 12px;
   background-color: #eee;
