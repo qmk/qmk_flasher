@@ -10,7 +10,26 @@ const pathModule = require('path');
 const chokidar = require('chokidar');
 const bootstrap = require('bootstrap');
 const bootbox = require('bootbox');
+const usb = require('usb');
 
+const usbDevices = {
+  1003: {  // Atmel Corp., list sourced from http://www.linux-usb.org/usb.ids
+    12270: ['atmega8u2'],
+    12271: ['atmega16u2'],
+    12272: ['atmega32u2'],
+    12273: ['at32uc3a3'],
+    12275: ['atmega16u4'],
+    12276: ['atmega32u4'],
+    12278: ['at32uc3b0', 'at32uc3b1'],
+    12279: ['at90usb82'],
+    12280: ['at32uc3a0', 'at32uc3a1'],
+    12281: ['at90usb646'],
+    12282: ['at90usb162'],
+    12283: ['at90usb1286', 'at90usb1287'],
+    12285: ['at89c5130', 'at89c5131'],
+    12287: ['at89c5132', 'at89c5snd1c'],
+  }
+}
 const win = remote.getCurrentWindow();
 
 /* Figure out how to invoke dfu-programmer
@@ -36,6 +55,7 @@ eeprom_reset_location = '"' + eeprom_reset_location + '"';
 /* State variables
  */
 let bootloader_ready = false;
+let dfu_device = null;
 let flash_in_progress = false;
 let flash_when_ready = false;
 let watcher;
@@ -291,6 +311,8 @@ function loadHex(filename) {
   $filePath.text(filename);
   clearStatus();
 
+  enableButton($flashHex);
+
   if (bootloader_ready) {
     if (autoFlashEnabled()) {
       clearStatus();
@@ -308,6 +330,7 @@ function loadHex(filename) {
       $flashHex.text(flashWhenReadyButtonText);
     }
     sendStatus(pressResetText);
+    $flashHex.text(flashWhenReadyButtonText);
   }
 
   watcher = chokidar.watch(filename, {});
@@ -454,7 +477,7 @@ function sendHex(file, callback) {
 }
 
 function eraseChip(callback) {
-  let dfu_args = ' atmega32u4 erase --force';
+  let dfu_args = ' ' + dfu_device + ' erase --force';
   sendStatus('dfu-programmer' + dfu_args);
   console.log(dfu_location + dfu_args);
   exec(dfu_location + dfu_args, function(error, stdout, stderr) {
@@ -470,7 +493,7 @@ function eraseChip(callback) {
 }
 
 function flashChip(file, callback) {
-  let dfu_args = ' atmega32u4 flash ' + file;
+  let dfu_args = ' ' + dfu_device + ' flash ' + file;
   sendStatus('dfu-programmer' + dfu_args);
   console.log(dfu_location + dfu_args);
   exec(dfu_location + dfu_args, function(error, stdout, stderr) {
@@ -485,7 +508,7 @@ function flashChip(file, callback) {
 }
 
 function resetChip(callback) {
-  let dfu_args = ' atmega32u4 reset';
+  let dfu_args = ' ' + dfu_device + ' reset';
   sendStatus('dfu-programmer' + dfu_args);
   console.log(dfu_location + dfu_args);
   exec(dfu_location + dfu_args, function(error, stdout, stderr) {
@@ -554,11 +577,21 @@ function eraseEEPROM(callback) {
 
 function checkForBoard() {
   if (!flash_in_progress) {
-    exec(dfu_location + ' atmega32u4 get bootloader-version', function(error, stdout, stderr) {
-      if (stdout.indexOf("Bootloader Version:") > -1) {
-        if (!bootloader_ready && checkFileSilent()) {
-          clearStatus();
-        }
+    // First look for a supported bootloader
+    dfu_device = null;
+    for (let device of usb.getDeviceList()) {
+      if (usbDevices.hasOwnProperty(device.deviceDescriptor.idVendor) && (usbDevices[device.deviceDescriptor.idVendor].hasOwnProperty(device.deviceDescriptor.idProduct))) {
+        dfu_device = usbDevices[device.deviceDescriptor.idVendor][device.deviceDescriptor.idProduct];
+        console.log('Found atmel device: '+dfu_device[0]);
+        break; // First match wins for now
+      }
+    }
+    if (dfu_device) {
+      exec(dfu_location + ' ' + dfu_device + ' get bootloader-version', function(error, stdout, stderr) {
+        if (stdout.indexOf("Bootloader Version:") > -1) {
+          if (!bootloader_ready && checkFileSilent()) {
+            clearStatus();
+          }
 
         if (!bootloader_ready) {
           bootloader_ready = true;
@@ -582,13 +615,9 @@ function checkForBoard() {
           if(!flash_when_ready){
             enableButton($flashHex);
           }
-          setFlashButtonWhenReady();
-        } else {
-          setFlashButtonImmediate();
-          disableButton($flashHex);
         }
-      }
-    });
+      });
+    }
   }
 
   if (bootloader_ready) {
