@@ -63,6 +63,9 @@ let $hexChangedFlash;
 const flashImmediatelyButtonText = "Flash";
 const flashWhenReadyButtonText = "Flash When Ready";
 const pressResetText = "Press RESET on your keyboard's PCB.";
+const aboutText = "<p>QMK Flasher version " + app.getVersion() + "</p>\
+<p>Copyright (c) 2015-2017 Jack Humbert, Zach White</p>\
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the conditions laid out in the included <a href=\"https://github.com/qmk/qmk_flasher/blob/master/LICENSE.md\">LICENSE.md</a> file.</p>";
 
 $flashHex.text(flashImmediatelyButtonText);
 
@@ -203,8 +206,7 @@ function openAboutDialog() {
   bootbox.alert({
     size: "small",
     title: "About",
-    message: `QMK Flasher version ${app.getVersion()}`
-    //TODO: Display information about open source licenses
+    message: aboutText
   });
 }
 
