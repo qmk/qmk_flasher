@@ -576,55 +576,61 @@ function eraseEEPROM(callback) {
 }
 
 function checkForBoard() {
-  if (!flash_in_progress) {
-    // First look for a supported bootloader
-    dfu_device = null;
-    for (let device of usb.getDeviceList()) {
-      if (usbDevices.hasOwnProperty(device.deviceDescriptor.idVendor) && (usbDevices[device.deviceDescriptor.idVendor].hasOwnProperty(device.deviceDescriptor.idProduct))) {
-        dfu_device = usbDevices[device.deviceDescriptor.idVendor][device.deviceDescriptor.idProduct];
-        console.log('Found atmel device: '+dfu_device[0]);
-        break; // First match wins for now
-      }
-    }
-    if (dfu_device) {
-      exec(dfu_location + ' ' + dfu_device + ' get bootloader-version', function(error, stdout, stderr) {
-        if (stdout.indexOf("Bootloader Version:") > -1) {
-          if (!bootloader_ready && checkFileSilent()) {
-            clearStatus();
-          }
+  if (flash_in_progress) {
+    return;
+  }
 
-        if (!bootloader_ready) {
-          bootloader_ready = true;
-          if (checkFileSilent()) {
-            if (flash_when_ready || autoFlashEnabled()) {
-              flashFirmware();
-            } else {
-              enableButton($flashHex);
-              enableButton($rebootMCU);
-              enableButton($eraseEEPROM);
-              setFlashButtonImmediate();
-              sendStatus("Ready To Flash!");
-            }
-          }
-        }
-      } else if (bootloader_ready) {
-        bootloader_ready = false;
-        disableButton($rebootMCU);
-        disableButton($eraseEEPROM);
-        if(checkFileSilent() && !autoFlashEnabled()) {
-          if(!flash_when_ready){
-            enableButton($flashHex);
-          }
-        }
-      });
+  // First look for a supported bootloader
+  dfu_device = null;
+  for (let device of usb.getDeviceList()) {
+    if (usbDevices.hasOwnProperty(device.deviceDescriptor.idVendor) && (usbDevices[device.deviceDescriptor.idVendor].hasOwnProperty(device.deviceDescriptor.idProduct))) {
+      dfu_device = usbDevices[device.deviceDescriptor.idVendor][device.deviceDescriptor.idProduct];
+      console.log('Found atmel device: '+dfu_device[0]);
+      break; // First match wins for now
     }
   }
+
+  if (!dfu_device) {
+    return;
+  }
+
+  exec(dfu_location + ' ' + dfu_device + ' get bootloader-version', function(error, stdout, stderr) {
+    if (stdout.indexOf("Bootloader Version:") > -1) {
+      if (!bootloader_ready && checkFileSilent()) {
+        clearStatus();
+      }
+
+      if (!bootloader_ready) {
+        bootloader_ready = true;
+        if (checkFileSilent()) {
+          if (flash_when_ready || autoFlashEnabled()) {
+            flashFirmware();
+          } else {
+            enableButton($flashHex);
+            enableButton($rebootMCU);
+            enableButton($eraseEEPROM);
+            setFlashButtonImmediate();
+            sendStatus("Ready To Flash!");
+          }
+        }
+      }
+    } else if (bootloader_ready) {
+      bootloader_ready = false;
+      disableButton($rebootMCU);
+      disableButton($eraseEEPROM);
+      if(checkFileSilent() && !autoFlashEnabled()) {
+        if(!flash_when_ready){
+          enableButton($flashHex);
+        }
+      }
+    }
+  });
 
   if (bootloader_ready) {
     window.setTimeout(checkForBoard, 1000);
   } else if (autoFlashEnabled()) {
     window.setTimeout(checkForBoard, 500);
   } else {
-    window.setTimeout(checkForBoard, 5000);
+    window.setTimeout(checkForBoard, 3000);
   }
 }
