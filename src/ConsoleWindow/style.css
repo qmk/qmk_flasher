@@ -1,0 +1,35 @@
+#status {
+  font-family: monospace;
+  font-size: 12px;
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  top: 50px;
+  bottom: 14px;
+  border-radius: 2px;
+  overflow-x: scroll;
+  overflow-y: scroll;
+  white-space: pre-wrap;
+  padding: 7px;
+  -webkit-app-region: no-drag;
+}
+
+#status, #status b {
+  -webkit-user-select: text;
+}
+
+#keyboard-chooser {
+  width: 100%;
+  text-align: left;
+}
+
+#keyboard-chooser-div {
+  position: absolute;
+  top: 10px;
+  left: 14px;
+  right: 14px;
+  height: 24px;
+  border-radius: 6px;
+  margin: 0;
+  padding: 0;
+}

@@ -9,7 +9,7 @@ arch=ia32
 if [ -f ./dist-common.sh ]; then
         . ./dist-common.sh
 else
-        echo '*** This must be run from the top-level qmk_firmware_flasher directory!'
+        echo '*** This must be run from the top-level qmk_flasher directory!'
         exit 1
 fi
 

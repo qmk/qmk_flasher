@@ -1,18 +1,18 @@
 {
-  "name": "qmk-firmware-flasher",
+  "name": "qmk-flasher",
   "productName": "QMK Flasher",
   "version": "0.5.2",
-  "description": "GUI app to load firmware onto atmega32u4 chips.",
+  "description": "GUI app to load firmware onto QMK Keyboards.",
   "main": "src/main.js",
   "scripts": {
     "start": "electron .",
-    "postinstall": "install-app-deps",
+    "postinstall": "install-app-deps; electron-rebuild --force",
     "pack": "build",
     "dist": "build"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/qmk/qmk_firmware_flasher.git"
+    "url": "git+https://github.com/qmk/qmk_flasher.git"
   },
   "keywords": [
     "dfu-programmer",
@@ -20,31 +20,32 @@
     "keyboard",
     "mechanical keyboard",
     "qmk",
-    "qmk-firmware-flasher",
     "qmk-flasher"
   ],
   "author": "Jack Humbert",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/qmk/qmk_firmware_flasher/issues"
+    "url": "https://github.com/qmk/qmk_flasher/issues"
   },
-  "homepage": "https://github.com/qmk/qmk_firmware_flasher",
+  "homepage": "https://github.com/qmk/qmk_flasher",
   "dependencies": {
     "bootbox": "~4.4",
     "bootstrap": "~3.3",
     "chokidar": "~1.7",
     "electron-debug": "~1.1",
-    "electron-settings": "~3.1.1",
+    "electron-settings": "~3.1",
     "jquery": "~2.2",
+    "node-hid": "~0.5",
     "usb": "~1.2"
   },
   "devDependencies": {
     "devtron": "^1.4.0",
     "electron": "^1.6.10",
-    "electron-builder": "^18.3.5"
+    "electron-builder": "^18.3.5",
+    "electron-rebuild": "^1.0.2"
   },
   "build": {
-    "appId": "com.github.qmk-firmware-flasher",
+    "appId": "com.github.qmk-flasher",
     "fileAssociation": [
       {
         "ext": "hex",
@@ -58,7 +59,7 @@
       "target": "zip"
     },
     "win": {
-      "iconUrl": "https://github.com/qmk/qmk_firmware_flasher/blob/master/build/windows.ico?raw=true"
+      "iconUrl": "https://github.com/qmk/qmk_flasher/blob/master/build/windows.ico?raw=true"
     }
   }
 }
