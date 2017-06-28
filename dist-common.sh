@@ -29,7 +29,7 @@ if [ -d "$output_dir" -o -d "dist" ]; then
 fi
 
 if ! [ -d dfu -a -d src ]; then
-	echo '*** This must be run from the top-level qmk_firmware_flasher directory!'
+	echo '*** This must be run from the top-level qmk_flasher directory!'
 	exit 1
 fi
 

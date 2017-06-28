@@ -6,17 +6,36 @@ const BrowserWindow = remote.BrowserWindow;
 const mainWindow = BrowserWindow.fromId(remote.getGlobal('mainWinId'));
 const win = remote.getCurrentWindow();
 
-const aboutMenuItem = $('#about-item');
-const optionsMenuItem = $('#options-item');
+const $aboutMenu = $('#about');
+const $consoleMenu = $('#console');
+const $optionsMenu = $('#options');
 
-aboutMenuItem.bind('click', () => {
+$aboutMenu.bind('click', () => {
   mainWindow.webContents.executeJavaScript("openAboutDialog()");
-  aboutMenuItem.blur();
+  $aboutMenu.blur();
   win.hide();
 });
 
-optionsMenuItem.bind('click', () => {
+$consoleMenu.bind('click', () => {
+  $consoleMenu.blur();
+  consoleWin = new BrowserWindow({
+    show: false,
+    frame: true,
+    resizable: true,
+    maximizable: true,
+    fullscreen: false,
+    fullscreenable: false,
+    title: 'hid_listen',
+  });
+  consoleWin.loadURL('file://' + __dirname + '/../ConsoleWindow/index.html');
+  consoleWin.setMenu(null);
+  consoleWin.once('ready-to-show', () => { consoleWin.show(); });
+  consoleWin.on('closed', function() { consoleWin = null; });
+  win.hide();
+});
+
+$optionsMenu.bind('click', () => {
   mainWindow.webContents.executeJavaScript("openOptions()");
-  optionsMenuItem.blur();
+  $optionsMenu.blur();
   win.hide();
 });

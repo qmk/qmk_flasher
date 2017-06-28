@@ -106,7 +106,7 @@ app.on('ready', function() {
 
   menuWin = new BrowserWindow({
     width: 120,
-    height: 64,
+    height: 85,
     frame: false,
     x: mainWin.getPosition()[0] + menuWinXOffset,
     y: mainWin.getPosition()[1] + menuWinYOffset,
