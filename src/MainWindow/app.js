@@ -481,7 +481,11 @@ function eraseChip(callback) {
   sendStatus('dfu-programmer' + dfu_args);
   console.log(dfu_location + dfu_args);
   exec(dfu_location + dfu_args, function(error, stdout, stderr) {
+    console.log('stdout');
+    console.log(stdout);
     writeStatus(stdout);
+    console.log('stderr');
+    console.log(stderr);
     writeStatus(stderr);
     const regex = /.*Success.*\r?\n|\rChecking memory from .* Empty.*/;
     if (regex.test(stderr)) {
@@ -497,7 +501,11 @@ function flashChip(file, callback) {
   sendStatus('dfu-programmer' + dfu_args);
   console.log(dfu_location + dfu_args);
   exec(dfu_location + dfu_args, function(error, stdout, stderr) {
+    console.log('stdout');
+    console.log(stdout);
     writeStatus(stdout);
+    console.log('stderr');
+    console.log(stderr);
     writeStatus(stderr);
     if (stderr.indexOf("Validating...  Success") > -1) {
       callback(true);
@@ -512,7 +520,11 @@ function resetChip(callback) {
   sendStatus('dfu-programmer' + dfu_args);
   console.log(dfu_location + dfu_args);
   exec(dfu_location + dfu_args, function(error, stdout, stderr) {
+    console.log('stdout');
+    console.log(stdout);
     writeStatus(stdout);
+    console.log('stderr');
+    console.log(stderr);
     writeStatus(stderr);
 	if (stderr == "") {
 	  callback(true);
@@ -529,7 +541,11 @@ function flashEEPROM(callback) {
   console.log(dfu_location + dfu_args);
 
   exec(dfu_location + dfu_args, function(error, stdout, stderr) {
+    console.log('stdout');
+    console.log(stdout);
     writeStatus(stdout);
+    console.log('stderr');
+    console.log(stderr);
     writeStatus(stderr);
     if (stderr.indexOf("Validating...  Success") > -1) {
 	  callback(true);
@@ -594,7 +610,12 @@ function checkForBoard() {
     return;
   }
 
+  console.log(dfu_location + ' ' + dfu_device + ' get bootloader-version')
   exec(dfu_location + ' ' + dfu_device + ' get bootloader-version', function(error, stdout, stderr) {
+    console.log('stdout');
+    console.log(stdout);
+    console.log('stderr');
+    console.log(stderr);
     if (stdout.indexOf("Bootloader Version:") > -1) {
       if (!bootloader_ready && checkFileSilent()) {
         clearStatus();
