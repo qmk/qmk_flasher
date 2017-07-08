@@ -33,16 +33,18 @@ if ! [ -d dfu -a -d src ]; then
 	exit 1
 fi
 
-if [ $(($(date +%s) - $(stat -f %c node_modules))) -gt 3600 ]; then
-	npm uninstall -g electron-packager
+if [ -d node_modules ]; then
+	if [ $(($(date +%s) - $(stat -f %c node_modules))) -gt 3600 ]; then
+		npm uninstall -g electron-packager
+	fi
+	echo '*** About to wipe out the "node_modules" directory.'
+	echo '*** You have 5 seconds to press Ctrl-C!'
+	for i in 5 4 3 2 1; do
+		echo "*** $i"
+		sleep 1
+	done
+	rm -r node_modules
 fi
-echo '*** About to wipe out the "node_modules" directory.'
-echo '*** You have 5 seconds to press Ctrl-C!'
-for i in 5 4 3 2 1; do
-	echo "*** $i"
-	sleep 1
-done
-rm -r node_modules
 
 if ! npm list -g electron-packager 2>&1 > /dev/null; then
 	echo '*** Installing prerequisite electron-packager globally.'
