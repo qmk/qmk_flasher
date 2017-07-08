@@ -8,7 +8,7 @@
 # These three must be integers
 !define VERSIONMAJOR 0
 !define VERSIONMINOR 5
-!define VERSIONBUILD 2
+!define VERSIONBUILD 3rc1
 # These will be displayed by the "Click here for support information" link in "Add/Remove Programs"
 # It is possible to use "mailto:" links in here to open the email client
 !define HELPURL "https://github.com/qmk/qmk_flasher/issues" # "Support Information" link

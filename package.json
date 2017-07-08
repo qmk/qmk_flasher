@@ -1,7 +1,7 @@
 {
   "name": "qmk-flasher",
   "productName": "QMK Flasher",
-  "version": "0.5.2",
+  "version": "0.5.3rc1",
   "description": "GUI app to load firmware onto QMK Keyboards.",
   "main": "src/main.js",
   "scripts": {
