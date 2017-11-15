@@ -1,3 +1,9 @@
+# The QMK Flasher has been deprecated - [use the QMK Toolbox instead](https://github.com/qmk/qmk_toolbox/releases)!
+
+The remainder of this repo is being left as-is for posterity.
+
+---
+
 # Releases
 
 [Check out the releases](https://github.com/qmk/qmk_flasher/releases) (darwin is OSX)
